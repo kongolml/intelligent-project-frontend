@@ -1,0 +1,51 @@
+$color-font: #646464;
+$color-error: #e25151;
+$color-success: #3c763d;
+
+$color-logo-orange: #EF8F1E;
+
+$color-brand-blue: #26b0e6;
+$color-brand-purple: #c269a3;
+$color-brand-pink: #d93832;
+$color-brand-orange: #f7cd5c;
+$color-brand-green: #60b262;
+
+$color-background: #f9f9f9;
+
+$color-icons-map: (
+  'illustration': $color-brand-blue,
+  'polygraphy': $color-brand-purple,
+  'package': $color-brand-green,
+  'web': $color-brand-pink,
+  'typography': $color-brand-orange
+);
+
+$brand-color-fading: 0.85;
+
+$link-color-faded: transparentize($color-font, 0.3);
+
+
+$list-padding: 20px;
+
+$transition: 350ms;
+
+$bp-mobile: 768px;
+
+$header-width: 100px;
+$header-logo-font-size: 2.5rem;
+
+$distance-from-top: 2rem;
+
+
+$menuZIndex: 10;
+
+$base-font-size: 16px;
+
+$base-line-height: 24px;
+
+
+$footer-padding: 15px;
+
+
+$menuLineWidth: 20px;
+$menuLineHeight: 1px;
