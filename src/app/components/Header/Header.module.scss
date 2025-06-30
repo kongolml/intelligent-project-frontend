@@ -1,0 +1,67 @@
+@use "../../global.variables.scss" as variables;
+
+:global(header) {
+	position: fixed;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    width: variables.$header-width;
+
+    .logo-link {
+        margin-top: variables.$distance-from-top;
+        margin-left: variables.$list-padding;
+        display: inline-block;
+        color: variables.$color-logo-orange !important;
+        font-size: variables.$header-logo-font-size;
+    }
+
+    nav {
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+
+        ul {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 0;
+
+            li {
+                &.current-menu-item {
+                    a {
+                        color: variables.$color-font;
+                    }
+                }
+            }
+        }
+
+    }
+
+    a {
+        color: variables.$link-color-faded;
+
+        &:hover {
+            color: variables.$color-font;
+        }
+    }
+
+    .menu-trigger {
+        display: none;
+    }
+
+    .language-switcher {
+        position: absolute;
+        left: 0;
+        bottom: 1rem;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding-left: variables.$list-padding;
+
+        .language {
+            text-transform: uppercase;
+        }
+    }
+}

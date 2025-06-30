@@ -1,4 +1,4 @@
-@import "../../global.variables.scss";
+@use "../../global.variables.scss" as variables;
 
 .what-we-do {
         $title-padding-bottom: 80px;
@@ -16,7 +16,7 @@
             margin: 0;
 
             h2 {
-                padding-left: $list-padding;
+                padding-left: variables.$list-padding;
             }
 
             ul {
@@ -27,7 +27,7 @@
                         margin-top: $title-padding-bottom;
 
                         a {
-                            color: $color-font;
+                            color: variables.$color-font;
                         }
                     }
                 }
@@ -42,16 +42,16 @@
 
                 &.active {
                     a {
-                        color: $color-font;
+                        color: variables.$color-font;
                     }
                 }
 
                 a {
-                    transition: color $transition * 0.3;
-                    color: $link-color-faded;
+                    transition: color variables.$transition * 0.3;
+                    color: variables.$link-color-faded;
 
                     &:hover {
-                        color: $color-font;
+                        color: variables.$color-font;
                     }
                 }
 
@@ -78,9 +78,9 @@
             position: relative;
             margin-bottom: 0;
 
-            @each $icon_name, $icon_color in $color-icons-map {
+            @each $icon_name, $icon_color in variables.$color-icons-map {
                 &.category-#{$icon_name} {
-                    background-color: transparentize($icon_color, $brand-color-fading);
+                    background-color: transparentize($icon_color, variables.$brand-color-fading);
                 }
             }
 
@@ -101,13 +101,13 @@
                 bottom: 0;
                 width: 100%;
                 text-align: center;
-                transition: $transition * 0.4 ease-in-out;
+                transition: variables.$transition * 0.4 ease-in-out;
                 padding: 2rem;
 
                 .description-wrp {
                     display: inline;
                     background: white;
-                    color: $color-font;
+                    color: variables.$color-font;
                     -webkit-box-decoration-break: clone;
                     -ms-box-decoration-break: clone;
                     -o-box-decoration-break: clone;
@@ -120,7 +120,7 @@
         .projects-wrp {
             box-shadow: 0 0 50px rgba(0,0,0,.25);
             border-radius: 6px;
-            background-color: $color-background;
+            background-color: variables.$color-background;
         }
 
         .scroll-to-services {

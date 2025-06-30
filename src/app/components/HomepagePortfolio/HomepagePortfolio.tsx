@@ -6,7 +6,7 @@ import { PortfolioCategory, PortfolioItem, PortfolioItem as PortfolioItemType } 
 import styles from "./HomepagePortfolio.module.scss";
 
 
-export default async function HomepagePortfolio(s) {
+export default async function HomepagePortfolio() {
     // const randomPortfolioItemsPromises = portfolioCategories.map(async (category) => {
     //     const result = await PortfolioItem.aggregate([
     //         {
