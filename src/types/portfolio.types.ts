@@ -9,6 +9,7 @@ export interface PortfolioItem {
 	title: string;
 	description?: string;
 	categories: PortfolioCategory["name"][];
+	mainImage: string; // URL to the main image
     mediaFiles: {
         id: string;
         url: string;

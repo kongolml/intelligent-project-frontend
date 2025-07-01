@@ -28,6 +28,8 @@ export default async function HomepagePortfolio() {
 
     const randomPortfolioItems: PortfolioItemType[] = await randomPortfolioItemsRequest.json();
 
+    console.log(randomPortfolioItems)
+
     return (
         <section className={styles["what-we-do"]} id="projects-demo">
         <div className="container">
@@ -81,7 +83,7 @@ export default async function HomepagePortfolio() {
                                             return (
                                                 <figure
                                                     id={`project-${index + 1}`}
-                                                    // style="background-image: url('<?php echo wp_get_attachment_image_src(get_post_thumbnail_id($portfolio_item->ID), $portfolio_image_size)[0]; ?>');"
+                                                    style={{ backgroundImage: `url('${portfolioItem.mainImage}')` }}
                                                     className="category-shit"
                                                     key={portfolioItem.id}
                                                 >
