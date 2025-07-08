@@ -5,8 +5,28 @@ import { PortfolioCategory, PortfolioItem, PortfolioItem as PortfolioItemType } 
 // styles
 import styles from "./HomepagePortfolio.module.scss";
 
+// hooks
+import useScrollEffects from "@/app/hooks/useScrollEffects";
+import HomepagePortfolioClient from "./HomepagePortfolioClient";
+
 
 export default async function HomepagePortfolio() {
+    // const heroRef = useRef<HTMLElement>(null);
+    // const projectsListRef = useRef<HTMLElement>(null);
+    // const projectNavRef = useRef<HTMLElement>(null);
+    // const projectsDemoRef = useRef<HTMLElement>(null);
+
+    // const projectsCount = 5; // adjust to actual count
+    // const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+
+    // useScrollEffects({
+    //     isMobile,
+    //     projectsCount,
+    //     projectsListRef,
+    //     projectNavRef,
+    //     projectsDemoRef,
+    //     heroRef,
+    // });
     // const randomPortfolioItemsPromises = portfolioCategories.map(async (category) => {
     //     const result = await PortfolioItem.aggregate([
     //         {
@@ -30,85 +50,7 @@ export default async function HomepagePortfolio() {
 
     console.log(randomPortfolioItems)
 
-    return (
-        <section className={styles["what-we-do"]} id="projects-demo">
-        <div className="container">
-            <div className="row">
-                <div className="col-12 col-xl-10 offset-xl-1">
-                    <div className={styles["projects-wrp"]}>
-                        <div className="row">
-                            <div className="col-12 col-md-4 col-xxl-3">
-                                <div className={styles["projects-nav"]}>
-                                    <h2>
-                                        Projects
+    // const randomPortfolioItems: PortfolioItem[] = await response.json();
 
-                                        <a href="<?php echo get_permalink(get_page_by_path('projects')); ?>" className="d-block d-md-none">
-                                            {/* <?php echo _e('View all', 'intelligent-project-theme'); ?> */}
-                                        </a>
-                                    </h2>
-                                    <ul className={`${styles["projects-nav"]} d-none d-md-block`}>
-                                        {randomPortfolioItems.map((portfolioItem) => {
-                                            return (
-                                                <li
-                                                    className={`${styles["project-link"]} category-${portfolioItem.id}`}
-                                                    key={portfolioItem.id}
-                                                >
-                                                    <a
-                                                        href={`#project-${portfolioItem.id}`}
-                                                        className={styles["project-anchor"]}
-                                                        data-project-number={portfolioItem.id}
-                                                    >
-                                                        {portfolioItem.title}
-                                                    </a>
-                                                </li>
-                                            );
-                                        })}
-
-                                        {/* <li className="link-to-all"><a href="<?php echo get_permalink(get_page_by_path('projects')); ?>" className="real-link"><?php echo _e('View all', 'intelligent-project-theme'); ?></a></li> */}
-                                    </ul>
-                                </div>
-                            </div>
-
-                            <div className="col-12 col-md-8 col-xxl-9">
-                                <div className="projects-list-wrp">
-                                    <div className="projects-list">
-                                        {/* <?php
-                                        $featured_portfolio_items_shown = 0;
-                                        $portfolio_image_size = wp_is_mobile() ? 'medium' : 'large';
-
-                                        foreach ($random_portfolio_items as $category_id => $portfolio_item) {
-                                            $featured_portfolio_items_shown++;
-                                        ?> */}
-                                        {randomPortfolioItems.map((portfolioItem, index) => {
-                                            return (
-                                                <figure
-                                                    id={`project-${index + 1}`}
-                                                    style={{ backgroundImage: `url('${portfolioItem.mainImage}')` }}
-                                                    className="category-shit"
-                                                    key={portfolioItem.id}
-                                                >
-                                                    <figcaption>
-                                                        <div className={styles["description-wrp"]} dangerouslySetInnerHTML={{ __html: portfolioItem.description || "" }}>
-                                                        </div>
-                                                    </figcaption>
-                                                </figure>
-                                            )
-                                        })}
-                                        {/* <?php
-                                        }
-                                        ?> */}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="scroll-to-services">
-                            <i className="icon-chevron-down"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    )
+  return <HomepagePortfolioClient randomPortfolioItems={randomPortfolioItems} />;
 }

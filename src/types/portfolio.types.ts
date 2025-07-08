@@ -10,8 +10,5 @@ export interface PortfolioItem {
 	description?: string;
 	categories: PortfolioCategory["name"][];
 	mainImage: string; // URL to the main image
-    mediaFiles: {
-        id: string;
-        url: string;
-    }[]
+    mediaFiles: string[] // urls
 }
