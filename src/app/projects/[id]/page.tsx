@@ -21,7 +21,7 @@ export default async function ProjectPage({ params }: { params: { id: string } }
             
             <h2>Main Files:</h2>
             <Image
-                src={project.mainImage}
+                src={project.thumbnail}
                 alt={project.title}
                 width={600}
                 height={400}

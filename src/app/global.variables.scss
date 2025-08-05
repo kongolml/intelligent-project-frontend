@@ -1,3 +1,5 @@
+@use 'sass:color';
+
 $color-font: #646464;
 $color-error: #e25151;
 $color-success: #3c763d;
@@ -13,16 +15,16 @@ $color-brand-green: #60b262;
 $color-background: #f9f9f9;
 
 $color-icons-map: (
-  'illustration': $color-brand-blue,
-  'polygraphy': $color-brand-purple,
+  // 'illustration': $color-brand-blue,
+  // 'polygraphy': $color-brand-purple,
   'package': $color-brand-green,
   'web': $color-brand-pink,
-  'typography': $color-brand-orange
+  'identity': $color-brand-orange
 );
 
 $brand-color-fading: 0.85;
 
-$link-color-faded: transparentize($color-font, 0.3);
+$link-color-faded: color.adjust($color-font, $alpha: -0.3);
 
 
 $list-padding: 20px;

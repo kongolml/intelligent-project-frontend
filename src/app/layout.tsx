@@ -36,7 +36,7 @@ export default function RootLayout({
           <div className="container">
             <div className="row">
               <div className="col">
-                <div className="on-center">
+                <div className="text-center">
                   <p>© Intelligent Project 2002-{new Date().getFullYear()}. All rights reserved</p>
                 </div>
               </div>

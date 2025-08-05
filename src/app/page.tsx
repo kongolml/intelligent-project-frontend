@@ -1,6 +1,6 @@
 // components
 import HomepagePortfolio from "./components/HomepagePortfolio/HomepagePortfolio";
-import ServicesList from "./components/ServicesList";
+import ServicesList from "./components/ServicesList/ServicesList";
 import Script from "next/script";
 
 // types

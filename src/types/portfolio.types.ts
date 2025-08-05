@@ -1,14 +1,26 @@
+export enum PortfolioCategorySlugs {
+	IDENTITY = "identity",
+	WEB = "web",
+	PACKAGE = "package"
+}
+
 export interface PortfolioCategory {
 	id: string;
 	name: string;
-	description?: string;
+	slug: PortfolioCategorySlugs;
+	description: string;
 }
 
 export interface PortfolioItem {
 	id: string;
 	title: string;
 	description?: string;
-	categories: PortfolioCategory["name"][];
-	mainImage: string; // URL to the main image
-    mediaFiles: string[] // urls
+	categories: {
+		name: PortfolioCategory["name"],
+		slug: PortfolioCategory["slug"]
+	}[];
+	thumbnail: string; // URL to the main image
+    mediaFiles: string[]; // urls
+	slug: string;
+	isShowcase?: boolean;
 }

@@ -1,12 +1,15 @@
 // styles
 import styles from "./Header.module.scss";
 
+import Logo from "@assets/intelligent-project-logo.svg";
+
+
 export default function Header() {
 	return (
 		<header>
 			<div className={styles["mobile-header-wrp"]}>
 				<a href="/" className={styles["logo-link"]}>
-					<i className="icon-intelligent-project-logo"></i>
+					<Logo width={40} height={40} fill="currentColor" />
 				</a>
 
 				<div className={styles["menu-trigger"]}></div>

@@ -1,6 +1,8 @@
 @use "./global.variables.scss" as variables;
+@use "./components/ServicesList/ServicesList.scss";
 
 @import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 :root {
   --background: #ffffff;
@@ -62,4 +64,13 @@ ul {
   html {
     color-scheme: dark;
   }
+}
+
+
+footer {
+    padding: variables.$footer-padding 0 variables.$footer-padding variables.$header-width;
+
+    p {
+        margin-bottom: 0;
+    }
 }
