@@ -17,7 +17,7 @@ interface PortfolioListProps {
 
 export default function PortfolioList({ portfolioItems, portfolioCategories }: PortfolioListProps) {
 	const router = useRouter();
-    const searchParams = useSearchParams();
+	const searchParams = useSearchParams();
 
 	const initialCategory = searchParams.get("category") || "all";
 	const [selectedCategory, setSelectedCategory] = useState<string>(initialCategory);
@@ -31,13 +31,13 @@ export default function PortfolioList({ portfolioItems, portfolioCategories }: P
 	}, [portfolioItems, selectedCategory]);
 
 	useEffect(() => {
-        setSelectedCategory(initialCategory);
-    }, [initialCategory]);
+		setSelectedCategory(initialCategory);
+	}, [initialCategory]);
 
 	const handleCategoryChange = (category: string) => {
-		router.push(category === "all" ? "/projects" : `/projects/category/${category}`);
-        setSelectedCategory(category);
-    };
+		category === "all" ? router.replace(window.location.pathname, { scroll: false }) : router.replace(`?category=${category}`, { scroll: false });;
+		setSelectedCategory(category);
+	};
 
 	return (
 		<>
