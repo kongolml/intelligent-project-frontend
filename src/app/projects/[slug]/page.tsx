@@ -3,9 +3,9 @@ import { notFound } from "next/navigation";
 // types
 import { PortfolioItem } from "../../../types/portfolio.types";
 
-export default async function ProjectPage({ params }: { params: { slug: string } }) {
+export default async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {
     // Fetch project by slug (for freshest data)
-    const projectRequest = await fetch(`http://localhost:3000/public-api/portfolio/${params.slug}`, {
+    const projectRequest = await fetch(`http://localhost:3000/public-api/portfolio/${(await params).slug}`, {
         // cache: "no-store",
     });
     const projectBySlug: PortfolioItem = await projectRequest.json();
