@@ -43,7 +43,7 @@ export default async function HomepagePortfolio() {
 
 	const showcasePortfolioItemsRequest = await fetch("http://localhost:3000/public-api/portfolio/showcases", {
 		// Recommended for SSR caching control:
-		cache: "no-store", // or `next: { revalidate: 60 }` for ISR,
+		// cache: "no-store", // or `next: { revalidate: 60 }` for ISR,
 	});
 
 	const showcasePortfolioItems: PortfolioItemType[] = await showcasePortfolioItemsRequest.json();

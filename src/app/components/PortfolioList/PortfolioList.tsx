@@ -1,7 +1,8 @@
 "use client";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter, useSearchParams } from "next/navigation";
 
 // types
 import { PortfolioCategory, PortfolioItem } from "@/types/portfolio.types";
@@ -15,7 +16,13 @@ interface PortfolioListProps {
 }
 
 export default function PortfolioList({ portfolioItems, portfolioCategories }: PortfolioListProps) {
-	const [selectedCategory, setSelectedCategory] = useState<string>("all");
+	const router = useRouter();
+    const searchParams = useSearchParams();
+
+	const initialCategory = searchParams.get("category") || "all";
+	const [selectedCategory, setSelectedCategory] = useState<string>(initialCategory);
+
+	const allItemsLength = portfolioItems.length;
 
 	const filteredItems = useMemo(() => {
 		return selectedCategory === "all"
@@ -23,19 +30,25 @@ export default function PortfolioList({ portfolioItems, portfolioCategories }: P
 			: portfolioItems.filter((item) => item.categories.some((category) => category.slug === selectedCategory));
 	}, [portfolioItems, selectedCategory]);
 
+	useEffect(() => {
+        setSelectedCategory(initialCategory);
+    }, [initialCategory]);
+
+	const handleCategoryChange = (category: string) => {
+		router.push(category === "all" ? "/projects" : `/projects/category/${category}`);
+        setSelectedCategory(category);
+    };
+
 	return (
 		<>
 			<ul className={styles.categoriesList}>
-				<li
-					onClick={() => setSelectedCategory("all")}
-					className={selectedCategory === "all" ? styles.active : ""}
-				>
-					All
+				<li onClick={() => handleCategoryChange("all")} className={selectedCategory === "all" ? styles.active : ""}>
+					All<sup>{allItemsLength}</sup>
 				</li>
 				{portfolioCategories.map((category) => (
 					<li
 						key={category.slug}
-						onClick={() => setSelectedCategory(category.slug)}
+						onClick={() => handleCategoryChange(category.slug)}
 						className={selectedCategory === category.slug ? styles.active : ""}
 					>
 						{category.name}
@@ -43,18 +56,29 @@ export default function PortfolioList({ portfolioItems, portfolioCategories }: P
 				))}
 			</ul>
 
-			<ul>
+			<div className={styles.projectsGrid}>
 				{filteredItems.map((item) => (
-					<li key={item.id}>
-						{item.thumbnail && <Image src={item.thumbnail} alt={item.title} width={150} height={100} />}
+					<div key={item.id} className={styles.projectCard}>
+						{item.thumbnail && (
+							<div className={styles.imageWrap}>
+								<Image
+									src={item.thumbnail}
+									alt={item.title}
+									fill
+									className={styles.projectImg}
+									sizes="(min-width: 1200px) 33vw, (min-width: 768px) 33vw, 100vw"
+								/>
+							</div>
+						)}
+
 						<h2>{item.title}</h2>
 						{item.description && <div dangerouslySetInnerHTML={{ __html: item.description }} />}
 						<p>Category: {item.categories.map((cat) => cat.name).join(", ")}</p>
 						{item.mediaFiles.length > 0 && <p>has mediaFiles!</p>}
-						<Link href={`/projects/${item.id}`}>View Project</Link>
-					</li>
+						<Link href={`/projects/${item.slug}`}>View Project</Link>
+					</div>
 				))}
-			</ul>
+			</div>
 		</>
 	);
 }

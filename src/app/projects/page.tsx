@@ -14,7 +14,7 @@ export default async function ProjectsPage() {
     
     const portfolioCategoriesRequest = await fetch("http://localhost:3000/public-api/portfolio-categories", {
 		// Recommended for SSR caching control:
-		cache: "no-store", // or `next: { revalidate: 60 }` for ISR,
+		// cache: "no-store", // or `next: { revalidate: 60 }` for ISR,
 	});
 
 
