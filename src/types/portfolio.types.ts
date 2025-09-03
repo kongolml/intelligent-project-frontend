@@ -1,7 +1,7 @@
 export enum PortfolioCategorySlugs {
 	IDENTITY = "identity",
 	WEB = "web",
-	PACKAGE = "package"
+	PACKAGE = "package",
 }
 
 export interface PortfolioCategory {
@@ -14,13 +14,47 @@ export interface PortfolioCategory {
 export interface PortfolioItem {
 	id: string;
 	title: string;
-	description?: string;
+	description?: EditorJSDataBlock[];
 	categories: {
-		name: PortfolioCategory["name"],
-		slug: PortfolioCategory["slug"]
+		name: PortfolioCategory["name"];
+		slug: PortfolioCategory["slug"];
 	}[];
 	thumbnail: string; // URL to the main image
-    mediaFiles: string[]; // urls
+	mediaFiles: string[]; // urls
 	slug: string;
 	isShowcase?: boolean;
 }
+
+export enum EditorJSDataBlockTypesEnum {
+	PARAGRAPH = "paragraph",
+	HEADER = "header",
+	LIST = "list",
+}
+
+interface EditorJSDataBlockParagraph {
+	type: EditorJSDataBlockTypesEnum.PARAGRAPH;
+	data: {
+		text: string;
+	};
+}
+
+interface EditorJSDataBlockHeader {
+	type: EditorJSDataBlockTypesEnum.HEADER;
+	data: {
+		text: string;
+		level: number;
+	};
+}
+
+interface EditorJSDataBlockList {
+	type: EditorJSDataBlockTypesEnum.LIST;
+	data: {
+		style: "ordered" | "unordered";
+		items: {
+			content: string;
+		}[]
+	};
+}
+
+
+type EditorJSDataBlock = { id?: string } & (EditorJSDataBlockParagraph | EditorJSDataBlockHeader | EditorJSDataBlockList);

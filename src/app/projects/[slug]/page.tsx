@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
 // types
-import { PortfolioItem } from "../../../types/portfolio.types";
+import { EditorJSDataBlockTypesEnum, PortfolioItem } from "../../../types/portfolio.types";
 
 export default async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {
     // Fetch project by slug (for freshest data)
@@ -13,7 +13,7 @@ console.log("Project by slug:", projectBySlug);
     return (
         <main>
             <h1>{projectBySlug.title}</h1>
-            <p>{projectBySlug.description}</p>
+            {projectBySlug.description && <EditorJSShow description={projectBySlug.description} />}
             <p>Category: {projectBySlug.categories.map((cat) => cat.name).join(", ")}</p>
             <h2>Main Files:</h2>
             <Image
@@ -38,5 +38,26 @@ console.log("Project by slug:", projectBySlug);
                 ))}
             </ul>
         </main>
+    );
+}
+
+
+const EditorJSShow = ({ description }: { description: PortfolioItem["description"] }) => {
+    if (!description) return null;
+
+    return (
+        <div>
+            {description.map((block) => {
+                switch (block.type) {
+                    case EditorJSDataBlockTypesEnum.PARAGRAPH:
+                        return <p key={block.id}>{block.data.text}</p>
+                    case EditorJSDataBlockTypesEnum.HEADER:
+                        // const Tag = `h${block.data.level || 2}`;
+                        return <h2 key={block.id}>{block.data.text}</h2>
+                    case EditorJSDataBlockTypesEnum.LIST:
+                        return <ul key={block.id}>{block.data.items.map((item, index) => <li key={`list-item-${index}-${block.id}`}>{item.content}</li>)}</ul>
+                }
+            })}
+        </div>
     );
 }
