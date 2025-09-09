@@ -9,7 +9,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
         // cache: "no-store",
     });
     const projectBySlug: PortfolioItem = await projectRequest.json();
-console.log("Project by slug:", projectBySlug);
+
     return (
         <main>
             <h1>{projectBySlug.title}</h1>
@@ -44,10 +44,10 @@ console.log("Project by slug:", projectBySlug);
 
 const EditorJSShow = ({ description }: { description: PortfolioItem["description"] }) => {
     if (!description) return null;
-
+console.log(description);
     return (
         <div>
-            {description.map((block) => {
+            {typeof description === "string" ? <p>{description}</p> : description.map((block) => {
                 switch (block.type) {
                     case EditorJSDataBlockTypesEnum.PARAGRAPH:
                         return <p key={block.id}>{block.data.text}</p>
@@ -55,7 +55,16 @@ const EditorJSShow = ({ description }: { description: PortfolioItem["description
                         // const Tag = `h${block.data.level || 2}`;
                         return <h2 key={block.id}>{block.data.text}</h2>
                     case EditorJSDataBlockTypesEnum.LIST:
-                        return <ul key={block.id}>{block.data.items.map((item, index) => <li key={`list-item-${index}-${block.id}`}>{item.content}</li>)}</ul>
+                        // @ts-ignore
+                        return <ul key={block.id}>{block.items.map((item, index) => <li key={`list-item-${index}-${block.id}`}>{item.content}</li>)}</ul>
+                    case EditorJSDataBlockTypesEnum.IMAGE:
+                        return <Image
+                            src={block.data.file.url}
+                            alt={block.data.caption}
+                            width={300}
+                            height={200}
+                            key={block.id}
+                        />
                 }
             })}
         </div>

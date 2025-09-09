@@ -29,6 +29,7 @@ export enum EditorJSDataBlockTypesEnum {
 	PARAGRAPH = "paragraph",
 	HEADER = "header",
 	LIST = "list",
+	IMAGE = "image",
 }
 
 interface EditorJSDataBlockParagraph {
@@ -56,5 +57,15 @@ interface EditorJSDataBlockList {
 	};
 }
 
+interface EditorJSDataBlockImage {
+	type: EditorJSDataBlockTypesEnum.IMAGE;
+	data: {
+		caption: string;
+		file: {
+			url: string;
+		};
+	};
+}
 
-type EditorJSDataBlock = { id?: string } & (EditorJSDataBlockParagraph | EditorJSDataBlockHeader | EditorJSDataBlockList);
+
+export type EditorJSDataBlock = { id?: string } & (EditorJSDataBlockParagraph | EditorJSDataBlockHeader | EditorJSDataBlockList | EditorJSDataBlockImage);
