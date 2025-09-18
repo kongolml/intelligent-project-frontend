@@ -1,0 +1,35 @@
+@use "./mixins.scss" as mixins;
+@use "../global.variables.scss" as variables;
+
+.on-center {
+    text-align: center;
+}
+
+
+h1 {
+    @include mixins.h1;
+}
+
+h2 {
+    @include mixins.h2;
+}
+
+a {
+    transition: color variables.$transition * 0.5;
+
+    &, &:hover, &:focus, &:active {
+        color: variables.$color-font;
+        outline: none;
+        text-decoration: none;
+    }
+}
+
+.on-center {
+    text-align: center;
+}
+
+.underline-on-hover {
+    &:hover {
+        text-decoration: underline;
+    }
+}

@@ -24,9 +24,13 @@ export default async function ProjectsPage() {
 
 	return (
 		<main>
-			<h1>Projects Page</h1>
+            <section>
+            {/* <div className="container mx-auto px-4">
+                <div className="flex flex-wrap -mx-2"> */}
 
-            <PortfolioList portfolioItems={portfolioItems} portfolioCategories={portfolioCategories} />
+<PortfolioList portfolioItems={portfolioItems} portfolioCategories={portfolioCategories} />
+                {/* </div>
+            </div> */}
 
             {/* <ul className={styles.categoriesList}>
                 <li onClick={() => filterPortfolioItemsByCategory("all")}>All</li>
@@ -48,6 +52,7 @@ export default async function ProjectsPage() {
                     </li>
                 ))}
             </ul> */}
+            </section>
 		</main>
 	);
 }

@@ -1,17 +1,32 @@
+@use "../../global.variables.scss" as variables;
+
 .categoriesList {
     list-style-type: none;
     padding: 0;
     display: flex;
     gap: 10px;
     font-size: 1rem;
+    margin-bottom: 2.6rem;
 
     li {
         cursor: pointer;
+        color: variables.$link-color-faded;
+        font-size: 1.6rem;
+
+        &:hover {
+          color: variables.$color-font;
+        }
 
         &.active {
-            border-bottom: 1px solid red;
+          color: variables.$color-font;
         }
     }
+}
+
+.itemsCount {
+  transform: translate(2px, -8px);
+  display: inline-block;
+  font-size: 1rem;
 }
 
 .projectsGrid {
@@ -30,13 +45,94 @@
 
 .imageWrap {
   position: relative;
-  width: 100%;
-  aspect-ratio: 16 / 9;   /* or 4/3, 1/1 — pick your shape */
-  overflow: hidden;
-  border-radius: 8px;     /* optional */
-  border: 1px solid red;
+  // width: 100%;
+  // aspect-ratio: 16 / 9;   /* or 4/3, 1/1 — pick your shape */
+  height: 300px;
+  background-color: transparentize(variables.$color-font, 0.75);
+  transition:  variables.$transition;
+
+  &:hover {
+    // img {
+      box-shadow: 0px 5px 15px rgba(0,0,0,.25);
+      transform: scale(1.02);
+    // }
+  }
 }
 
 .projectImg {
   object-fit: cover;
+}
+
+.portfolioImageWrp {
+  position: relative;
+  height: 300px;
+  margin-bottom: 40px;
+  transition: variables.$transition;
+
+  // maybe too much animation?
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0px 0px 0px rgba(0,0,0,.25);
+
+  &:hover {
+    box-shadow: 0px 5px 15px rgba(0,0,0,.25);
+    transform: scale(1.02);
+
+    // .category-icon-wrp {
+    //     opacity: 0;
+    // }
+
+    // .portfolio-images-list {
+    //     opacity: 1;
+    // }
+}
+}
+
+@each $icon_name, $icon_color in variables.$color-icons-map {
+  .#{$icon_name} {
+      // &, .category-icon-wrp {
+      //     background-color: transparentize($icon_color, variables.$brand-color-fading);
+      //     color: $icon_color;
+      // }
+      & {
+        background-color: transparentize($icon_color, variables.$brand-color-fading);
+
+        .svgIcon {
+          fill: $icon_color;
+        }
+    }
+  }
+}
+
+.svgIcon {
+  width: 150px;
+  height: 150px;
+}
+
+
+// .intrinsicGrid {
+//   display: grid;
+//   grid-template-columns: auto auto auto 1fr;
+//   gap: 16px;
+//   width: 100%;
+// }
+
+.flexContainer {
+  display: flex; /* Use flexbox */
+  gap: 16px;
+  width: 100%;
+
+  /* Visualization */
+  border: 2px solid #059669;
+}
+
+.flexItem {
+  /* Let items shrink but not grow by default */
+  flex-grow: 0;
+  flex-shrink: 1;
+  flex-basis: auto; /* Size is based on content */
+
+  /* Visualization */
+  background-color: #d1fae5;
+  border: 1px solid #6ee7b7;
 }
