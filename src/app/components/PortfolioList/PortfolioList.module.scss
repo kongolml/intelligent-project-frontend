@@ -50,6 +50,7 @@
   height: 300px;
   background-color: transparentize(variables.$color-font, 0.75);
   transition:  variables.$transition;
+  cursor: pointer;
 
   &:hover {
     // img {
@@ -135,4 +136,38 @@
   /* Visualization */
   background-color: #d1fae5;
   border: 1px solid #6ee7b7;
+}
+
+.closeButton {
+  font-size: 2rem;
+  position: fixed;
+  cursor: pointer;
+  left: 30px;
+    top: 38px;
+    z-index: 1000;
+
+    &:hover {
+      color:#646464;
+    }
+}
+
+.portfolioItemWrp {
+  // width limited by viewport width and 80vh projected to 16:9
+  width: min(90vw, calc(80vh * 16 / 9));
+  max-height: 80vh;
+
+  // your requested styles:
+  background-color: rgba(100, 100, 100, .25);
+  margin: 0 auto;
+  aspect-ratio: 16 / 9;
+
+  // required for <Image fill>
+  position: relative;
+  // overflow: "hidden",
+}
+
+.portfolioItemDescription {
+  position: absolute;
+    top: 100%;
+    left: 0;
 }
