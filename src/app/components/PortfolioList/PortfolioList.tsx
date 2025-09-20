@@ -181,7 +181,8 @@ export default function PortfolioList({ portfolioItems, portfolioCategories }: P
 				<div className="row row-cols-1 row-cols-lg-2 row-cols-xl-3">
 					{filteredItems.map((item) => (
 						<div className="col" key={item.id}>
-							<div onClick={() => showPortfolioItem(item)}>
+							{/* <div onClick={() => showPortfolioItem(item)}> */}
+							<Link href={`/projects/${item.slug}`}>
 								<div className={styles.projectCard}>
 									{item.thumbnail && (
 										<div className={styles.imageWrap}>
@@ -197,9 +198,10 @@ export default function PortfolioList({ portfolioItems, portfolioCategories }: P
 										</div>
 									)}
 
-									<p>{item.title}</p>
+									<p>{item.title} {item.mediaFiles.length > 0 ? `files: (${item.mediaFiles.length})` : ""}</p>
 								</div>
-							</div>
+							</Link>
+							{/* </div> */}
 						</div>
 					))}
 				</div>
