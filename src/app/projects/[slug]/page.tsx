@@ -27,7 +27,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
                                 alt={projectBySlug.title}
                                 width={600}
                                 height={400}
-                                className="project-image"
+                                className={styles.projectImage}
                             />
                             {projectBySlug.description && <EditorJSShow description={projectBySlug.description} />}
                             {projectBySlug.mediaFiles.length > 0 && (
