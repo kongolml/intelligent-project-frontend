@@ -70,8 +70,8 @@ console.log(description);
                         // const Tag = `h${block.data.level || 2}`;
                         return <h2 key={block.id} className={styles.editorJSShowHeader2}>{block.data.text}</h2>
                     case EditorJSDataBlockTypesEnum.LIST:
-                        // @ts-ignore
-                        return <ul key={block.id} className={styles.editorJSShowList}>{block.items.map((item, index) => <li key={`list-item-${index}-${block.id}`}>{item.content}</li>)}</ul>
+                        console.log(block);
+                        return <ul key={block.id} className={styles.editorJSShowList}>{block.data.items.map((item, index) => <li key={`list-item-${index}-${block.id}`}>{item.content}</li>)}</ul>
                     case EditorJSDataBlockTypesEnum.IMAGE:
                         return <Image
                             src={block.data.file.url}
