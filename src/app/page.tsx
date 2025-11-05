@@ -1,5 +1,6 @@
 // components
 import HomepagePortfolio from "./components/HomepagePortfolio/HomepagePortfolio";
+import HomepagePortfolioScrollable from "./components/HomepagePortfolioScrollable/HomepagePortfolioScrollable";
 import ServicesList from "./components/ServicesList/ServicesList";
 import Script from "next/script";
 
@@ -21,7 +22,9 @@ export default async function Home() {
 	return (
 		<>
 		<main role="main" className="homepage">
-      <HomepagePortfolio />
+      {/* <HomepagePortfolio /> */}
+	
+	<HomepagePortfolioScrollable />
 
       <ServicesList portfolioCategories={portfolioCategories} />
 		</main>

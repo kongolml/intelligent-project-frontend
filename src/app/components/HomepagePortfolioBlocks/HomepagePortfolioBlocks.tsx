@@ -34,17 +34,17 @@ const gridSizesMap = {
 	"small": [4, 5, 6, 7]
 }
 
-function getSizeCategory(index: number): "small" | undefined {
+function getSizeCategory(blockNumber: number): "small" | undefined {
   for (const [label, values] of Object.entries(gridSizesMap)) {
 	// @ts-ignore
-    if (values.includes(index)) return label;
+    if (values.includes(blockNumber)) return label;
   }
 
   return;
 }
 
 export default function HomepagePortfolioBlocks({ portfolioItems }: HomepagePortfolioBlocksProps) {
-	console.log("HomepagePortfolioBlocks", portfolioItems);
+	// console.log("HomepagePortfolioBlocks", portfolioItems);
 	return (
 		<div className={styles.portfolioGrid}>
 			{portfolioItems.map((item, index) => (

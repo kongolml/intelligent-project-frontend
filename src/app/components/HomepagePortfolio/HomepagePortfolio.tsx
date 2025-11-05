@@ -57,7 +57,7 @@ export default async function HomepagePortfolio() {
 		<section>
 			<div className="container">
 				<div className="row">
-					<div className="col-12">
+					<div className="col-10 mx-auto">
 						<HomepagePortfolioBlocks portfolioItems={showcasePortfolioItems} />
 					</div>
 				</div>

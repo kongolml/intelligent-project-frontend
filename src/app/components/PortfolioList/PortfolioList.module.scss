@@ -151,6 +151,10 @@
     }
 }
 
+.portfolioItem {
+  // opacity: 0;
+}
+
 .portfolioItemWrp {
   // width limited by viewport width and 80vh projected to 16:9
   width: min(90vw, calc(80vh * 16 / 9));

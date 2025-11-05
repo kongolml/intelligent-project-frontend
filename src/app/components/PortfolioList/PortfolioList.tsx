@@ -1,6 +1,9 @@
 "use client";
 import { useState, useMemo, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 // import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 
@@ -19,6 +22,9 @@ import PortfolioCategories from "@/app/components/PortfolioList/PortfolioCategor
 import IconIdentity from "@assets/icon-identity.svg";
 import IconWeb from "@assets/icon-web.svg";
 import IconPackage from "@assets/icon-package.svg";
+
+gsap.registerPlugin(useGSAP);
+gsap.registerPlugin(ScrollTrigger);
 
 interface PortfolioListProps {
 	portfolioItems: PortfolioItem[];
@@ -129,6 +135,125 @@ export default function PortfolioList({ portfolioItems, portfolioCategories }: P
 		handleClose();
 	};
 
+
+
+	const container = useRef<HTMLDivElement>(null);
+
+	// useGSAP(
+	// 	() => {
+	// 		ScrollTrigger.batch(".portfolioItem", {
+	// 			onEnter: (batch) => {
+	// 				gsap.from(batch, {
+	// 					opacity: 0,
+	// 					x: -100,
+	// 					stagger: 0.2, // <-- fade one after another!
+	// 					scrub: true,
+	// 				});
+	// 			},
+	// 			start: "top center",
+	// 			end: "top 100px",
+	// 			markers: true,
+	// 		});
+	// 	},
+	// 	{ scope: container }
+	// );
+
+	useGSAP(() => {
+		// let observer = new IntersectionObserver((entries, self) => {
+		// 	let targets = entries.map((entry) => {
+		// 		if (!entry.isIntersecting) return;
+				
+		// 		self.unobserve(entry.target);
+		// 		// return entry.target;
+
+		// 		gsap.from(entry.target, { 
+		// 			opacity: 0,
+		// 			// x: -100,
+		// 			stagger: 0.2,
+		// 			scrollTrigger: {
+		// 				trigger: entry.target,
+		// 				start: "top center",
+		// 				end: "top 100px",
+		// 				// pin: false,
+		// 				markers: true,
+		// 				scrub: true,
+		// 			},
+		// 		});
+		// 	});
+		// });
+
+		// ScrollTrigger.create({
+		// 	trigger: container.current,
+		// 	start: "top center",
+		// 	end: "+=500",
+		// 	onUpdate: (self) => console.log("velocity:", self.getVelocity()),
+		// });
+
+		let observer = new IntersectionObserver((entries, self) => {
+			let targets = entries.map((entry) => {
+				if (!entry.isIntersecting) return;
+				
+				self.unobserve(entry.target);
+				return entry.target;
+			});
+
+			targets.forEach((target) => {
+				if (!target) return;
+
+				gsap.from(target, { 
+					opacity: 0,
+					// x: -100,
+					stagger: 0.2,
+					scrollTrigger: {
+						// trigger: entry.target,
+						// trigger: container.current,
+						trigger: target,
+						start: "top center",
+						end: "top 100px",
+						// pin: false,
+						markers: true,
+						scrub: true,
+						onUpdate: (self) => {
+							console.log("velocity123444:", self.getVelocity())
+							// target.style.transform = `translateY(${self.getVelocity()}px)`;
+						},
+					},
+				});
+			})
+
+			// gsap.from(targets, { 
+			// 	opacity: 0,
+			// 	// x: -100,
+			// 	stagger: 0.2,
+			// 	scrollTrigger: {
+			// 		// trigger: entry.target,
+			// 		trigger: container.current,
+			// 		start: "top center",
+			// 		end: "top 100px",
+			// 		// pin: false,
+			// 		markers: true,
+			// 		scrub: true,
+			// 		onUpdate: (self) => {
+			// 			console.log("velocity123:", self.getVelocity())
+
+			// 		},
+			// 	},
+			// });
+		});
+
+		if (container.current) {
+			const portfolioItems = container.current.querySelectorAll('.portfolioItem');
+			portfolioItems.forEach((item) => {
+				observer.observe(item);
+			});
+		}
+	
+		// Cleanup
+		return () => {
+			observer.disconnect();
+		};
+	},{ scope: container }); // <-- scope is for selector text (optional)
+
 	return (
 		<>
 			<div className="container">
@@ -178,9 +303,9 @@ export default function PortfolioList({ portfolioItems, portfolioCategories }: P
 			</div>
 
 			<div className="container" ref={targetRef}>
-				<div className="row row-cols-1 row-cols-lg-2 row-cols-xl-3">
+				<div className="row row-cols-1 row-cols-lg-2 row-cols-xl-3" ref={container}>
 					{filteredItems.map((item) => (
-						<div className="col" key={item.id}>
+						<div className={`col portfolioItem ${styles.portfolioItem}`} key={item.id}>
 							{/* <div onClick={() => showPortfolioItem(item)}> */}
 							<Link href={`/projects/${item.slug}`}>
 								<div className={styles.projectCard}>
