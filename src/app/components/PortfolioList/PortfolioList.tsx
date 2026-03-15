@@ -1,8 +1,8 @@
 "use client";
 import { useState, useMemo, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
-import gsap from 'gsap';
-import { useGSAP } from '@gsap/react';
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 // import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -135,8 +135,6 @@ export default function PortfolioList({ portfolioItems, portfolioCategories }: P
 		handleClose();
 	};
 
-
-
 	const container = useRef<HTMLDivElement>(null);
 
 	// useGSAP(
@@ -158,120 +156,194 @@ export default function PortfolioList({ portfolioItems, portfolioCategories }: P
 	// 	{ scope: container }
 	// );
 
-	useGSAP(() => {
-		// let observer = new IntersectionObserver((entries, self) => {
-		// 	let targets = entries.map((entry) => {
-		// 		if (!entry.isIntersecting) return;
-				
-		// 		self.unobserve(entry.target);
-		// 		// return entry.target;
+	useGSAP(
+		() => {
+			// let observer = new IntersectionObserver((entries, self) => {
+			// 	let targets = entries.map((entry) => {
+			// 		if (!entry.isIntersecting) return;
 
-		// 		gsap.from(entry.target, { 
-		// 			opacity: 0,
-		// 			// x: -100,
-		// 			stagger: 0.2,
-		// 			scrollTrigger: {
-		// 				trigger: entry.target,
-		// 				start: "top center",
-		// 				end: "top 100px",
-		// 				// pin: false,
-		// 				markers: true,
-		// 				scrub: true,
-		// 			},
-		// 		});
-		// 	});
-		// });
+			// 		self.unobserve(entry.target);
+			// 		// return entry.target;
 
-		// ScrollTrigger.create({
-		// 	trigger: container.current,
-		// 	start: "top center",
-		// 	end: "+=500",
-		// 	onUpdate: (self) => console.log("velocity:", self.getVelocity()),
-		// });
+			// 		gsap.from(entry.target, {
+			// 			opacity: 0,
+			// 			// x: -100,
+			// 			stagger: 0.2,
+			// 			scrollTrigger: {
+			// 				trigger: entry.target,
+			// 				start: "top center",
+			// 				end: "top 100px",
+			// 				// pin: false,
+			// 				markers: true,
+			// 				scrub: true,
+			// 			},
+			// 		});
+			// 	});
+			// });
 
-		let observer = new IntersectionObserver((entries, self) => {
-			let targets = entries.map((entry) => {
-				if (!entry.isIntersecting) return;
-				
-				self.unobserve(entry.target);
-				return entry.target;
+			// ScrollTrigger.create({
+			// 	trigger: container.current,
+			// 	start: "top center",
+			// 	end: "+=500",
+			// 	onUpdate: (self) => console.log("velocity:", self.getVelocity()),
+			// });
+
+			let observer = new IntersectionObserver((entries, self) => {
+				let targets = entries.map((entry) => {
+					if (!entry.isIntersecting) return;
+
+					self.unobserve(entry.target);
+					return entry.target;
+				});
+
+				// targets.forEach((target) => {
+				// 	if (!target) return;
+
+				// 	gsap.from(target, {
+				// 		opacity: 0,
+				// 		// x: -100,
+				// 		stagger: 0.2,
+				// 		scrollTrigger: {
+				// 			// trigger: entry.target,
+				// 			// trigger: container.current,
+				// 			trigger: target,
+				// 			start: "top center",
+				// 			end: "top 100px",
+				// 			// pin: false,
+				// 			// markers: true,
+				// 			scrub: true,
+				// 			onUpdate: (self) => {
+				// 				// console.log("velocity123444:", self.getVelocity())
+				// 				// target.style.transform = `translateY(${self.getVelocity()}px)`;
+				// 			},
+				// 		},
+				// 	});
+				// })
+
+				// gsap.from(targets, {
+				// 	opacity: 0,
+				// 	// x: -100,
+				// 	stagger: 0.2,
+				// 	scrollTrigger: {
+				// 		// trigger: entry.target,
+				// 		trigger: container.current,
+				// 		start: "top center",
+				// 		end: "top 100px",
+				// 		// pin: false,
+				// 		markers: true,
+				// 		scrub: true,
+				// 		onUpdate: (self) => {
+				// 			console.log("velocity123:", self.getVelocity())
+
+				// 		},
+				// 	},
+				// });
 			});
 
-			targets.forEach((target) => {
-				if (!target) return;
+			const portfolioListContainer = document.querySelector(".portfolio-list-container") as HTMLElement;
+			const pageTitle = document.querySelector(".page-title") as HTMLElement;
+			const categoryListContainer = document.querySelector(".category-list-container") as HTMLElement;
 
-				gsap.from(target, { 
-					opacity: 0,
-					// x: -100,
-					stagger: 0.2,
-					scrollTrigger: {
-						// trigger: entry.target,
-						// trigger: container.current,
-						trigger: target,
-						start: "top center",
-						end: "top 100px",
-						// pin: false,
-						markers: true,
-						scrub: true,
-						onUpdate: (self) => {
-							console.log("velocity123444:", self.getVelocity())
-							// target.style.transform = `translateY(${self.getVelocity()}px)`;
-						},
-					},
-				});
-			})
+			portfolioCategories.forEach((category) => {
+				const topElement = document.querySelector(`.category-${category.slug}-top`) as HTMLElement;
+				const mainElement = document.querySelector(`.category-${category.slug}-main`) as HTMLElement;
 
-			// gsap.from(targets, { 
-			// 	opacity: 0,
-			// 	// x: -100,
-			// 	stagger: 0.2,
-			// 	scrollTrigger: {
-			// 		// trigger: entry.target,
-			// 		trigger: container.current,
-			// 		start: "top center",
-			// 		end: "top 100px",
-			// 		// pin: false,
-			// 		markers: true,
-			// 		scrub: true,
+				// if (topElement && mainElement) {
+				// 	// Get initial positions
+				// 	const topRect = topElement.getBoundingClientRect();
+				// 	const mainRect = mainElement.getBoundingClientRect();
+
+				// 	// Calculate the difference in positions
+				// 	const deltaX = mainRect.left - topRect.left;
+				// 	const deltaY = mainRect.top - topRect.top;
+
+				// 	// Animate with ScrollTrigger
+				// 	gsap.to(topElement, {
+				// 		x: deltaX,
+				// 		y: deltaY,
+				// 		scrollTrigger: {
+				// 			trigger: pageTitle,
+				// 			start: "top top",
+				// 			endTrigger: portfolioListContainer,
+				// 			end: "top top",
+				// 			scrub: 1, // Smooth scrubbing based on scroll
+				// 			// markers: true, // Remove this in production,
+				// 			// pin: categoryListContainer,
+				// 		},
+				// 		// ease: "bounce.out", // Use "none" when scrub is true
+				// 		// ease: inertiaEase,
+				// 		// ease: "power3.out",
+				// 		onUpdate: (self) => {
+				// 						console.log("velocity123:", self.getVelocity())
+			
+				// 					},
+				// 	});
+				// }
+			});
+
+			// const categoryIconWrp = document.querySelectorAll(".category-icon-wrp");
+			// categoryIconWrp.forEach((icon) => {
+			// 	gsap.to(icon, {
+			// 		y: 100, // Increased value for faster upward movement (parallax effect)
+			// 		scrollTrigger: {
+			// 			trigger: pageTitle,
+			// 			start: "top top",
+			// 			endTrigger: icon,
+			// 			end: "bottom top+=0", // Extended range for smoother parallax effect
+			// 			scrub: 1, // Smooth connection to scroll
+			// 			markers: true, // Remove this in production
+			// 		},
 			// 		onUpdate: (self) => {
-			// 			console.log("velocity123:", self.getVelocity())
+			// 			console.log("velocity123456:", self.getVelocity())
 
 			// 		},
-			// 	},
+			// 	});
 			// });
-		});
 
-		if (container.current) {
-			const portfolioItems = container.current.querySelectorAll('.portfolioItem');
-			portfolioItems.forEach((item) => {
-				observer.observe(item);
-			});
-		}
-	
-		// Cleanup
-		return () => {
-			observer.disconnect();
-		};
-	},{ scope: container }); // <-- scope is for selector text (optional)
+			if (container.current) {
+				const portfolioItems = container.current.querySelectorAll(".portfolioItem");
+				portfolioItems.forEach((item) => {
+					observer.observe(item);
+				});
+			}
+
+			// Cleanup
+			return () => {
+				observer.disconnect();
+			};
+		},
+		{ scope: container }
+	); // <-- scope is for selector text (optional)
+
+	const inertiaEase = (progress: number) => {
+		// Exponential deceleration curve
+		return 1 - Math.pow(1 - progress, 3);
+	};
 
 	return (
 		<>
-			<div className="container">
-				<div className="d-flex justify-content-center flex-column vh-100 ">
-					<div className="row">
-						<h1>Projects</h1>
-					</div>
+			<div className="container sticky-top">
+				<div className="row">
+					<h1 className={styles.pageTitle}>Projects</h1>
+				</div>
+			</div>
 
-					<div className="row row-cols-1 row-cols-lg-2 row-cols-xl-3 w-100">
+			<div className="container">
+				<div className="d-flex flex-column vh-100 ">
+					<div className="row row-cols-1 row-cols-lg-2 row-cols-xl-3 w-100 flex-grow-1 d-flex align-items-center">
 						{portfolioCategories.map((category, index) => {
 							const CategoryIcon = categoriesIconsMap[category.slug];
 
 							return (
 								<div className="col" key={category.slug} onClick={() => scrollToCategory(category.slug)}>
-									<h2>
+									<h2 className={`category-${category.slug}-top`}>
 										{category.name} <span className={styles.itemsCount}>{(categoryCounts && categoryCounts[category.slug]) || 0}</span>
 									</h2>
-									<div className={`${styles.portfolioImageWrp} ${styles[category.slug]} d-flex justify-content-center align-items-center`}>
+									<div
+										className={`${styles.portfolioImageWrp} ${
+											styles[category.slug]
+										} d-flex justify-content-center align-items-center category-icon-wrp`}
+									>
 										<CategoryIcon className={styles.svgIcon} />
 									</div>
 								</div>
@@ -302,7 +374,17 @@ export default function PortfolioList({ portfolioItems, portfolioCategories }: P
 				</Modal>
 			</div>
 
-			<div className="container" ref={targetRef}>
+			<div className="container category-list-container">
+				<div className="d-flex flex-row flex-nowrap gap-3">
+					{portfolioCategories.map((category) => (
+						<div key={category.slug} className={`category-${category.slug}-main`}>
+							<h2 className="opacity-1">{category.name}</h2>
+						</div>
+					))}
+				</div>
+			</div>
+
+			<div className="container portfolio-list-container" ref={targetRef}>
 				<div className="row row-cols-1 row-cols-lg-2 row-cols-xl-3" ref={container}>
 					{filteredItems.map((item) => (
 						<div className={`col portfolioItem ${styles.portfolioItem}`} key={item.id}>
@@ -323,7 +405,9 @@ export default function PortfolioList({ portfolioItems, portfolioCategories }: P
 										</div>
 									)}
 
-									<p>{item.title} {item.mediaFiles.length > 0 ? `files: (${item.mediaFiles.length})` : ""}</p>
+									<p>
+										{item.title} {item.mediaFiles.length > 0 ? `files: (${item.mediaFiles.length})` : ""}
+									</p>
 								</div>
 							</Link>
 							{/* </div> */}

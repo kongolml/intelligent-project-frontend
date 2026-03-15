@@ -32,6 +32,7 @@ export default function RootLayout({
       <head>
       <style>
 @import url('https://fonts.googleapis.com/css2?family=Chiron+GoRound+TC:wght@200..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&family=Sora:wght@400;500;600&display=swap');
 </style>
       </head>
       <body>

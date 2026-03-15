@@ -3,7 +3,7 @@
 import { useRef, useEffect, useState } from "react";
 import { PortfolioItem } from "../../../types/portfolio.types";
 import styles from "./HomepagePortfolioScrollable.module.scss";
-import useScrollEffects from "@/app/hooks/useScrollEffects";
+import {useScrollEffects} from "@/app/hooks/useScrollEffects";
 
 interface Props {
 	showcasePortfolioItems: PortfolioItem[];
@@ -15,6 +15,9 @@ export default function HomepagePortfolioScrollableClient({ showcasePortfolioIte
 	const projectNavRef = useRef<HTMLDivElement>(null);
 	const projectsDemoRef = useRef<HTMLElement>(null);
 	const ourServicesRef = useRef<HTMLElement | null>(null);
+
+	const circleRef = useRef<HTMLDivElement>(null);
+
 	const [isMobile, setIsMobile] = useState(false);
 
 	useEffect(() => {
@@ -41,8 +44,11 @@ export default function HomepagePortfolioScrollableClient({ showcasePortfolioIte
 		projectNavRef,
 		projectsDemoRef,
 		heroRef,
-		ourServicesRef
+		ourServicesRef,
+		circleRef
 	});
+
+	// useCircleEffect();
 
 	return (
 		<>
@@ -50,8 +56,8 @@ export default function HomepagePortfolioScrollableClient({ showcasePortfolioIte
 				<div className="container">
 					<div className="row">
 						<div className="col-12 col-sm-8 offset-md-1">
-							<div id="hero-into-text">
-								<h1 className="we-are">|</h1>
+							<div id={styles.heroIntoText}>
+								<h1 className={`${styles.weAre} we-are`}>|</h1>
 								<div id="typewriter">
 									{/* Брендинг, дизайн пакування та веб-розробка. */}
 									{/* Чистий дизайн. Сильні бренди. Деталі мають значення. */}
@@ -61,6 +67,7 @@ export default function HomepagePortfolioScrollableClient({ showcasePortfolioIte
 						</div>
 					</div>
 				</div>
+				{/* <div className={`${styles.circle} circle`} ref={circleRef}></div> */}
 			</section>
 
 			<section className={styles.whatWeDo} id="projects-demo" ref={projectsDemoRef}>
