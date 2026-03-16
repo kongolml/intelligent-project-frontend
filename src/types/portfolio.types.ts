@@ -14,6 +14,9 @@ export interface PortfolioCategory {
 export interface PortfolioItem {
 	id: string;
 	title: string;
+	subtitle?: string;
+	client?: string;
+	year?: number;
 	description?: EditorJSDataBlock[];
 	categories: {
 		name: PortfolioCategory["name"];

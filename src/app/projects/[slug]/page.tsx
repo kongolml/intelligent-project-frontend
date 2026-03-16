@@ -19,5 +19,5 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
 
     const project: PortfolioItem = await projectRequest.json();
 
-    return <ProjectDetailClient project={project} />;
+    return <main><ProjectDetailClient project={project} /></main>;
 }

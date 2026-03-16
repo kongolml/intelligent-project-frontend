@@ -47,6 +47,11 @@ export default function ProjectDetailClient({ project }: ProjectDetailClientProp
                     <h1 className={styles.heroTitle} data-reveal-delay="2">
                         {project.title}
                     </h1>
+                    {project.subtitle && (
+                        <p className={styles.heroSubtitle} data-reveal-delay="2">
+                            {project.subtitle}
+                        </p>
+                    )}
                     {intro && (
                         <p className={styles.heroIntro} data-reveal-delay="3">
                             {intro}
@@ -64,6 +69,18 @@ export default function ProjectDetailClient({ project }: ProjectDetailClientProp
                             <span className={styles.overviewValue}>{cat.name}</span>
                         </div>
                     ))}
+                    {project.client && (
+                        <div className={styles.overviewItem} data-reveal-delay={String(project.categories.length + 1)}>
+                            <span className={styles.overviewLabel}>Client</span>
+                            <span className={styles.overviewValue}>{project.client}</span>
+                        </div>
+                    )}
+                    {project.year && (
+                        <div className={styles.overviewItem} data-reveal-delay={String(project.categories.length + 2)}>
+                            <span className={styles.overviewLabel}>Year</span>
+                            <span className={styles.overviewValue}>{project.year}</span>
+                        </div>
+                    )}
                 </div>
             </section>
 
