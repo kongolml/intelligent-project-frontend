@@ -10,20 +10,28 @@ import { PortfolioCategory, PortfolioItem } from "../../types/portfolio.types";
 import PortfolioList from "@/app/components/PortfolioList/PortfolioList";
 
 export default async function ProjectsPage() {
-	const portfolioRequest = await fetch(`${getApiUrl()}/public-api/portfolio`, {
-		// Recommended for SSR caching control:
-		cache: "no-store", // or `next: { revalidate: 60 }` for ISR,
-	});
-    
-    const portfolioCategoriesRequest = await fetch(`${getApiUrl()}/public-api/portfolio-categories`, {
-		// Recommended for SSR caching control:
-		// cache: "no-store", // or `next: { revalidate: 60 }` for ISR,
-	});
+	let portfolioItems: PortfolioItem[] = [];
+	let portfolioCategories: PortfolioCategory[] = [];
 
+	try {
+		const portfolioRequest = await fetch(`${getApiUrl()}/public-api/portfolio`, {
+			cache: "no-store",
+		});
+		if (portfolioRequest.ok) {
+			portfolioItems = await portfolioRequest.json();
+		}
+	} catch {
+		// API unavailable — render with empty portfolio
+	}
 
-	const portfolioItems: PortfolioItem[] = await portfolioRequest.json();
-
-    const portfolioCategories: PortfolioCategory[] = await portfolioCategoriesRequest.json();
+	try {
+		const portfolioCategoriesRequest = await fetch(`${getApiUrl()}/public-api/portfolio-categories`);
+		if (portfolioCategoriesRequest.ok) {
+			portfolioCategories = await portfolioCategoriesRequest.json();
+		}
+	} catch {
+		// API unavailable — render with empty categories
+	}
 
 	return (
 		<main>

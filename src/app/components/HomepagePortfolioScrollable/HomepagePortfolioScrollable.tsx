@@ -9,12 +9,16 @@ import { PortfolioCategory, PortfolioItem, PortfolioItem as PortfolioItemType } 
 import HomepagePortfolioScrollableClient from "./HomepagePortfolioScrollableClient";
 
 export default async function HomepagePortfolioScrollable() {
-	const showcasePortfolioItemsRequest = await fetch(`${getApiUrl()}/public-api/portfolio/showcases`, {
-		// Recommended for SSR caching control:
-		// cache: "no-store", // or `next: { revalidate: 60 }` for ISR,
-	});
+	let showcasePortfolioItems: PortfolioItemType[] = [];
 
-	const showcasePortfolioItems: PortfolioItemType[] = await showcasePortfolioItemsRequest.json();
+	try {
+		const showcasePortfolioItemsRequest = await fetch(`${getApiUrl()}/public-api/portfolio/showcases`);
+		if (showcasePortfolioItemsRequest.ok) {
+			showcasePortfolioItems = await showcasePortfolioItemsRequest.json();
+		}
+	} catch {
+		// API unavailable — render with empty showcase
+	}
 
 	// Randomly select 3 items
 	const shuffled = [...showcasePortfolioItems].sort(() => Math.random() - 0.5);

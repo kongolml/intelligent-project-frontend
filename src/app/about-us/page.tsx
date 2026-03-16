@@ -12,8 +12,16 @@ import { Teammate } from "../../types/teammate.types";
 import styles from "./Teammate.module.scss";
 
 export default async function AboutUsPage() {
-	const teammates = await fetch(`${getApiUrl()}/public-api/teammates`);
-	const teammatesData: Teammate[] = await teammates.json();
+	let teammatesData: Teammate[] = [];
+
+	try {
+		const teammates = await fetch(`${getApiUrl()}/public-api/teammates`);
+		if (teammates.ok) {
+			teammatesData = await teammates.json();
+		}
+	} catch {
+		// API unavailable — render with empty team
+	}
 
 	return (
 		<main>

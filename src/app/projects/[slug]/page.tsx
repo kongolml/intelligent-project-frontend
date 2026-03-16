@@ -6,9 +6,12 @@ import ProjectDetailClient from "./ProjectDetailClient";
 export default async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {
     const slug = (await params).slug;
 
-    const projectRequest = await fetch(`${getApiUrl()}/public-api/portfolio/${slug}`, {
-        // cache: "no-store",
-    });
+    let projectRequest;
+    try {
+        projectRequest = await fetch(`${getApiUrl()}/public-api/portfolio/${slug}`);
+    } catch {
+        notFound();
+    }
 
     if (!projectRequest.ok) {
         notFound();

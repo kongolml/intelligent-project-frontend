@@ -14,12 +14,16 @@ import { PortfolioCategory, PortfolioItem } from "../types/portfolio.types";
 // import animationGsap from "../../public/vendor/scroll-magic/animation.gsap";
 
 export default async function Home() {
-  const portfolioCategoriesRequest = await fetch(`${getApiUrl()}/public-api/portfolio-categories`, {
-		// Recommended for SSR caching control:
-		// cache: "no-store", // or `next: { revalidate: 60 }` for ISR,
-	});
+  let portfolioCategories: PortfolioCategory[] = [];
 
-	const portfolioCategories: PortfolioCategory[] = await portfolioCategoriesRequest.json();
+  try {
+    const portfolioCategoriesRequest = await fetch(`${getApiUrl()}/public-api/portfolio-categories`);
+    if (portfolioCategoriesRequest.ok) {
+      portfolioCategories = await portfolioCategoriesRequest.json();
+    }
+  } catch {
+    // API unavailable — render with empty categories
+  }
   // const portfolioItems: PortfolioItem[] = await res.json();
 
 	return (

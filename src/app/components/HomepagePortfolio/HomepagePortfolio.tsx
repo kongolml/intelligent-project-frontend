@@ -44,12 +44,16 @@ export default async function HomepagePortfolio() {
 	//     return result[0] || null;
 	// });
 
-	const showcasePortfolioItemsRequest = await fetch(`${getApiUrl()}/public-api/portfolio/showcases`, {
-		// Recommended for SSR caching control:
-		// cache: "no-store", // or `next: { revalidate: 60 }` for ISR,
-	});
+	let showcasePortfolioItems: PortfolioItemType[] = [];
 
-	const showcasePortfolioItems: PortfolioItemType[] = await showcasePortfolioItemsRequest.json();
+	try {
+		const showcasePortfolioItemsRequest = await fetch(`${getApiUrl()}/public-api/portfolio/showcases`);
+		if (showcasePortfolioItemsRequest.ok) {
+			showcasePortfolioItems = await showcasePortfolioItemsRequest.json();
+		}
+	} catch {
+		// API unavailable — render with empty showcase
+	}
 
 	// console.log(showcasePortfolioItems);
 
