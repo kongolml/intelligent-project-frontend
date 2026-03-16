@@ -1,5 +1,8 @@
 import Link from 'next/link'
 
+// lib
+import { getApiUrl } from "../lib/api";
+
 // types
 import { PortfolioCategory, PortfolioItem } from "../../types/portfolio.types";
 
@@ -7,12 +10,12 @@ import { PortfolioCategory, PortfolioItem } from "../../types/portfolio.types";
 import PortfolioList from "@/app/components/PortfolioList/PortfolioList";
 
 export default async function ProjectsPage() {
-	const portfolioRequest = await fetch("http://localhost:3000/public-api/portfolio", {
+	const portfolioRequest = await fetch(`${getApiUrl()}/public-api/portfolio`, {
 		// Recommended for SSR caching control:
 		cache: "no-store", // or `next: { revalidate: 60 }` for ISR,
 	});
     
-    const portfolioCategoriesRequest = await fetch("http://localhost:3000/public-api/portfolio-categories", {
+    const portfolioCategoriesRequest = await fetch(`${getApiUrl()}/public-api/portfolio-categories`, {
 		// Recommended for SSR caching control:
 		// cache: "no-store", // or `next: { revalidate: 60 }` for ISR,
 	});

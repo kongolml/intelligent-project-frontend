@@ -7,6 +7,7 @@ import {
     EditorJSDataBlockTypesEnum,
     EditorJSDataBlock,
 } from "../../../types/portfolio.types";
+import { sanitizeHtml } from "../../lib/sanitize";
 import styles from "./ProjectDetail.module.scss";
 
 interface ProjectDetailClientProps {
@@ -163,7 +164,7 @@ function EditorJSContent({ blocks }: { blocks: EditorJSDataBlock[] }) {
                             <p
                                 key={key}
                                 className={styles.sectionText}
-                                dangerouslySetInnerHTML={{ __html: block.data.text }}
+                                dangerouslySetInnerHTML={{ __html: sanitizeHtml(block.data.text) }}
                             />
                         );
                     case EditorJSDataBlockTypesEnum.HEADER:

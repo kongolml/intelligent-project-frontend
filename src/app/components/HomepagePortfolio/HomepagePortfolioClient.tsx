@@ -3,6 +3,7 @@
 import { useRef } from "react";
 // import useScrollEffects from "@/app/hooks/useScrollEffects";
 import {useScrollEffects} from "@/app/hooks/useScrollEffects.gemini";
+import { sanitizeHtml } from "../../lib/sanitize";
 import styles from "./HomepagePortfolio.module.scss";
 import { PortfolioItem as PortfolioItemType } from "../../../types/portfolio.types";
 
@@ -123,7 +124,7 @@ export default function HomepagePortfolioClient({ randomPortfolioItems }: Props)
                                                     key={portfolioItem.id}
                                                 >
                                                     <figcaption>
-                                                        <div className={styles["description-wrp"]} dangerouslySetInnerHTML={{ __html: portfolioItem.description || "" }}>
+                                                        <div className={styles["description-wrp"]} dangerouslySetInnerHTML={{ __html: sanitizeHtml(portfolioItem.description || "") }}>
                                                         </div>
                                                     </figcaption>
                                                 </figure>

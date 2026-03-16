@@ -3,13 +3,16 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Image from "next/image";
 
+// lib
+import { getApiUrl } from "../lib/api";
+
 // types
 import { Teammate } from "../../types/teammate.types";
 
 import styles from "./Teammate.module.scss";
 
 export default async function AboutUsPage() {
-	const teammates = await fetch("http://localhost:3000/public-api/teammates");
+	const teammates = await fetch(`${getApiUrl()}/public-api/teammates`);
 	const teammatesData: Teammate[] = await teammates.json();
 
 	return (
