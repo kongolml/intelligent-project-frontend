@@ -5,7 +5,7 @@ import ServicesList from "./components/ServicesList/ServicesList";
 import Script from "next/script";
 
 // lib
-import { getApiUrl } from "./lib/api";
+import { getPortfolioCategories } from "./lib/api";
 
 // types
 import { PortfolioCategory, PortfolioItem } from "../types/portfolio.types";
@@ -17,10 +17,7 @@ export default async function Home() {
   let portfolioCategories: PortfolioCategory[] = [];
 
   try {
-    const portfolioCategoriesRequest = await fetch(`${getApiUrl()}/public-api/portfolio-categories`);
-    if (portfolioCategoriesRequest.ok) {
-      portfolioCategories = await portfolioCategoriesRequest.json();
-    }
+    portfolioCategories = await getPortfolioCategories();
   } catch {
     // API unavailable — render with empty categories
   }
@@ -30,7 +27,7 @@ export default async function Home() {
 		<>
 		<main role="main" className="homepage">
       {/* <HomepagePortfolio /> */}
-	
+
 	<HomepagePortfolioScrollable />
 
       <ServicesList portfolioCategories={portfolioCategories} />

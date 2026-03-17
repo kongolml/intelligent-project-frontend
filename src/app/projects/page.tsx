@@ -1,7 +1,7 @@
 import Link from 'next/link'
 
 // lib
-import { getApiUrl } from "../lib/api";
+import { getPortfolioItems, getPortfolioCategories } from "../lib/api";
 
 // types
 import { PortfolioCategory, PortfolioItem } from "../../types/portfolio.types";
@@ -14,21 +14,13 @@ export default async function ProjectsPage() {
 	let portfolioCategories: PortfolioCategory[] = [];
 
 	try {
-		const portfolioRequest = await fetch(`${getApiUrl()}/public-api/portfolio`, {
-			cache: "no-store",
-		});
-		if (portfolioRequest.ok) {
-			portfolioItems = await portfolioRequest.json();
-		}
+		portfolioItems = await getPortfolioItems();
 	} catch {
 		// API unavailable — render with empty portfolio
 	}
 
 	try {
-		const portfolioCategoriesRequest = await fetch(`${getApiUrl()}/public-api/portfolio-categories`);
-		if (portfolioCategoriesRequest.ok) {
-			portfolioCategories = await portfolioCategoriesRequest.json();
-		}
+		portfolioCategories = await getPortfolioCategories();
 	} catch {
 		// API unavailable — render with empty categories
 	}

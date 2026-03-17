@@ -4,7 +4,7 @@ import Col from "react-bootstrap/Col";
 import Image from "next/image";
 
 // lib
-import { getApiUrl } from "../lib/api";
+import { getTeammates } from "../lib/api";
 
 // types
 import { Teammate } from "../../types/teammate.types";
@@ -15,10 +15,7 @@ export default async function AboutUsPage() {
 	let teammatesData: Teammate[] = [];
 
 	try {
-		const teammates = await fetch(`${getApiUrl()}/public-api/teammates`);
-		if (teammates.ok) {
-			teammatesData = await teammates.json();
-		}
+		teammatesData = await getTeammates();
 	} catch {
 		// API unavailable — render with empty team
 	}

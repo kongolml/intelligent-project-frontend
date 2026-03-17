@@ -1,9 +1,8 @@
 // lib
-import { getApiUrl } from "../../lib/api";
+import { getPortfolioShowcases } from "../../lib/api";
 
 // types
-import { PortfolioCategory, PortfolioItem, PortfolioItem as PortfolioItemType } from "../../../types/portfolio.types";
-// import PortfolioItem from "."; // Adjust the import path as necessary
+import { PortfolioItem as PortfolioItemType } from "../../../types/portfolio.types";
 
 // components
 import HomepagePortfolioScrollableClient from "./HomepagePortfolioScrollableClient";
@@ -12,10 +11,7 @@ export default async function HomepagePortfolioScrollable() {
 	let showcasePortfolioItems: PortfolioItemType[] = [];
 
 	try {
-		const showcasePortfolioItemsRequest = await fetch(`${getApiUrl()}/public-api/portfolio/showcases`);
-		if (showcasePortfolioItemsRequest.ok) {
-			showcasePortfolioItems = await showcasePortfolioItemsRequest.json();
-		}
+		showcasePortfolioItems = await getPortfolioShowcases();
 	} catch {
 		// API unavailable — render with empty showcase
 	}

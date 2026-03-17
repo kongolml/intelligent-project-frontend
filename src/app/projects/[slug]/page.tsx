@@ -1,23 +1,20 @@
 import { notFound } from "next/navigation";
-import { getApiUrl } from "../../lib/api";
-import { PortfolioItem } from "../../../types/portfolio.types";
+import { getPortfolioItemBySlug } from "../../lib/api";
 import ProjectDetailClient from "./ProjectDetailClient";
 
 export default async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {
     const slug = (await params).slug;
 
-    let projectRequest;
+    let project;
     try {
-        projectRequest = await fetch(`${getApiUrl()}/public-api/portfolio/${slug}`);
+        project = await getPortfolioItemBySlug(slug);
     } catch {
         notFound();
     }
 
-    if (!projectRequest.ok) {
+    if (!project) {
         notFound();
     }
-
-    const project: PortfolioItem = await projectRequest.json();
 
     return <main><ProjectDetailClient project={project} /></main>;
 }
