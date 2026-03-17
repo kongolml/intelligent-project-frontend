@@ -60,7 +60,7 @@ function mapTeammate(raw: PayloadTeammate): Teammate {
 export async function getPortfolioItems(): Promise<PortfolioItem[]> {
   const docs = await fetchFromPayload<PayloadPortfolioItem>(
     "portfolio-items?depth=1&limit=0",
-    { cache: "no-store" },
+    // { cache: "no-store" },
   ).catch((err) => {
     console.error("Failed to fetch portfolio items:", err);
     return [];

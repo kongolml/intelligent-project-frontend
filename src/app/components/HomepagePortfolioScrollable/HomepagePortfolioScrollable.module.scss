@@ -1,3 +1,4 @@
+@use "sass:color";
 @use "../../global.variables.scss" as variables;
 
 $hero-height-percents-viewport: 90;
@@ -94,7 +95,7 @@ $hero-height-percents-viewport: 90;
 
         @each $icon_name, $icon_color in variables.$color-icons-map {
             &:global(.category-#{$icon_name}) {
-                background-color: transparentize($icon_color, variables.$brand-color-fading);
+                background-color: color.adjust($icon_color, $alpha: -(variables.$brand-color-fading));
             }
         }
 
