@@ -61,7 +61,10 @@ export async function getPortfolioItems(): Promise<PortfolioItem[]> {
   const docs = await fetchFromPayload<PayloadPortfolioItem>(
     "portfolio-items?depth=1&limit=0",
     { cache: "no-store" },
-  );
+  ).catch((err) => {
+    console.error("Failed to fetch portfolio items:", err);
+    return [];
+  });
   return docs.map(mapPortfolioItem);
 }
 
