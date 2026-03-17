@@ -38,9 +38,10 @@ function mapPortfolioItem(raw: PayloadPortfolioItem): PortfolioItem {
     client: raw.client ?? undefined,
     year: raw.year ?? undefined,
     description: (raw.description as EditorJSDataBlock[] | null) ?? undefined,
-    categories: raw.categories.map((c) => ({ name: c.name, slug: c.slug as PortfolioCategorySlugs })),
+    descriptionHTML: raw.descriptionHTML ?? undefined,
+    categories: (raw.categories ?? []).map((c) => ({ name: c.name, slug: c.slug as PortfolioCategorySlugs })),
     thumbnail: resolveMediaUrl(raw.thumbnail),
-    mediaFiles: raw.mediaFiles.map((m) => resolveMediaUrl(m)),
+    mediaFiles: (raw.mediaFiles ?? []).map((m) => resolveMediaUrl(m)),
     slug: raw.slug,
     isShowcase: raw.isShowcase ?? undefined,
   };
@@ -51,7 +52,7 @@ function mapTeammate(raw: PayloadTeammate): Teammate {
     id: raw.id,
     name: raw.name,
     title: raw.title,
-    image: raw.image.map((m) => resolveMediaUrl(m)),
+    image: (raw.image ?? []).map((m) => resolveMediaUrl(m)),
   };
 }
 
@@ -71,23 +72,35 @@ export async function getPortfolioItems(): Promise<PortfolioItem[]> {
 export async function getPortfolioShowcases(): Promise<PortfolioItem[]> {
   const docs = await fetchFromPayload<PayloadPortfolioItem>(
     "portfolio-items?where[isShowcase][equals]=true&depth=1&limit=0",
-  );
+  ).catch((err) => {
+    console.error("Failed to fetch portfolio showcases:", err);
+    return [];
+  });
   return docs.map(mapPortfolioItem);
 }
 
 export async function getPortfolioItemBySlug(slug: string): Promise<PortfolioItem | null> {
   const docs = await fetchFromPayload<PayloadPortfolioItem>(
     `portfolio-items?where[slug][equals]=${encodeURIComponent(slug)}&depth=1`,
-  );
-  if (docs.length === 0) return null;
+  ).catch((err) => {
+    console.error(`Failed to fetch portfolio item by slug "${slug}":`, err);
+    return null;
+  });
+  if (!docs || docs.length === 0) return null;
   return mapPortfolioItem(docs[0]);
 }
 
 export async function getPortfolioCategories(): Promise<PortfolioCategory[]> {
-  return fetchFromPayload<PortfolioCategory>("portfolio-categories?limit=0");
+  return fetchFromPayload<PortfolioCategory>("portfolio-categories?limit=0").catch((err) => {
+    console.error("Failed to fetch portfolio categories:", err);
+    return [];
+  });
 }
 
 export async function getTeammates(): Promise<Teammate[]> {
-  const docs = await fetchFromPayload<PayloadTeammate>("teammates?depth=1&limit=0");
+  const docs = await fetchFromPayload<PayloadTeammate>("teammates?depth=1&limit=0").catch((err) => {
+    console.error("Failed to fetch teammates:", err);
+    return [];
+  });
   return docs.map(mapTeammate);
 }

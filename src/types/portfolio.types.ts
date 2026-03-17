@@ -18,6 +18,7 @@ export interface PortfolioItem {
 	client?: string;
 	year?: number;
 	description?: EditorJSDataBlock[];
+	descriptionHTML?: string; // html
 	categories: {
 		name: PortfolioCategory["name"];
 		slug: PortfolioCategory["slug"];

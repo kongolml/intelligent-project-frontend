@@ -1,29 +1,14 @@
-import Link from 'next/link'
-
 // lib
 import { getPortfolioItems, getPortfolioCategories } from "../lib/api";
-
-// types
-import { PortfolioCategory, PortfolioItem } from "../../types/portfolio.types";
 
 // components
 import PortfolioList from "@/app/components/PortfolioList/PortfolioList";
 
 export default async function ProjectsPage() {
-	let portfolioItems: PortfolioItem[] = [];
-	let portfolioCategories: PortfolioCategory[] = [];
-
-	try {
-		portfolioItems = await getPortfolioItems();
-	} catch {
-		// API unavailable — render with empty portfolio
-	}
-
-	try {
-		portfolioCategories = await getPortfolioCategories();
-	} catch {
-		// API unavailable — render with empty categories
-	}
+	const [portfolioItems, portfolioCategories] = await Promise.all([
+		getPortfolioItems(),
+		getPortfolioCategories(),
+	]);
 
 	return (
 		<main>

@@ -18,8 +18,9 @@ export default function ProjectDetailClient({ project }: ProjectDetailClientProp
     useRevealAnimations();
 
     // Extract first paragraph as intro text
-    const { intro, restBlocks } = extractIntro(project.description);
+    // const { intro, restBlocks } = extractIntro(project.description);
     const categories = project.categories.map((c) => c.name).join(" / ");
+    const projectDescription = project.descriptionHTML || null;
 
     return (
         <div className={styles.casePage}>
@@ -52,11 +53,11 @@ export default function ProjectDetailClient({ project }: ProjectDetailClientProp
                             {project.subtitle}
                         </p>
                     )}
-                    {intro && (
+                    {/* {intro && (
                         <p className={styles.heroIntro} data-reveal-delay="3">
                             {intro}
                         </p>
-                    )}
+                    )} */}
                 </div>
             </section>
 
@@ -85,11 +86,11 @@ export default function ProjectDetailClient({ project }: ProjectDetailClientProp
             </section>
 
             {/* Description Content */}
-            {restBlocks.length > 0 && (
+            {projectDescription && (
                 <section className={styles.section} data-reveal>
                     <div className={styles.grid}>
                         <div className={styles.sectionContentWide}>
-                            <EditorJSContent blocks={restBlocks} />
+                            <div dangerouslySetInnerHTML={{ __html: projectDescription }} />
                         </div>
                     </div>
                 </section>
@@ -154,7 +155,7 @@ function extractIntro(description?: EditorJSDataBlock[]) {
     }
 
     const first = description[0];
-    if (first.type === EditorJSDataBlockTypesEnum.PARAGRAPH) {
+    if (first?.type === EditorJSDataBlockTypesEnum.PARAGRAPH) {
         return {
             intro: stripHtml(first.data.text),
             restBlocks: description.slice(1),

@@ -41,6 +41,7 @@ export interface PayloadPortfolioItem {
   client?: string | null;
   year?: number | null;
   description?: unknown[] | null;
+  descriptionHTML?: string | null;
   categories: PayloadPortfolioCategory[];
   thumbnail: PayloadMediaFile | null;
   mediaFiles: PayloadMediaFile[];
