@@ -6,6 +6,7 @@ import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 // import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
+import PortfolioItemSpinner from "@/app/components/PortfolioList/PortfolioItemSpinner";
 
 import Modal from "react-bootstrap/Modal";
 import CloseButton from "react-bootstrap/CloseButton";
@@ -119,6 +120,8 @@ export default function PortfolioList({ portfolioItems, portfolioCategories }: P
 		handleCategoryChange(category);
 		targetRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
 	};
+
+	const [loadingSlug, setLoadingSlug] = useState<string | null>(null);
 
 	const [show, setShow] = useState(false);
 	const [selectedPortfolioItem, setSelectedPortfolioItem] = useState<PortfolioItem | null>(null);
@@ -389,14 +392,10 @@ export default function PortfolioList({ portfolioItems, portfolioCategories }: P
 				<div className="row row-cols-1 row-cols-lg-2 row-cols-xl-3" ref={container}>
 					{filteredItems.map((item) => (
 						<div className={`col portfolioItem ${styles.portfolioItem}`} key={item.id}>
-							{/* <div onClick={() => showPortfolioItem(item)}> */}
-							<Link href={`/projects/${item.slug}`}>
+							<Link href={`/projects/${item.slug}`} onClick={() => setLoadingSlug(item.slug)}>
 								<div className={styles.projectCard} style={{ viewTransitionName: `thumb-${item.id}` }}>
 									{item.thumbnail && (
-										<div
-											className={styles.imageWrap}
-											
-										>
+										<div className={styles.imageWrap}>
 											<Image
 												src={item.thumbnail}
 												alt={item.title}
@@ -406,6 +405,7 @@ export default function PortfolioList({ portfolioItems, portfolioCategories }: P
 												draggable={false}
 												onContextMenu={(e) => e.preventDefault()}
 											/>
+											{loadingSlug === item.slug && <PortfolioItemSpinner />}
 										</div>
 									)}
 
