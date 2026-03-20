@@ -2,6 +2,7 @@
 import { getPortfolioItems, getPortfolioCategories } from "../lib/api";
 
 // components
+import { Suspense } from "react";
 import PortfolioList from "@/app/components/PortfolioList/PortfolioList";
 
 export default async function ProjectsPage() {
@@ -16,7 +17,9 @@ export default async function ProjectsPage() {
             {/* <div className="container mx-auto px-4">
                 <div className="flex flex-wrap -mx-2"> */}
 
+
 <PortfolioList portfolioItems={portfolioItems} portfolioCategories={portfolioCategories} />
+
                 {/* </div>
             </div> */}
 

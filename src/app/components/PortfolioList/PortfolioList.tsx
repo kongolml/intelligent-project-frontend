@@ -1,5 +1,5 @@
 "use client";
-import { useState, useMemo, useEffect, useRef, useCallback } from "react";
+import { useState, useMemo, useEffect, useRef, useCallback, useTransition } from "react";
 import Link from "next/link";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -38,43 +38,44 @@ const categoriesIconsMap = {
 } as const;
 
 // Custom Hook to measure an element's width
-const useElementWidth = () => {
-	const ref = useRef(null);
-	const [width, setWidth] = useState(0);
+// const useElementWidth = () => {
+// 	const ref = useRef(null);
+// 	const [width, setWidth] = useState(0);
 
-	const updateWidth = useCallback(() => {
-		if (ref.current) {
-			setWidth(ref.current.offsetWidth);
-		}
-	}, []);
+// 	const updateWidth = useCallback(() => {
+// 		if (ref.current) {
+// 			setWidth(ref.current.offsetWidth);
+// 		}
+// 	}, []);
 
-	useEffect(() => {
-		updateWidth(); // Set initial width
+// 	useEffect(() => {
+// 		updateWidth(); // Set initial width
 
-		const element = ref.current;
-		if (!element) return;
+// 		const element = ref.current;
+// 		if (!element) return;
 
-		// Use ResizeObserver to update width when the element resizes
-		const observer = new ResizeObserver(() => {
-			updateWidth();
-		});
+// 		// Use ResizeObserver to update width when the element resizes
+// 		const observer = new ResizeObserver(() => {
+// 			updateWidth();
+// 		});
 
-		observer.observe(element);
+// 		observer.observe(element);
 
-		// Cleanup function to disconnect the observer
-		return () => {
-			observer.disconnect();
-		};
-	}, [updateWidth]);
+// 		// Cleanup function to disconnect the observer
+// 		return () => {
+// 			observer.disconnect();
+// 		};
+// 	}, [updateWidth]);
 
-	return { ref, width };
-};
+// 	return { ref, width };
+// };
 
 export default function PortfolioList({ portfolioItems, portfolioCategories }: PortfolioListProps) {
 	const router = useRouter();
 	const searchParams = useSearchParams();
+	// const [, startTransition] = useTransition();
 
-	const { ref: sourceRef, width: sourceWidth } = useElementWidth();
+	// const { ref: sourceRef, width: sourceWidth } = useElementWidth();
 
 	const initialCategory = searchParams.get("category") || "all";
 	const [selectedCategory, setSelectedCategory] = useState<string>(initialCategory);
@@ -390,9 +391,12 @@ export default function PortfolioList({ portfolioItems, portfolioCategories }: P
 						<div className={`col portfolioItem ${styles.portfolioItem}`} key={item.id}>
 							{/* <div onClick={() => showPortfolioItem(item)}> */}
 							<Link href={`/projects/${item.slug}`}>
-								<div className={styles.projectCard}>
+								<div className={styles.projectCard} style={{ viewTransitionName: `thumb-${item.id}` }}>
 									{item.thumbnail && (
-										<div className={styles.imageWrap}>
+										<div
+											className={styles.imageWrap}
+											
+										>
 											<Image
 												src={item.thumbnail}
 												alt={item.title}

@@ -86,3 +86,46 @@ footer {
         margin-bottom: 0;
     }
 }
+
+
+/* ─── View Transitions ─── */
+// @view-transition {
+//   navigation: auto;
+// }
+
+// /* Default page crossfade */
+// ::view-transition-old(root) {
+//   animation: 300ms ease both vt-fade-out;
+// }
+// ::view-transition-new(root) {
+//   animation: 300ms ease both vt-fade-in;
+// }
+
+// @keyframes vt-fade-out {
+//   from { opacity: 1; }
+//   to   { opacity: 0; }
+// }
+// @keyframes vt-fade-in {
+//   from { opacity: 0; }
+//   to   { opacity: 1; }
+// }
+
+// /* Shared thumbnail → hero transition */
+// ::view-transition-old(thumb),
+// ::view-transition-new(thumb) {
+//   animation: none;
+//   mix-blend-mode: normal;
+// }
+
+// /* Suppress the page-level fade for the shared element so only it animates */
+// :root[style*="--vt-active"] ::view-transition-old(root),
+// :root[style*="--vt-active"] ::view-transition-new(root) {
+//   animation-duration: 200ms;
+// }
+
+// @media (prefers-reduced-motion: reduce) {
+//   ::view-transition-old(root),
+//   ::view-transition-new(root) {
+//     animation: none;
+//   }
+// }

@@ -50,7 +50,10 @@ export default function ProjectDetailClientV2({ project }: ProjectDetailClientV2
 
             {/* ─── HERO ─── */}
             <section id="hero" className={styles.hero}>
-                <div className={`${styles.heroBg} ${project.thumbnail ? styles.heroBgWithImage : ""}`}>
+                <div
+                    className={`${styles.heroBg} ${project.thumbnail ? styles.heroBgWithImage : ""}`}
+                    style={project.thumbnail ? { viewTransitionName: `thumb-${project.id}` } : undefined}
+                >
                     {project.thumbnail && (
                         <Image
                             src={project.thumbnail}

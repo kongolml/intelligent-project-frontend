@@ -3,6 +3,9 @@ import path from 'path';
 
 const nextConfig: NextConfig = {
   /* config options here */
+  experimental: {
+    viewTransition: true,
+  },
   images: {
     remotePatterns: [new URL('https://intelligent-project.fra1.digitaloceanspaces.com/**'), new URL('https://intelligent-project.fra1.cdn.digitaloceanspaces.com/**'), new URL('https://mir-s3-cdn-cf.behance.net/project_modules/**')]
   },
