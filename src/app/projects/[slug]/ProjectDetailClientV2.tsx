@@ -5,6 +5,16 @@ import Image from "next/image";
 import Link from "next/link";
 import { PortfolioItem } from "../../../types/portfolio.types";
 import styles from "./PortfolioCaseStudyV2.module.scss";
+import CaseStudyNav, { NavSection } from "./CaseStudyNav";
+
+const NAV_SECTIONS: NavSection[] = [
+    { id: "hero",      label: "Intro",      index: "01" },
+    { id: "about",     label: "About",      index: "02" },
+    { id: "concept",   label: "Concept",    index: "03" },
+    { id: "process",   label: "Exploration", index: "04" },
+    { id: "packaging", label: "Packaging",  index: "05" },
+    { id: "type",      label: "Typography", index: "06" },
+];
 
 interface ProjectDetailClientV2Props {
     project: PortfolioItem;
@@ -36,9 +46,10 @@ export default function ProjectDetailClientV2({ project }: ProjectDetailClientV2
 
     return (
         <div className={styles.casePage}>
+            <CaseStudyNav sections={NAV_SECTIONS} />
 
             {/* ─── HERO ─── */}
-            <section className={styles.hero}>
+            <section id="hero" className={styles.hero}>
                 <div className={`${styles.heroBg} ${project.thumbnail ? styles.heroBgWithImage : ""}`}>
                     {project.thumbnail && (
                         <Image
@@ -91,7 +102,7 @@ export default function ProjectDetailClientV2({ project }: ProjectDetailClientV2
             </section>
 
             {/* ─── ABOUT ─── */}
-            <section className={styles.about}>
+            <section id="about" className={styles.about}>
                 <div className={`${styles.aboutLeft} reveal`}>
                     <div className={styles.aboutLabel}>About the project</div>
                     <h2 className={styles.aboutHeading}>{aboutH2}</h2>
@@ -149,7 +160,7 @@ export default function ProjectDetailClientV2({ project }: ProjectDetailClientV2
             </section>
 
             {/* ─── CONCEPT + MOODBOARD ─── */}
-            <section className={styles.conceptSection}>
+            <section id="concept" className={styles.conceptSection}>
                 <div className={`${styles.conceptFields} reveal`}>
                     <div className={styles.conceptField}>
                         <label>Concept</label>
@@ -187,7 +198,7 @@ export default function ProjectDetailClientV2({ project }: ProjectDetailClientV2
             </section>
 
             {/* ─── LOGO EXPLORATION ─── */}
-            <section className={styles.processSection}>
+            <section id="process" className={styles.processSection}>
                 <div className={`${styles.processHeader} reveal`}>
                     <h2>Logo &amp; Visual Exploration</h2>
                     <span className={styles.stepCount}>ref...</span>
@@ -274,7 +285,7 @@ export default function ProjectDetailClientV2({ project }: ProjectDetailClientV2
             </section>
 
             {/* ─── PACKAGING ─── */}
-            <section className={styles.processSection} style={{ paddingTop: "40px" }}>
+            <section id="packaging" className={styles.processSection} style={{ paddingTop: "40px" }}>
                 <div className={`${styles.processHeader} reveal`}>
                     <h2>Packaging</h2>
                 </div>
@@ -372,7 +383,7 @@ export default function ProjectDetailClientV2({ project }: ProjectDetailClientV2
             </section>
 
             {/* ─── TYPOGRAPHY SECTION ─── */}
-            <section className={`${styles.typeSection} reveal`}>
+            <section id="type" className={`${styles.typeSection} reveal`}>
                 <div className={styles.typeLabel}>Typography</div>
                 <p className={styles.typeDesc}>
                     The primary typeface is a transitional serif, chosen for its historical
