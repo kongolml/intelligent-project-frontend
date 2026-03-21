@@ -216,44 +216,78 @@ export default function ProjectDetailClientV2({ project }: ProjectDetailClientV2
                     <span className={styles.stepCount}>ref...</span>
                 </div>
 
-                {/* Row 1 */}
-                <div className={`${styles.iterationRow} reveal`}>
-                    <div className={styles.iterationCard}>
-                        <div className={`${styles.imgWrapper} ${styles.imgWrapperRatio43}`}>
-                            <div className={styles.mockLight} />
+                {(project.visual_exploration ?? []).length > 0 ? (
+                    (() => {
+                        const imgs = project.visual_exploration!;
+                        const rows: string[][] = [];
+                        for (let i = 0; i < imgs.length; i += 3) rows.push(imgs.slice(i, i + 3));
+                        return rows.map((row, rowIdx) => (
+                            <div
+                                key={rowIdx}
+                                className={`${styles.iterationRow} reveal`}
+                                style={rowIdx > 0 ? { transitionDelay: `${rowIdx * 0.1}s` } : undefined}
+                            >
+                                {row.map((url, colIdx) => {
+                                    const isLast = rowIdx === rows.length - 1 && colIdx === row.length - 1;
+                                    return (
+                                        <div key={colIdx} className={`${styles.iterationCard} ${isLast ? styles.iterationCardFinal : ""}`}>
+                                            <div className={`${styles.imgWrapper} ${styles.imgWrapperRatio43}`}>
+                                                <Image
+                                                    src={url}
+                                                    alt={`${project.title} — logo exploration ${rowIdx * 3 + colIdx + 1}`}
+                                                    fill
+                                                    className={styles.coverImage}
+                                                />
+                                            </div>
+                                            {isLast && <div className={styles.iterationLabel}>Selected</div>}
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        ));
+                    })()
+                ) : (
+                    <>
+                        {/* Row 1 */}
+                        <div className={`${styles.iterationRow} reveal`}>
+                            <div className={styles.iterationCard}>
+                                <div className={`${styles.imgWrapper} ${styles.imgWrapperRatio43}`}>
+                                    <div className={styles.mockLight} />
+                                </div>
+                            </div>
+                            <div className={styles.iterationCard}>
+                                <div className={`${styles.imgWrapper} ${styles.imgWrapperRatio43}`}>
+                                    <div className={styles.mockBlue} />
+                                </div>
+                            </div>
+                            <div className={styles.iterationCard}>
+                                <div className={`${styles.imgWrapper} ${styles.imgWrapperRatio43}`}>
+                                    <div className={styles.mockCream} />
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div className={styles.iterationCard}>
-                        <div className={`${styles.imgWrapper} ${styles.imgWrapperRatio43}`}>
-                            <div className={styles.mockBlue} />
-                        </div>
-                    </div>
-                    <div className={styles.iterationCard}>
-                        <div className={`${styles.imgWrapper} ${styles.imgWrapperRatio43}`}>
-                            <div className={styles.mockCream} />
-                        </div>
-                    </div>
-                </div>
 
-                {/* Row 2 */}
-                <div className={`${styles.iterationRow} reveal`} style={{ transitionDelay: "0.1s" }}>
-                    <div className={styles.iterationCard}>
-                        <div className={`${styles.imgWrapper} ${styles.imgWrapperRatio43}`}>
-                            <div className={styles.mockStone} />
+                        {/* Row 2 */}
+                        <div className={`${styles.iterationRow} reveal`} style={{ transitionDelay: "0.1s" }}>
+                            <div className={styles.iterationCard}>
+                                <div className={`${styles.imgWrapper} ${styles.imgWrapperRatio43}`}>
+                                    <div className={styles.mockStone} />
+                                </div>
+                            </div>
+                            <div className={styles.iterationCard}>
+                                <div className={`${styles.imgWrapper} ${styles.imgWrapperRatio43}`}>
+                                    <div className={styles.mockTeal} />
+                                </div>
+                            </div>
+                            <div className={`${styles.iterationCard} ${styles.iterationCardFinal}`}>
+                                <div className={`${styles.imgWrapper} ${styles.imgWrapperRatio43}`}>
+                                    <div className={styles.mockSand} />
+                                </div>
+                                <div className={styles.iterationLabel}>Selected</div>
+                            </div>
                         </div>
-                    </div>
-                    <div className={styles.iterationCard}>
-                        <div className={`${styles.imgWrapper} ${styles.imgWrapperRatio43}`}>
-                            <div className={styles.mockTeal} />
-                        </div>
-                    </div>
-                    <div className={`${styles.iterationCard} ${styles.iterationCardFinal}`}>
-                        <div className={`${styles.imgWrapper} ${styles.imgWrapperRatio43}`}>
-                            <div className={styles.mockSand} />
-                        </div>
-                        <div className={styles.iterationLabel}>Selected</div>
-                    </div>
-                </div>
+                    </>
+                )}
             </section>
 
             {/* ─── NAME STEP ─── */}
