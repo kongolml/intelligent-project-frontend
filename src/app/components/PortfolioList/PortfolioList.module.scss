@@ -1,188 +1,337 @@
 @use "../../global.variables.scss" as variables;
 @use "sass:color";
 
-.categoriesList {
-    list-style-type: none;
-    padding: 0;
-    display: flex;
-    gap: 10px;
-    font-size: 1rem;
-    margin-bottom: 2.6rem;
+// ─── Design Tokens ───
+$cream: #f5f2ed;
+$black: #0a0a0a;
+$grey-dark: #3a3a38;
+$grey-mid: #7a7a76;
+$grey-light: #b8b5ae;
+$accent: #c44a2f;
+$page-margin: clamp(24px, 5vw, 80px);
+$serif: "DM Serif Display", serif;
+$sans: "Instrument Sans", sans-serif;
+$mono: "JetBrains Mono", monospace;
 
-    li {
-        cursor: pointer;
-        color: variables.$link-color-faded;
-        font-size: 1.6rem;
-
-        &:hover {
-          color: variables.$color-font;
-        }
-
-        &.active {
-          color: variables.$color-font;
-        }
-    }
+// ─── Reveal Animation ───
+.reveal {
+	opacity: 0;
+	transform: translateY(40px);
+	transition:
+		opacity 0.8s cubic-bezier(0.23, 1, 0.32, 1),
+		transform 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.visible {
+	opacity: 1;
+	transform: translateY(0);
 }
 
-.itemsCount {
-  transform: translate(2px, -8px);
-  display: inline-block;
-  font-size: 1rem;
+// ─── Hero Section ───
+.hero {
+	padding: 120px $page-margin 80px;
+	border-bottom: 1px solid rgba($black, 0.06);
 }
 
-.projectsGrid {
-  list-style-type: none;
-  padding: 0;
-  display: grid;
-  grid-template-columns: repeat(3, minmax(320px, 1fr)); /* max 3 cols */
-  gap: 16px;
+.heroInner {
+	max-width: 900px;
 }
 
+.heroLabel {
+	font-family: $mono;
+	font-size: 0.6875rem;
+	text-transform: uppercase;
+	letter-spacing: 0.14em;
+	color: $grey-mid;
+	margin-bottom: 28px;
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
+
+.accentLine {
+	display: block;
+	width: 32px;
+	height: 1px;
+	background: $accent;
+}
+
+.heroTitle {
+	font-family: $serif;
+	font-size: clamp(3.5rem, 7vw, 7rem);
+	font-weight: 400;
+	line-height: 0.95;
+	letter-spacing: -0.03em;
+	color: $black;
+	margin-bottom: 32px;
+}
+
+.heroMeta {
+	display: flex;
+	align-items: center;
+	gap: 16px;
+	font-family: $sans;
+	font-size: 0.875rem;
+	color: $grey-mid;
+}
+
+.metaCount {
+	font-family: $mono;
+	font-size: 0.75rem;
+	letter-spacing: 0.06em;
+}
+
+.metaDivider {
+	width: 24px;
+	height: 1px;
+	background: $grey-light;
+}
+
+.metaCategories {
+	font-size: 0.8125rem;
+	letter-spacing: 0.02em;
+}
+
+// ─── Filter Bar ───
+.filterBar {
+	position: sticky;
+	top: 0;
+	z-index: 50;
+	background: rgba($cream, 0.92);
+	backdrop-filter: blur(12px);
+	-webkit-backdrop-filter: blur(12px);
+	border-bottom: 1px solid rgba($black, 0.06);
+	padding: 0 $page-margin;
+}
+
+.filterInner {
+	display: flex;
+	gap: 0;
+	overflow-x: auto;
+	-ms-overflow-style: none;
+	scrollbar-width: none;
+
+	&::-webkit-scrollbar {
+		display: none;
+	}
+}
+
+.filterBtn {
+	font-family: $mono;
+	font-size: 0.6875rem;
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
+	color: $grey-mid;
+	background: none;
+	border: none;
+	padding: 20px 24px;
+	cursor: pointer;
+	white-space: nowrap;
+	transition:
+		color 0.3s ease,
+		box-shadow 0.3s ease;
+	position: relative;
+
+	&:hover {
+		color: $grey-dark;
+	}
+
+	&::after {
+		content: "";
+		position: absolute;
+		bottom: 0;
+		left: 24px;
+		right: 24px;
+		height: 2px;
+		background: $accent;
+		transform: scaleX(0);
+		transform-origin: left;
+		transition: transform 0.35s cubic-bezier(0.23, 1, 0.32, 1);
+	}
+}
+
+.filterActive {
+	color: $black;
+
+	&::after {
+		transform: scaleX(1);
+	}
+}
+
+.filterCount {
+	font-size: 0.5625rem;
+	color: $grey-light;
+	margin-left: 6px;
+	vertical-align: super;
+}
+
+// ─── Project Grid ───
+.gridSection {
+	padding: 60px $page-margin 120px;
+}
+
+.projectGrid {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 48px 32px;
+}
+
+// ─── Project Card ───
 .projectCard {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+	display: flex;
+	flex-direction: column;
+	gap: 0;
+	text-decoration: none;
+	color: $black;
+	position: relative;
+
+	&:nth-child(even) {
+		margin-top: 80px;
+	}
+
+	&:hover {
+		color: $black;
+
+		.cardImageWrap {
+			transform: translateY(-4px);
+			box-shadow: 0 20px 60px rgba($black, 0.12);
+		}
+
+		.cardOverlay {
+			opacity: 1;
+		}
+
+		.cardArrow {
+			opacity: 1;
+			transform: translateX(0);
+		}
+
+		.cardImage {
+			transform: scale(1.03);
+		}
+	}
 }
 
-.imageWrap {
-  position: relative;
-  // width: 100%;
-  // aspect-ratio: 16 / 9;   /* or 4/3, 1/1 — pick your shape */
-  height: 300px;
-  background-color: color.adjust(variables.$color-font, $alpha: -0.75);
-  transition:  variables.$transition;
-  cursor: pointer;
-
-  &:hover {
-    // img {
-      box-shadow: 0px 5px 15px rgba(0,0,0,.25);
-      transform: scale(1.02);
-    // }
-  }
+.cardImageWrap {
+	position: relative;
+	width: 100%;
+	aspect-ratio: 4 / 3;
+	overflow: hidden;
+	background: color.adjust($grey-light, $alpha: -0.7);
+	transition:
+		transform 0.6s cubic-bezier(0.23, 1, 0.32, 1),
+		box-shadow 0.6s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
-.projectImg {
-  object-fit: cover;
+.cardImage {
+	object-fit: cover;
+	transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
-.portfolioImageWrp {
-  position: relative;
-  height: 300px;
-  margin-bottom: 40px;
-  transition: variables.$transition;
-
-  // maybe too much animation?
-  border-radius: 6px;
-  overflow: hidden;
-  box-shadow: 0px 0px 0px rgba(0,0,0,.25);
-
-  &:hover {
-    box-shadow: 0px 5px 15px rgba(0,0,0,.25);
-    transform: scale(1.02);
-
-    // .category-icon-wrp {
-    //     opacity: 0;
-    // }
-
-    // .portfolio-images-list {
-    //     opacity: 1;
-    // }
-}
+.cardOverlay {
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(180deg, transparent 50%, rgba($black, 0.08) 100%);
+	opacity: 0;
+	transition: opacity 0.4s ease;
+	pointer-events: none;
 }
 
-@each $icon_name, $icon_color in variables.$color-icons-map {
-  .#{$icon_name} {
-      // &, .category-icon-wrp {
-      //     background-color: transparentize($icon_color, variables.$brand-color-fading);
-      //     color: $icon_color;
-      // }
-      & {
-        background-color: color.adjust($icon_color, $alpha: -(variables.$brand-color-fading));
-
-        .svgIcon {
-          fill: $icon_color;
-        }
-    }
-  }
+.cardInfo {
+	padding: 20px 0 0;
 }
 
-.svgIcon {
-  width: 150px;
-  height: 150px;
+.cardMeta {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 8px;
 }
 
-
-// .intrinsicGrid {
-//   display: grid;
-//   grid-template-columns: auto auto auto 1fr;
-//   gap: 16px;
-//   width: 100%;
-// }
-
-.flexContainer {
-  display: flex; /* Use flexbox */
-  gap: 16px;
-  width: 100%;
-
-  /* Visualization */
-  border: 2px solid #059669;
+.cardCategories {
+	font-family: $mono;
+	font-size: 0.625rem;
+	text-transform: uppercase;
+	letter-spacing: 0.12em;
+	color: $grey-mid;
 }
 
-.flexItem {
-  /* Let items shrink but not grow by default */
-  flex-grow: 0;
-  flex-shrink: 1;
-  flex-basis: auto; /* Size is based on content */
-
-  /* Visualization */
-  background-color: #d1fae5;
-  border: 1px solid #6ee7b7;
+.cardYear {
+	font-family: $mono;
+	font-size: 0.625rem;
+	letter-spacing: 0.06em;
+	color: $grey-light;
 }
 
-.closeButton {
-  font-size: 2rem;
-  position: fixed;
-  cursor: pointer;
-  left: 30px;
-    top: 38px;
-    z-index: 1000;
-
-    &:hover {
-      color:#646464;
-    }
+.cardTitle {
+	font-family: $serif;
+	font-size: clamp(1.5rem, 2.5vw, 2rem);
+	font-weight: 400;
+	line-height: 1.15;
+	letter-spacing: -0.02em;
+	color: $black;
+	margin-bottom: 0;
+	text-transform: none;
 }
 
-.portfolioItem {
-  // opacity: 0;
+.cardSubtitle {
+	font-family: $sans;
+	font-size: 0.875rem;
+	color: $grey-mid;
+	line-height: 1.5;
+	margin-top: 6px;
+	margin-bottom: 0;
 }
 
-.portfolioItemWrp {
-  // width limited by viewport width and 80vh projected to 16:9
-  width: min(90vw, calc(80vh * 16 / 9));
-  max-height: 80vh;
-
-  // your requested styles:
-  background-color: rgba(100, 100, 100, .25);
-  margin: 0 auto;
-  aspect-ratio: 16 / 9;
-
-  // required for <Image fill>
-  position: relative;
-  // overflow: "hidden",
+.cardArrow {
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	opacity: 0;
+	transform: translateX(-8px);
+	transition:
+		opacity 0.35s ease,
+		transform 0.35s cubic-bezier(0.23, 1, 0.32, 1);
+	color: $accent;
 }
 
-.portfolioItemDescription {
-  position: absolute;
-    top: 100%;
-    left: 0;
+// ─── Responsive ───
+@media (max-width: 1024px) {
+	.projectGrid {
+		gap: 40px 24px;
+	}
+
+	.projectCard:nth-child(even) {
+		margin-top: 48px;
+	}
 }
 
-// .pageTitleWrapper {
-//   position: sticky;
-//   top: 0;
-//   z-index: 100;
-//   background-color: white; // Adjust to match your page background
-//   padding-top: 1rem;
-//   padding-bottom: 1rem;
-//   margin-bottom: 0; // Remove any default margins
-// }
+@media (max-width: variables.$bp-mobile) {
+	.hero {
+		padding: 80px 20px 48px;
+	}
+
+	.heroTitle {
+		font-size: clamp(2.5rem, 12vw, 4rem);
+	}
+
+	.filterBar {
+		padding: 0 20px;
+	}
+
+	.gridSection {
+		padding: 40px 20px 80px;
+	}
+
+	.projectGrid {
+		grid-template-columns: 1fr;
+		gap: 48px;
+	}
+
+	.projectCard:nth-child(even) {
+		margin-top: 0;
+	}
+
+	.cardTitle {
+		font-size: 1.375rem;
+	}
+}
