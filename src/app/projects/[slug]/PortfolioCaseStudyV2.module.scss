@@ -13,6 +13,8 @@ $grey-light: #b8b5ae;
 $accent: #c44a2f;
 $col-gap: 24px;
 $page-margin: clamp(24px, 5vw, 80px);
+$page-bg: #dedad2;
+$panel-bg: #f5f2ed;
 
 $font-display: 'DM Serif Display', serif;
 $font-body: 'Instrument Sans', sans-serif;
@@ -23,7 +25,7 @@ $ease-case: cubic-bezier(0.23, 1, 0.32, 1);
 
 /* ─── Page Wrapper ─── */
 .casePage {
-  background: $white;
+  background: $page-bg;
   color: $black;
   font-family: $font-body;
   font-weight: 400;
@@ -77,6 +79,10 @@ $ease-case: cubic-bezier(0.23, 1, 0.32, 1);
   position: relative;
   overflow: hidden;
   padding-top: 0 !important;
+  border-radius: 0;
+  will-change: border-radius, transform;
+  transform-origin: top center;
+  transition: box-shadow 0.3s ease;
 }
 
 .heroBg {
@@ -260,6 +266,7 @@ $ease-case: cubic-bezier(0.23, 1, 0.32, 1);
   font-size: 0.8125rem;
   padding: 6px 14px;
   border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 24px;
   color: $grey-dark;
 }
 
@@ -271,7 +278,6 @@ $ease-case: cubic-bezier(0.23, 1, 0.32, 1);
   grid-template-columns: 1fr 1fr;
   gap: 80px;
   align-items: start;
-  border-top: 1px solid rgba(0, 0, 0, 0.06);
 
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
@@ -333,6 +339,7 @@ $ease-case: cubic-bezier(0.23, 1, 0.32, 1);
   aspect-ratio: 1;
   position: relative;
   overflow: hidden;
+  border-radius: 12px;
 }
 
 /* Moodboard placeholder gradients */
@@ -526,6 +533,7 @@ $ease-case: cubic-bezier(0.23, 1, 0.32, 1);
   position: relative;
   width: 100%;
   overflow: hidden;
+  border-radius: 16px;
 }
 
 .imgWrapperRatio169 {
@@ -684,7 +692,6 @@ $ease-case: cubic-bezier(0.23, 1, 0.32, 1);
 /* ─── TYPOGRAPHY SECTION ─── */
 .typeSection {
   padding: 80px $page-margin;
-  border-top: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 .typeLabel {
@@ -718,9 +725,9 @@ $ease-case: cubic-bezier(0.23, 1, 0.32, 1);
 /* ─── TEXT BAND ─── */
 .textBand {
   padding: 120px $page-margin;
-  max-width: 900px;
 
   blockquote {
+    max-width: 900px;
     font-family: $font-display;
     font-size: clamp(2.5rem, 5vw, 5rem);
     line-height: 1.05;
@@ -736,11 +743,19 @@ $ease-case: cubic-bezier(0.23, 1, 0.32, 1);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-top: 1px solid rgba(0, 0, 0, 0.06);
   cursor: pointer;
   transition: background 0.3s ease;
   text-decoration: none;
   color: $black;
+  background: $panel-bg;
+  margin: 6px 20px 20px;
+  border-radius: 40px;
+  overflow: hidden;
+
+  @media (max-width: 768px) {
+    border-radius: 24px;
+    margin: 4px 10px 10px;
+  }
 
   &:hover {
     background: $cream;
@@ -774,6 +789,7 @@ $ease-case: cubic-bezier(0.23, 1, 0.32, 1);
   width: 60px;
   height: 60px;
   border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;

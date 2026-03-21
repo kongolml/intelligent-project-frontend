@@ -23,6 +23,7 @@ interface ProjectDetailClientV2Props {
 export default function ProjectDetailClientV2({ project }: ProjectDetailClientV2Props) {
     useRevealAnimations();
     useHeroAnimations();
+    useScrollRounding();
 
     const heroLabel =
         project.categories.length > 0
@@ -565,5 +566,55 @@ function useHeroAnimations() {
         heroElements.forEach((el, i) => {
             setTimeout(() => el.classList.add("visible"), 200 + i * 150);
         });
+    }, []);
+}
+
+
+// ── Scroll-linked Hero Rounding Hook ──
+// As the user scrolls past the hero, it dramatically rounds its bottom corners
+// and shrinks slightly, creating a "card lifting off the page" effect.
+
+function useScrollRounding() {
+    useEffect(() => {
+        const hero = document.getElementById('hero');
+        if (!hero) return;
+
+        let ticking = false;
+
+        const update = () => {
+            const scrollY = window.scrollY;
+            const heroH = hero.offsetHeight;
+            // Progress 0→1 over the first 40% of hero height scroll
+            const progress = Math.max(0, Math.min(1, scrollY / (heroH * 0.4)));
+            const maxRadius = window.innerWidth <= 768 ? 36 : 60;
+            const radius = Math.round(progress * maxRadius);
+            // Scale from 1.0 down to 0.97 and add slight horizontal margin via transform
+            const scale = 1 - progress * 0.03;
+            const marginX = Math.round(progress * 16);
+
+            hero.style.borderRadius = `0 0 ${radius}px ${radius}px`;
+            hero.style.transform = `scale(${scale})`;
+            hero.style.marginLeft = `${marginX}px`;
+            hero.style.marginRight = `${marginX}px`;
+        };
+
+        const onScroll = () => {
+            if (!ticking) {
+                requestAnimationFrame(() => {
+                    update();
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        };
+
+        window.addEventListener('scroll', onScroll, { passive: true });
+        window.addEventListener('resize', update, { passive: true });
+        update();
+
+        return () => {
+            window.removeEventListener('scroll', onScroll);
+            window.removeEventListener('resize', update);
+        };
     }, []);
 }
