@@ -42,9 +42,17 @@ export interface PayloadPortfolioItem {
   year?: number | null;
   description?: unknown[] | null;
   descriptionHTML?: string | null;
+  client_goal?: unknown | null;
+  client_goalHTML?: string | null;
+  our_task?: unknown | null;
+  our_taskHTML?: string | null;
+  concept?: unknown | null;
+  conceptHTML?: string | null;
   categories: PayloadPortfolioCategory[];
   thumbnail: PayloadMediaFile | null;
   mediaFiles: PayloadMediaFile[];
+  visual_inspiration?: (PayloadMediaFile | string)[];
+  visual_exploration?: (PayloadMediaFile | string)[];
   slug: string;
   isShowcase?: boolean;
 }

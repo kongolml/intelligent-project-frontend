@@ -19,12 +19,17 @@ export interface PortfolioItem {
 	year?: number;
 	description?: EditorJSDataBlock[];
 	descriptionHTML?: string; // html
+	client_goalHTML?: string;
+	our_taskHTML?: string;
+	conceptHTML?: string;
 	categories: {
 		name: PortfolioCategory["name"];
 		slug: PortfolioCategory["slug"];
 	}[];
 	thumbnail: string; // URL to the main image
 	mediaFiles: string[]; // urls
+	visual_inspiration?: string[]; // resolved URLs
+	visual_exploration?: string[]; // resolved URLs
 	slug: string;
 	isShowcase?: boolean;
 }

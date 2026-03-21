@@ -29,10 +29,10 @@ export default function ProjectDetailClientV2({ project }: ProjectDetailClientV2
             ? project.categories.map((c) => c.name).join(" / ")
             : "Brand Identity & Packaging";
 
-    const aboutH2 =
-        project.subtitle ?? "Premium brand entering the European market";
+    const clientName = project.client ?? "Client";
 
-    const ourTaskHTML = project.descriptionHTML || null;
+    const ourTaskHTML = project.our_taskHTML || null;
+    const clientGoalHTML = project.client_goalHTML || null;
 
     const [titleLine1, titleLine2] = splitTitle(project.title);
 
@@ -107,8 +107,8 @@ export default function ProjectDetailClientV2({ project }: ProjectDetailClientV2
             {/* ─── ABOUT ─── */}
             <section id="about" className={styles.about}>
                 <div className={`${styles.aboutLeft} reveal`}>
-                    <div className={styles.aboutLabel}>About the project</div>
-                    <h2 className={styles.aboutHeading}>{aboutH2}</h2>
+                    <div className={styles.aboutLabel}>Client</div>
+                    <h2 className={styles.aboutHeading}>{clientName}</h2>
                 </div>
 
                 <div className={styles.aboutRight}>
@@ -119,23 +119,16 @@ export default function ProjectDetailClientV2({ project }: ProjectDetailClientV2
                         <h4>Our Task</h4>
                         {ourTaskHTML ? (
                             <div dangerouslySetInnerHTML={{ __html: ourTaskHTML }} />
-                        ) : (
-                            <p>
-                                Brand identity, naming, packaging design, art direction for a
-                                premium line entering the European market.
-                            </p>
-                        )}
+                        ) : null}
                     </div>
                     <div
                         className={`${styles.aboutDetail} reveal`}
                         style={{ transitionDelay: "0.2s" }}
                     >
                         <h4>Client Goal</h4>
-                        <p>
-                            Position the product as authentic, high-quality — distinguished
-                            from mass-market competitors through design that communicates
-                            heritage and craft.
-                        </p>
+                        {clientGoalHTML ? (
+                            <div dangerouslySetInnerHTML={{ __html: clientGoalHTML }} />
+                        ) : null}
                     </div>
                     <div
                         className={`${styles.aboutDetail} reveal`}
@@ -192,10 +185,26 @@ export default function ProjectDetailClientV2({ project }: ProjectDetailClientV2
                 <div className="reveal" style={{ transitionDelay: "0.15s" }}>
                     <div className={styles.moodboardLabel}>Visual Inspiration</div>
                     <div className={styles.moodboardGrid}>
-                        <div className={`${styles.moodImg} ${styles.moodBlue}`} />
-                        <div className={`${styles.moodImg} ${styles.moodCream}`} />
-                        <div className={`${styles.moodImg} ${styles.moodTeal}`} />
-                        <div className={`${styles.moodImg} ${styles.moodWarm}`} />
+                        {(project.visual_inspiration ?? []).length > 0
+                            ? (project.visual_inspiration ?? []).map((url, i) => (
+                                <div key={i} className={styles.moodImg}>
+                                    <Image
+                                        src={url}
+                                        alt={`${project.title} — visual exploration ${i + 1}`}
+                                        fill
+                                        className={styles.coverImage}
+                                    />
+                                </div>
+                            ))
+                            : (
+                                <>
+                                    <div className={`${styles.moodImg} ${styles.moodBlue}`} />
+                                    <div className={`${styles.moodImg} ${styles.moodCream}`} />
+                                    <div className={`${styles.moodImg} ${styles.moodTeal}`} />
+                                    <div className={`${styles.moodImg} ${styles.moodWarm}`} />
+                                </>
+                            )
+                        }
                     </div>
                 </div>
             </section>
