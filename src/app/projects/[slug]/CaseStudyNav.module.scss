@@ -17,7 +17,7 @@ $transition-nav:  cubic-bezier(0.23, 1, 0.32, 1);
 /* ─── Rail container ─── */
 .rail {
   position: fixed;
-  left: 0;
+  left: 73px;
   top: 0;
   bottom: 0;
   width: $rail-width;
@@ -72,7 +72,7 @@ $transition-nav:  cubic-bezier(0.23, 1, 0.32, 1);
 /* ─── Travelling indicator ─── */
 .indicator {
   position: absolute;
-  left: 50%;
+  left: 24px;
   top: 0;
   transform: translateX(-50%) translateY(0);
   transition: transform 0.65s $transition-nav;
