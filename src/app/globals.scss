@@ -54,7 +54,7 @@ a {
 }
 
 main {
-	margin-left: variables.$header-width;
+	margin-top: variables.$header-height;
 	position: relative;
 }
 
@@ -80,7 +80,7 @@ ul {
 
 
 footer {
-    padding: variables.$footer-padding 0 variables.$footer-padding variables.$header-width;
+    padding: variables.$footer-padding 0;
 
     p {
         margin-bottom: 0;

@@ -1,67 +1,279 @@
 @use "../../global.variables.scss" as variables;
 
-:global(header) {
+// ─── Design Tokens (matched to portfolio design system) ───
+$accent: #c44a2f;
+$black: #0a0a0a;
+$cream: #f5f2ed;
+$grey-mid: #7a7a76;
+$grey-light: #b8b5ae;
+$font-mono: "JetBrains Mono", monospace;
+$font-sans: "Instrument Sans", sans-serif;
+$font-serif: "DM Serif Display", serif;
+
+$header-height: 72px;
+$header-height-scrolled: 56px;
+$page-margin: clamp(24px, 5vw, 80px);
+$ease: cubic-bezier(0.23, 1, 0.32, 1);
+
+// ─── Header Container ───
+.header {
 	position: fixed;
-    left: 0;
-    top: 0;
-    height: 100vh;
-    width: variables.$header-width;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: $header-height;
+	z-index: 200;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	transition:
+		height 0.5s $ease,
+		background 0.4s ease,
+		backdrop-filter 0.4s ease;
 
-    .logo-link {
-        margin-top: variables.$distance-from-top;
-        margin-left: variables.$list-padding;
-        display: inline-block;
-        color: variables.$color-logo-orange !important;
-        font-size: variables.$header-logo-font-size;
-    }
+	// Before entrance — everything hidden
+	&:not(.headerEntered) {
+		.accentLine {
+			transform: scaleX(0);
+		}
 
-    nav {
-        position: absolute;
-        left: 0;
-        top: 50%;
-        transform: translateY(-50%);
+		.logoLink {
+			opacity: 0;
+			transform: translateY(12px);
+		}
 
-        ul {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            margin-bottom: 0;
+		.navItem {
+			.navLink {
+				clip-path: inset(0 0 100% 0);
+			}
+		}
+	}
+}
 
-            li {
-                &.current-menu-item {
-                    a {
-                        color: variables.$color-font;
-                    }
-                }
-            }
-        }
+// ─── Entered State — play the sequence ───
+.headerEntered {
+	.accentLine {
+		transform: scaleX(1);
+	}
 
-    }
+	.logoLink {
+		opacity: 1;
+		transform: translateY(0);
+		transition: opacity 0.6s $ease 0.2s, transform 0.6s $ease 0.2s;
+	}
 
-    a {
-        color: variables.$link-color-faded;
+	.navItem {
+		.navLink {
+			clip-path: inset(0 0 0% 0);
+			transition: clip-path 0.6s $ease var(--stagger);
+		}
 
-        &:hover {
-            color: variables.$color-font;
-        }
-    }
+		.navIndex {
+			animation: indexFlash 0.8s $ease var(--stagger) forwards;
+		}
+	}
+}
 
-    .menu-trigger {
-        display: none;
-    }
+// Index flash: visible during entrance, then fades out
+@keyframes indexFlash {
+	0% {
+		opacity: 0.8;
+		transform: translateX(0);
+	}
+	60% {
+		opacity: 0.8;
+		transform: translateX(0);
+	}
+	100% {
+		opacity: 0;
+		transform: translateX(-4px);
+	}
+}
 
-    .language-switcher {
-        position: absolute;
-        left: 0;
-        bottom: 1rem;
-        width: 100%;
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        padding-left: variables.$list-padding;
+// ─── Settled State — entrance done, enable hover transitions ───
+.headerSettled {
+	.navItem .navIndex {
+		animation: none;
+		opacity: 0;
+		transform: translateX(-4px);
+		transition: opacity 0.25s ease, transform 0.3s $ease;
+	}
 
-        .language {
-            text-transform: uppercase;
-        }
-    }
+	.navLink:hover .navIndex,
+	.navLinkActive .navIndex {
+		opacity: 0.5;
+		transform: translateX(0);
+	}
+
+	.navLinkActive .navIndex {
+		opacity: 0.4;
+	}
+}
+
+// ─── Scrolled State — frosted glass ───
+.headerScrolled {
+	height: $header-height-scrolled;
+	background: rgba($cream, 0.92);
+	backdrop-filter: blur(12px);
+	-webkit-backdrop-filter: blur(12px);
+
+	.accentLine {
+		opacity: 1;
+		background: $accent;
+	}
+}
+
+// ─── Accent Line ───
+.accentLine {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	height: 1px;
+	background: rgba($black, 0.06);
+	transform-origin: left center;
+	transform: scaleX(1);
+	transition:
+		transform 0.7s $ease,
+		background 0.5s ease,
+		opacity 0.5s ease;
+	z-index: 1;
+}
+
+// ─── Inner Layout ───
+.headerInner {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0 $page-margin;
+	height: 100%;
+}
+
+// ─── Logo ───
+.logoLink {
+	display: flex;
+	align-items: center;
+	color: variables.$color-logo-orange !important;
+	transition:
+		transform 0.4s $ease,
+		opacity 0.6s $ease;
+	flex-shrink: 0;
+
+	&:hover {
+		transform: scale(1.06);
+		color: variables.$color-logo-orange !important;
+	}
+}
+
+// ─── Navigation ───
+.navList {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	align-items: center;
+	gap: 0;
+}
+
+.navItem {
+	position: relative;
+}
+
+// ─── Nav Link ───
+.navLink {
+	position: relative;
+	display: flex;
+	align-items: center;
+	padding: 8px 20px;
+	font-family: $font-sans;
+	font-size: 0.8125rem;
+	font-weight: 500;
+	letter-spacing: 0.02em;
+	color: $grey-mid !important;
+	transition: color 0.3s ease;
+	overflow: visible;
+
+	// Accent underline
+	&::after {
+		content: "";
+		position: absolute;
+		bottom: 2px;
+		left: 20px;
+		right: 20px;
+		height: 1px;
+		background: $accent;
+		transform: scaleX(0);
+		transform-origin: left center;
+		transition: transform 0.4s $ease;
+	}
+
+	&:hover {
+		color: $black !important;
+
+		&::after {
+			transform: scaleX(1);
+			transition-delay: 0.05s;
+		}
+	}
+}
+
+// ─── Nav Index Number ───
+.navIndex {
+	font-family: $font-mono;
+	font-size: 0.5625rem;
+	letter-spacing: 0.06em;
+	color: $grey-light;
+	margin-right: 6px;
+	pointer-events: none;
+	flex-shrink: 0;
+}
+
+// ─── Nav Text ───
+.navText {
+	position: relative;
+}
+
+// ─── Active Link ───
+.navLinkActive {
+	color: $black !important;
+	font-weight: 600;
+
+	&::after {
+		transform: scaleX(1);
+	}
+
+	.navIndex {
+		color: $accent;
+	}
+}
+
+// ─── Responsive ───
+@media (max-width: variables.$bp-mobile) {
+	.header {
+		height: 56px;
+	}
+
+	.headerScrolled {
+		height: 56px;
+	}
+
+	.headerInner {
+		padding: 0 16px;
+	}
+
+	.logoLink {
+		svg {
+			width: 26px;
+			height: 26px;
+		}
+	}
+
+	.navLink {
+		padding: 8px 12px;
+		font-size: 0.75rem;
+	}
+
+	.navIndex {
+		display: none;
+	}
 }
