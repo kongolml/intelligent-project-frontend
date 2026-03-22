@@ -8,6 +8,7 @@ import PortfolioItemSpinner from "@/app/components/PortfolioList/PortfolioItemSp
 import { PortfolioCategory, PortfolioItem } from "@/types/portfolio.types";
 
 import Image from "@/app/components/common/Image";
+import { useFilterBar } from "@/app/contexts/FilterBarContext";
 
 // styles
 import styles from "./PortfolioList.module.scss";
@@ -20,12 +21,21 @@ interface PortfolioListProps {
 export default function PortfolioList({ portfolioItems, portfolioCategories }: PortfolioListProps) {
 	const router = useRouter();
 	const searchParams = useSearchParams();
+	const {
+		filterBarDocked,
+		setCategories,
+		setCategoryCounts,
+		setSelectedCategory: setContextCategory,
+		setFilterBarDocked,
+		setOnCategoryChange,
+	} = useFilterBar();
 
 	const initialCategory = searchParams.get("category") || "all";
 	const [selectedCategory, setSelectedCategory] = useState<string>(initialCategory);
 	const [loadingSlug, setLoadingSlug] = useState<string | null>(null);
 
 	const gridRef = useRef<HTMLDivElement>(null);
+	const sentinelRef = useRef<HTMLDivElement>(null);
 
 	const filteredItems = useMemo(() => {
 		return selectedCategory === "all"
@@ -53,9 +63,76 @@ export default function PortfolioList({ portfolioItems, portfolioCategories }: P
 				? router.replace(window.location.pathname, { scroll: false })
 				: router.replace(`?category=${category}`, { scroll: false });
 			setSelectedCategory(category);
+			setContextCategory(category);
 		},
-		[router]
+		[router, setContextCategory]
 	);
+
+	// Sync data into FilterBar context for Header consumption
+	useEffect(() => {
+		setCategories(portfolioCategories);
+	}, [portfolioCategories, setCategories]);
+
+	useEffect(() => {
+		setCategoryCounts(categoryCounts);
+	}, [categoryCounts, setCategoryCounts]);
+
+	useEffect(() => {
+		setContextCategory(selectedCategory);
+	}, [selectedCategory, setContextCategory]);
+
+	useEffect(() => {
+		setOnCategoryChange(handleCategoryChange);
+		return () => setOnCategoryChange(null);
+	}, [handleCategoryChange, setOnCategoryChange]);
+
+	// Clean up docked state when component unmounts (navigating away from /projects)
+	useEffect(() => {
+		return () => setFilterBarDocked(false);
+	}, [setFilterBarDocked]);
+
+	// Sentinel observer — detect when filter bar becomes sticky (docked)
+	// Debounce undocking to prevent flicker from transient layout shifts (e.g. grid re-rendering on filter change)
+	const undockTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+	useEffect(() => {
+		const sentinel = sentinelRef.current;
+		if (!sentinel) return;
+		if (window.innerWidth < 768) return;
+
+		const observer = new IntersectionObserver(
+			([entry]) => {
+				const shouldDock = !entry.isIntersecting && entry.boundingClientRect.top < 0;
+
+				if (shouldDock) {
+					// Dock immediately
+					if (undockTimerRef.current) {
+						clearTimeout(undockTimerRef.current);
+						undockTimerRef.current = null;
+					}
+					setFilterBarDocked(true);
+				} else {
+					// Debounce undock — layout reflows from filtering can cause brief false positives
+					if (undockTimerRef.current) return;
+					undockTimerRef.current = setTimeout(() => {
+						undockTimerRef.current = null;
+						// Re-check sentinel position before undocking
+						const rect = sentinel.getBoundingClientRect();
+						if (rect.top >= 0) {
+							setFilterBarDocked(false);
+						}
+					}, 150);
+				}
+			},
+			{ threshold: 0 }
+		);
+
+		observer.observe(sentinel);
+		return () => {
+			observer.disconnect();
+			if (undockTimerRef.current) clearTimeout(undockTimerRef.current);
+		};
+	}, [setFilterBarDocked]);
 
 	// IntersectionObserver for reveal animations
 	useEffect(() => {
@@ -96,8 +173,11 @@ export default function PortfolioList({ portfolioItems, portfolioCategories }: P
 				</div>
 			</section>
 
+			{/* ── Sentinel for sticky detection ── */}
+			<div ref={sentinelRef} style={{ height: 0, margin: 0, padding: 0 }} />
+
 			{/* ── Filter Bar ── */}
-			<div className={styles.filterBar}>
+			<div className={`${styles.filterBar} ${filterBarDocked ? styles.filterBarDocked : ""}`}>
 				<div className={styles.filterInner}>
 					<button
 						className={`${styles.filterBtn} ${selectedCategory === "all" ? styles.filterActive : ""}`}

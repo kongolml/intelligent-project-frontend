@@ -7,6 +7,7 @@ import "./globals.scss";
 
 // components
 import Header from "@components/Header/Header";
+import { FilterBarProvider } from "@/app/contexts/FilterBarContext";
 
 // const geistSans = Geist({
 //   variable: "--font-geist-sans",
@@ -38,9 +39,11 @@ export default function RootLayout({
 </style>
       </head>
       <body>
+        <FilterBarProvider>
         <Header />
 
         <ViewTransition>{children}</ViewTransition>
+        </FilterBarProvider>
 
         <footer>
           <div className="container">

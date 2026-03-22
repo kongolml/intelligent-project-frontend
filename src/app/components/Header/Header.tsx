@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Logo from "@assets/intelligent-project-logo.svg";
+import { useFilterBar } from "@/app/contexts/FilterBarContext";
 import styles from "./Header.module.scss";
 
 const NAV_ITEMS = [
@@ -44,11 +45,16 @@ export default function Header() {
 	const [entered, setEntered] = useState(false);
 	const [introPlayed, setIntroPlayed] = useState(false);
 	const [scrolled, setScrolled] = useState(false);
+	const [showPills, setShowPills] = useState(false);
 	const headerRef = useRef<HTMLElement>(null);
+	const { filterBarDocked, categories, categoryCounts, selectedCategory: activeCategory, onCategoryChange } = useFilterBar();
+	const filterBarDockedRef = useRef(false);
 
 	const activeIndex = NAV_ITEMS.findIndex(
 		(item) => pathname === item.href || pathname.startsWith(item.href + "/")
 	);
+
+	const isProjectsPage = pathname === "/projects" || pathname.startsWith("/projects/");
 
 	// Spring-driven morph
 	const springRef = useRef<Spring>({ value: 0, velocity: 0, target: 0 });
@@ -61,11 +67,12 @@ export default function Header() {
 		const pageMargin = Math.min(80, Math.max(24, vw * 0.05));
 		const expanded = Math.min(1200, vw - pageMargin * 2);
 		const expandedLeft = (vw - expanded) / 2;
-		// Compact: tighter pill, tucked to the left
-		const compact = Math.min(460, vw * 0.7);
+		// Compact: tighter pill, tucked to the left — wider when categories are docked
+		const hasCats = filterBarDockedRef.current && isProjectsPage;
+		const compact = hasCats ? Math.min(760, vw * 0.9) : Math.min(460, vw * 0.7);
 		const compactLeft = pageMargin;
 		return { expanded, compact, expandedLeft, compactLeft };
-	}, []);
+	}, [isProjectsPage]);
 
 	const applySpring = useCallback(() => {
 		const el = headerRef.current;
@@ -172,6 +179,46 @@ export default function Header() {
 		applySpring();
 	}, [applySpring]);
 
+	// Reset pills when leaving /projects
+	useEffect(() => {
+		if (!isProjectsPage) {
+			setShowPills(false);
+			filterBarDockedRef.current = false;
+		}
+	}, [isProjectsPage]);
+
+	// React to filter bar docking — widen header + show category pills
+	useEffect(() => {
+		if (!isProjectsPage) return;
+		if (filterBarDocked === filterBarDockedRef.current) return;
+
+		filterBarDockedRef.current = filterBarDocked;
+
+		if (filterBarDocked && scrolledRef.current) {
+			// Nudge spring for elastic bounce as header widens
+			springRef.current.target = 0.96;
+			startSpring();
+			requestAnimationFrame(() => {
+				springRef.current.target = 1;
+				startSpring();
+			});
+			// Delay pill reveal so header starts widening first
+			const timer = setTimeout(() => setShowPills(true), 100);
+			return () => clearTimeout(timer);
+		} else {
+			setShowPills(false);
+			// Nudge spring for elastic shrink
+			if (scrolledRef.current) {
+				springRef.current.target = 1.04;
+				startSpring();
+				requestAnimationFrame(() => {
+					springRef.current.target = 1;
+					startSpring();
+				});
+			}
+		}
+	}, [filterBarDocked, isProjectsPage, startSpring]);
+
 	// Entrance animation — once per session
 	useEffect(() => {
 		const hasPlayed = sessionStorage.getItem("header-intro");
@@ -236,6 +283,39 @@ export default function Header() {
 						})}
 					</ul>
 				</nav>
+
+				{/* Category pills — appear when filter bar docks into header */}
+				{isProjectsPage && categories.length > 0 && (
+					<div
+						className={`${styles.categorySection} ${showPills ? styles.categorySectionVisible : ""}`}
+					>
+						<span className={styles.categoryDivider} />
+						<button
+							className={`${styles.categoryPill} ${
+								showPills ? styles.categoryPillEnter : ""
+							} ${activeCategory === "all" ? styles.categoryPillActive : ""}`}
+							style={{ "--cat-stagger": "0ms" } as React.CSSProperties}
+							onClick={() => onCategoryChange("all")}
+						>
+							All
+						</button>
+						{categories.map((cat, i) => (
+							<button
+								key={cat.slug}
+								className={`${styles.categoryPill} ${
+									showPills ? styles.categoryPillEnter : ""
+								} ${activeCategory === cat.slug ? styles.categoryPillActive : ""}`}
+								style={{ "--cat-stagger": `${(i + 1) * 50}ms` } as React.CSSProperties}
+								onClick={() => onCategoryChange(cat.slug)}
+							>
+								{cat.name}
+								<span className={styles.categoryPillCount}>
+									{categoryCounts[cat.slug] || 0}
+								</span>
+							</button>
+						))}
+					</div>
+				)}
 			</div>
 		</header>
 	);

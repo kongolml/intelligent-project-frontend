@@ -164,6 +164,18 @@ $mono: "JetBrains Mono", monospace;
 	vertical-align: super;
 }
 
+// ─── Filter Bar Docked (content fades out when categories move to header) ───
+.filterBarDocked {
+	.filterBtn {
+		opacity: 0;
+		transform: translateY(-8px);
+		pointer-events: none;
+		transition:
+			opacity 0.3s ease,
+			transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+	}
+}
+
 // ─── Project Grid ───
 .gridSection {
 	padding: 60px $page-margin 120px;
