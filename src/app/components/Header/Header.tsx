@@ -80,10 +80,21 @@ export default function Header() {
 		const width = expanded + (compact - expanded) * clampedM;
 		const left = expandedLeft + (compactLeft - expandedLeft) * clampedM;
 		const radius = 12 + (40 - 12) * clampedM;
-		const bgAlpha = 0.18 + (0.42 - 0.18) * clamped01;
-		const blur = 20 + (32 - 20) * clamped01;
-		const shadow = 0.04 + (0.1 - 0.04) * clamped01;
-		const borderAlpha = 0.08 + (0.14 - 0.08) * clamped01;
+
+		// Background: dark transparent → cream glass
+		// Expanded (m=0): subtle dark overlay like Apple nav
+		// Compact (m=1): warm cream glass pill
+		const darkR = 18, darkG = 18, darkB = 18;
+		const creamR = 245, creamG = 242, creamB = 237;
+		const bgR = Math.round(darkR + (creamR - darkR) * clamped01);
+		const bgG = Math.round(darkG + (creamG - darkG) * clamped01);
+		const bgB = Math.round(darkB + (creamB - darkB) * clamped01);
+		const bgAlpha = 0.12 + (0.42 - 0.12) * clamped01;
+
+		const blur = 14 + (32 - 14) * clamped01;
+		const saturate = 180 - (180 - 120) * clamped01; // 180% expanded → 120% compact
+		const shadow = 0.02 + (0.1 - 0.02) * clamped01;
+		const borderAlpha = 0.06 + (0.14 - 0.06) * clamped01;
 		// Gentle drift: max 6px
 		const scrollY = window.scrollY;
 		const drift = Math.min(scrollY / 300, 1) * 6;
@@ -91,10 +102,10 @@ export default function Header() {
 		el.style.width = `${width}px`;
 		el.style.left = `${left}px`;
 		el.style.borderRadius = `${radius}px`;
-		el.style.background = `rgba(245, 242, 237, ${bgAlpha})`;
-		el.style.backdropFilter = `blur(${blur}px)`;
-		el.style.setProperty("-webkit-backdrop-filter", `blur(${blur}px)`);
-		el.style.boxShadow = `0 4px 30px rgba(10, 10, 10, ${shadow})`;//, inset 0 1px 0 rgba(255, 255, 255, 0.25)`;
+		el.style.background = `rgba(${bgR}, ${bgG}, ${bgB}, ${bgAlpha})`;
+		el.style.backdropFilter = `saturate(${Math.round(saturate)}%) blur(${blur}px)`;
+		el.style.setProperty("-webkit-backdrop-filter", `saturate(${Math.round(saturate)}%) blur(${blur}px)`);
+		el.style.boxShadow = `0 4px 30px rgba(10, 10, 10, ${shadow})`;
 		el.style.borderColor = `rgba(255, 255, 255, ${borderAlpha})`;
 		el.style.transform = `translateY(${drift}px)`;
 	}, [computeLayout]);

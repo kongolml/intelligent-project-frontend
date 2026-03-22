@@ -26,7 +26,7 @@ $ease: cubic-bezier(0.23, 1, 0.32, 1);
 	z-index: 200;
 	display: flex;
 	align-items: center;
-	border: 1px solid rgba(255, 255, 255, 0.08);
+	border: 1px solid rgba(255, 255, 255, 0.06);
 	// Will-change for spring-animated properties
 	will-change: left, width, border-radius, background, backdrop-filter, transform, box-shadow;
 
@@ -93,7 +93,7 @@ $ease: cubic-bezier(0.23, 1, 0.32, 1);
 		animation: none;
 		opacity: 0;
 		transform: translateX(-4px);
-		transition: opacity 0.25s ease, transform 0.3s $ease;
+		transition: opacity 0.25s ease, transform 0.3s $ease, color 0.5s $ease;
 	}
 
 	.navLink:hover .navIndex,
@@ -107,10 +107,31 @@ $ease: cubic-bezier(0.23, 1, 0.32, 1);
 	}
 }
 
-// ─── Scrolled State (class for child style differences) ───
+// ─── Scrolled State — text transitions from light to dark ───
 .headerScrolled {
-	// Spring handles the visual morph; this class is available
-	// for any child-specific scrolled adjustments if needed.
+	.navLink {
+		color: $black !important;
+
+		&:hover {
+			color: $black !important;
+		}
+	}
+
+	.navIndex {
+		color: $grey-light;
+	}
+
+	.navLinkActive {
+		color: $black !important;
+
+		.navIndex {
+			color: $accent;
+		}
+	}
+
+	.logoLink {
+		color: variables.$color-logo-orange !important;
+	}
 }
 
 // ─── Inner Layout ───
@@ -126,15 +147,15 @@ $ease: cubic-bezier(0.23, 1, 0.32, 1);
 .logoLink {
 	display: flex;
 	align-items: center;
-	color: variables.$color-logo-orange !important;
+	color: rgba(255, 255, 255, 0.92) !important;
 	transition:
 		transform 0.4s $ease,
+		color 0.5s $ease,
 		opacity 0.6s $ease;
 	flex-shrink: 0;
 
 	&:hover {
 		transform: scale(1.06);
-		color: variables.$color-logo-orange !important;
 	}
 }
 
@@ -162,8 +183,8 @@ $ease: cubic-bezier(0.23, 1, 0.32, 1);
 	font-size: 0.8125rem;
 	font-weight: 500;
 	letter-spacing: 0.02em;
-	color: $black !important;
-	transition: color 0.3s ease;
+	color: rgba(255, 255, 255, 0.9) !important;
+	transition: color 0.5s $ease;
 	overflow: visible;
 	white-space: nowrap;
 
@@ -182,7 +203,7 @@ $ease: cubic-bezier(0.23, 1, 0.32, 1);
 	}
 
 	&:hover {
-		color: $black !important;
+		color: rgba(255, 255, 255, 1) !important;
 
 		&::after {
 			transform: scaleX(1);
@@ -196,10 +217,11 @@ $ease: cubic-bezier(0.23, 1, 0.32, 1);
 	font-family: $font-mono;
 	font-size: 0.5625rem;
 	letter-spacing: 0.06em;
-	color: $grey-light;
+	color: rgba(255, 255, 255, 0.4);
 	margin-right: 6px;
 	pointer-events: none;
 	flex-shrink: 0;
+	transition: color 0.5s $ease;
 }
 
 // ─── Nav Text ───
@@ -209,7 +231,7 @@ $ease: cubic-bezier(0.23, 1, 0.32, 1);
 
 // ─── Active Link ───
 .navLinkActive {
-	color: $black !important;
+	color: rgba(255, 255, 255, 1) !important;
 	font-weight: 600;
 
 	&::after {
@@ -217,7 +239,8 @@ $ease: cubic-bezier(0.23, 1, 0.32, 1);
 	}
 
 	.navIndex {
-		color: $accent;
+		color: rgba(255, 255, 255, 0.5);
+		transition: color 0.5s $ease;
 	}
 }
 
