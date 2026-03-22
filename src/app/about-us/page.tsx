@@ -22,7 +22,7 @@ export default async function AboutUsPage() {
 
 	return (
 		<main>
-			<section>
+			<section style={{ paddingTop: 100 }}>
 				<Container>
 					<Row>
 						<Col>
