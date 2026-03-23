@@ -120,7 +120,7 @@ export default function HomepagePortfolioClient({ randomPortfolioItems }: Props)
                                             return (
                                                 <figure
                                                     id={`project-${index + 1}`}
-                                                    style={{ backgroundImage: `url('${portfolioItem.thumbnail}')` }}
+                                                    style={{ backgroundImage: `url('${portfolioItem.main_image}')` }}
                                                     key={portfolioItem.id}
                                                 >
                                                     <figcaption>

@@ -49,10 +49,11 @@ export interface PayloadPortfolioItem {
   concept?: unknown | null;
   conceptHTML?: string | null;
   categories: PayloadPortfolioCategory[];
-  thumbnail: PayloadMediaFile | null;
+  main_image: PayloadMediaFile | null;
   mediaFiles: PayloadMediaFile[];
   visual_inspiration?: (PayloadMediaFile | string)[];
   visual_exploration?: (PayloadMediaFile | string)[];
+  final_result_gallery?: (PayloadMediaFile | string)[];
   slug: string;
   isShowcase?: boolean;
 }

@@ -26,10 +26,11 @@ export interface PortfolioItem {
 		name: PortfolioCategory["name"];
 		slug: PortfolioCategory["slug"];
 	}[];
-	thumbnail: string; // URL to the main image
+	main_image: string; // URL to the main image
 	mediaFiles: string[]; // urls
 	visual_inspiration?: string[]; // resolved URLs
 	visual_exploration?: string[]; // resolved URLs
+	final_result_gallery?: string[]; // resolved URLs
 	slug: string;
 	isShowcase?: boolean;
 }

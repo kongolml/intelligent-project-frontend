@@ -37,13 +37,8 @@ export default function ProjectDetailClientV2({ project }: ProjectDetailClientV2
 
     const [titleLine1, titleLine2] = splitTitle(project.title);
 
-    // Packaging image slots
-    const packImg0 = project.mediaFiles[0] ?? null;
-    const packImg1 = project.mediaFiles[1] ?? null;
-    const packImg2 = project.mediaFiles[2] ?? null;
-    const packImg3 = project.mediaFiles[3] ?? null;
-    const packFinalA = project.mediaFiles[4] ?? null;
-    const packFinalB = project.mediaFiles[5] ?? null;
+    // Packaging images from final_result_gallery
+    const finalResultGalleryImages = project.final_result_gallery ?? [];
 
     return (
         <div className={styles.casePage}>
@@ -52,12 +47,12 @@ export default function ProjectDetailClientV2({ project }: ProjectDetailClientV2
             {/* ─── HERO ─── */}
             <section id="hero" className={styles.hero}>
                 <div
-                    className={`${styles.heroBg} ${project.thumbnail ? styles.heroBgWithImage : ""}`}
-                    style={project.thumbnail ? { viewTransitionName: `thumb-${project.id}` } : undefined}
+                    className={`${styles.heroBg} ${project.main_image ? styles.heroBgWithImage : ""}`}
+                    style={project.main_image ? { viewTransitionName: `thumb-${project.id}` } : undefined}
                 >
-                    {project.thumbnail && (
+                    {project.main_image && (
                         <Image
-                            src={project.thumbnail}
+                            src={project.main_image}
                             alt={project.title}
                             fill
                             className={styles.heroBgImage}
@@ -337,96 +332,52 @@ export default function ProjectDetailClientV2({ project }: ProjectDetailClientV2
                     <h2>Packaging</h2>
                 </div>
 
-                {/* Pair 1 */}
-                <div className={`${styles.imagePair} reveal`}>
-                    <div className={`${styles.imgWrapper} ${styles.imgWrapperRatio1}`}>
-                        {packImg0 ? (
-                            <Image
-                                src={packImg0}
-                                alt={`${project.title} — packaging label cream`}
-                                fill
-                                className={styles.coverImage}
-                            />
-                        ) : (
-                            <div className={styles.mockCream} />
-                        )}
-                    </div>
-                    <div className={`${styles.imgWrapper} ${styles.imgWrapperRatio1}`}>
-                        {packImg1 ? (
-                            <Image
-                                src={packImg1}
-                                alt={`${project.title} — packaging label blue`}
-                                fill
-                                className={styles.coverImage}
-                            />
-                        ) : (
-                            <div className={styles.mockBlue} />
-                        )}
-                    </div>
-                </div>
-
-                <div style={{ height: "24px" }} />
-
-                {/* Pair 2 */}
-                <div className={`${styles.imagePair} reveal`} style={{ transitionDelay: "0.1s" }}>
-                    <div className={`${styles.imgWrapper} ${styles.imgWrapperRatio1}`}>
-                        {packImg2 ? (
-                            <Image
-                                src={packImg2}
-                                alt={`${project.title} — packaging detail warm`}
-                                fill
-                                className={styles.coverImage}
-                            />
-                        ) : (
-                            <div className={styles.mockWarm} />
-                        )}
-                    </div>
-                    <div className={`${styles.imgWrapper} ${styles.imgWrapperRatio1}`}>
-                        {packImg3 ? (
-                            <Image
-                                src={packImg3}
-                                alt={`${project.title} — packaging detail teal`}
-                                fill
-                                className={styles.coverImage}
-                            />
-                        ) : (
-                            <div className={styles.mockTeal} />
-                        )}
-                    </div>
-                </div>
-
-                <div style={{ height: "24px" }} />
-
-                {/* Final 16:10 pair */}
-                <div
-                    className={`${styles.imagePair} reveal`}
-                    style={{ transitionDelay: "0.15s" }}
-                >
-                    <div className={`${styles.imgWrapper} ${styles.imgWrapperRatio1610}`}>
-                        {packFinalA ? (
-                            <Image
-                                src={packFinalA}
-                                alt={`${project.title} — product final dark`}
-                                fill
-                                className={styles.coverImage}
-                            />
-                        ) : (
-                            <div className={styles.mockDark} />
-                        )}
-                    </div>
-                    <div className={`${styles.imgWrapper} ${styles.imgWrapperRatio1610}`}>
-                        {packFinalB ? (
-                            <Image
-                                src={packFinalB}
-                                alt={`${project.title} — product final deep`}
-                                fill
-                                className={styles.coverImage}
-                            />
-                        ) : (
-                            <div className={styles.mockDeep} />
-                        )}
-                    </div>
-                </div>
+                {finalResultGalleryImages.length > 0 ? (
+                    (() => {
+                        const pairs: string[][] = [];
+                        for (let i = 0; i < finalResultGalleryImages.length; i += 2) pairs.push(finalResultGalleryImages.slice(i, i + 2));
+                        return pairs.map((pair, pairIdx) => (
+                            <div key={pairIdx}>
+                                {pairIdx > 0 && <div style={{ height: "24px" }} />}
+                                <div
+                                    className={`${styles.imagePair} reveal`}
+                                    style={pairIdx > 0 ? { transitionDelay: `${pairIdx * 0.1}s` } : undefined}
+                                >
+                                    {pair.map((url, colIdx) => (
+                                        <div key={colIdx} className={`${styles.imgWrapper} ${styles.imgWrapperRatio1}`}>
+                                            <Image
+                                                src={url}
+                                                alt={`${project.title} — packaging ${pairIdx * 2 + colIdx + 1}`}
+                                                fill
+                                                className={styles.coverImage}
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        ));
+                    })()
+                ) : (
+                    <>
+                        <div className={`${styles.imagePair} reveal`}>
+                            <div className={`${styles.imgWrapper} ${styles.imgWrapperRatio1}`}>
+                                <div className={styles.mockCream} />
+                            </div>
+                            <div className={`${styles.imgWrapper} ${styles.imgWrapperRatio1}`}>
+                                <div className={styles.mockBlue} />
+                            </div>
+                        </div>
+                        <div style={{ height: "24px" }} />
+                        <div className={`${styles.imagePair} reveal`} style={{ transitionDelay: "0.1s" }}>
+                            <div className={`${styles.imgWrapper} ${styles.imgWrapperRatio1}`}>
+                                <div className={styles.mockWarm} />
+                            </div>
+                            <div className={`${styles.imgWrapper} ${styles.imgWrapperRatio1}`}>
+                                <div className={styles.mockTeal} />
+                            </div>
+                        </div>
+                    </>
+                )}
             </section>
 
             {/* ─── TYPOGRAPHY SECTION ─── */}

@@ -108,7 +108,7 @@ export default function HomepagePortfolioScrollableClient({ showcasePortfolioIte
 													<figure 
 														key={item.id} 
 														id={`project-${index + 1}`}
-														style={{ backgroundImage: `url(${item.thumbnail})` }} 
+														style={{ backgroundImage: `url(${item.main_image})` }} 
 														className={`category-${item.categories[0]?.slug || ''}`}
 													></figure>
 												))}

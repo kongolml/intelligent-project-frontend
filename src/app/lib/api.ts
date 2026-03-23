@@ -43,10 +43,11 @@ function mapPortfolioItem(raw: PayloadPortfolioItem): PortfolioItem {
     our_taskHTML: raw.our_taskHTML ?? undefined,
     conceptHTML: raw.conceptHTML ?? undefined,
     categories: (raw.categories ?? []).map((c) => ({ name: c.name, slug: c.slug as PortfolioCategorySlugs })),
-    thumbnail: resolveMediaUrl(raw.thumbnail),
+    main_image: resolveMediaUrl(raw.main_image),
     mediaFiles: (raw.mediaFiles ?? []).map((m) => resolveMediaUrl(m)),
     visual_inspiration: (raw.visual_inspiration ?? []).map((m) => resolveMediaUrl(m)),
     visual_exploration: (raw.visual_exploration ?? []).map((m) => resolveMediaUrl(m)),
+    final_result_gallery: (raw.final_result_gallery ?? []).map((m) => resolveMediaUrl(m)),
     slug: raw.slug,
     isShowcase: raw.isShowcase ?? undefined,
   };

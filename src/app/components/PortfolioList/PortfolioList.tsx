@@ -210,9 +210,9 @@ export default function PortfolioList({ portfolioItems, portfolioCategories }: P
 							onClick={() => setLoadingSlug(item.slug)}
 						>
 							<div className={styles.cardImageWrap} style={{ viewTransitionName: `thumb-${item.id}` }}>
-								{item.thumbnail && (
+								{item.main_image && (
 									<Image
-										src={item.thumbnail}
+										src={item.main_image}
 										alt={item.title}
 										fill
 										className={styles.cardImage}
