@@ -1,0 +1,45 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.DROPLET_SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.DROPLET_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Sync build to Droplet
+        run: |
+          rsync -az --delete \
+            .next/standalone/ \
+            ${{ secrets.DROPLET_USER }}@${{ secrets.DROPLET_HOST }}:/var/www/intelligent-project-frontend/
+          rsync -az --delete \
+            .next/static/ \
+            ${{ secrets.DROPLET_USER }}@${{ secrets.DROPLET_HOST }}:/var/www/intelligent-project-frontend/.next/static/
+          rsync -az --delete \
+            public/ \
+            ${{ secrets.DROPLET_USER }}@${{ secrets.DROPLET_HOST }}:/var/www/intelligent-project-frontend/public/
+
+      - name: Restart PM2
+        run: |
+          ssh ${{ secrets.DROPLET_USER }}@${{ secrets.DROPLET_HOST }} \
+            "pm2 restart intelligent-project-frontend || pm2 start /var/www/intelligent-project-frontend/server.js --name intelligent-project-frontend"
