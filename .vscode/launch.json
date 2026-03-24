@@ -5,10 +5,26 @@
       "name": "Next.js: Debug SSR",
       "type": "node",
       "request": "launch",
-      "runtimeExecutable": "npm",
+      "runtimeExecutable": "/Users/kostiantyngolosov/.nvm/versions/node/v22.11.0/bin/npm",
       "runtimeArgs": ["run", "dev"],
       "port": 9229,
-      "console": "integratedTerminal"
+      "console": "integratedTerminal",
+      "env": {
+        "NODE_OPTIONS": "--inspect"
+      },
+      "sourceMapPathOverrides": {
+        "webpack://_N_E/./*": "${workspaceFolder}/*"
+      }
+    },
+    {
+      "name": "Next.js: Attach to existing server",
+      "type": "node",
+      "request": "attach",
+      "port": 9229,
+      "skipFiles": ["<node_internals>/**"],
+      "sourceMapPathOverrides": {
+        "webpack://_N_E/./*": "${workspaceFolder}/*"
+      }
     }
   ]
 }

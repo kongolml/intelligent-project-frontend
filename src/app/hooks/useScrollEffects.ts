@@ -1,186 +1,327 @@
 "use client";
 
+import gsap from "gsap";
+import ScrambleTextPlugin from "gsap/ScrambleTextPlugin";
+import { MotionPathPlugin } from "gsap/MotionPathPlugin";
+import { useGSAP } from "@gsap/react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
 import { useEffect } from "react";
 
-// import { gsap } from "gsap";
-// import  "scrollmagic";
-// import "scrollmagic-plugin-gsap";
-// import "../lib/scrollmagic-gsap"; // Ensure this is imported to monkey-patch ScrollMagic
-
 interface UseScrollEffectsProps {
-  isMobile: boolean;
-  projectsCount: number;
-  projectsListRef: React.RefObject<HTMLElement | null>;
-  projectNavRef: React.RefObject<HTMLElement | null>;
-  projectsDemoRef: React.RefObject<HTMLElement | null>;
-  heroRef: React.RefObject<HTMLElement | null>;
+	isMobile: boolean;
+	projectsCount: number;
+	projectsListRef: React.RefObject<HTMLElement | null>;
+	projectNavRef: React.RefObject<HTMLElement | null>;
+	projectsDemoRef: React.RefObject<HTMLElement | null>;
+	heroRef: React.RefObject<HTMLElement | null>;
+	ourServicesRef: React.RefObject<HTMLElement | null>;
+  circleRef: React.RefObject<HTMLElement | null>
 }
 
-export default function useScrollEffects({
-  isMobile,
-  projectsCount,
-  projectsListRef,
-  projectNavRef,
-  projectsDemoRef,
-  heroRef,
+export function useScrollEffects({
+	isMobile,
+	projectsCount,
+	projectsListRef,
+	projectNavRef,
+	projectsDemoRef,
+	heroRef,
+	ourServicesRef,
+  circleRef
 }: UseScrollEffectsProps) {
-  useEffect(() => {
-    // if (
-    //   typeof window === "undefined" ||
-    //   typeof document === "undefined" ||
-    //   typeof ScrollMagic === "undefined"
-    // ) {
-    //   return;
-    // }
+	useEffect(() => {
+		// Prevent SSR crash
+		if (typeof window === "undefined") return;
 
-    if (
-      !projectsListRef.current ||
-      !projectNavRef.current ||
-      !projectsDemoRef.current ||
-      !heroRef.current
-    ) {
-      return;
-    }
+		const ScrollMagic = (window as any).ScrollMagic;
+		// const gsap = (window as any).gsap;
 
-    // ✅ Prevent SSR crash
-    if (typeof window === "undefined") return;
+		if (!ScrollMagic || !gsap) {
+			console.warn("ScrollMagic or GSAP not loaded.");
+			return;
+		}
 
-    const ScrollMagic = (window as any).ScrollMagic;
-    const gsap = (window as any).gsap;
-    const TimelineMax = (window as any).TimelineMax;
+		if (!projectsListRef.current || !projectNavRef.current || !projectsDemoRef.current || !heroRef.current || !ourServicesRef.current) {
+			return;
+		}
 
-    if (!ScrollMagic || !gsap) {
-      console.warn("ScrollMagic or GSAP not loaded.");
-      return;
-    }
+		// gsap.registerPlugin(ScrollTrigger);
+		gsap.registerPlugin(ScrambleTextPlugin, MotionPathPlugin, ScrollTrigger);
+		const controller = new ScrollMagic.Controller();
 
-    const controller = new ScrollMagic.Controller();
-    const carouselLength = projectsCount - 1;
-    const scrollPercentPerSlide = 100 / carouselLength;
+		// introduction text animation
+		// gsap.set(".we-are", { opacity: 1 });
+		// let split = SplitText.create(".we-are", { type: "chars" });
+		// gsap.from(split.chars, {
+		//   y: 20,
+		//   autoAlpha: 0,
+		//   stagger: 0.05
+		// });
 
-    const projectsSectionPaddingTop = parseInt(
-      window.getComputedStyle(projectsDemoRef.current).getPropertyValue("padding-top"),
-      10
-    );
+		gsap.to(".we-are", {
+			scrambleText: {
+				text: "Intelligent Project",
+				speed: 0.5,
+				chars: "ЄЇ?+_\\1",
+				revealDelay: 0.1,
+			},
+			duration: 1,
+		});
 
-    if (isMobile) {
-      const height =
-        window.innerHeight -
-        projectsSectionPaddingTop * 4 -
-        projectNavRef.current.offsetHeight;
-      projectsListRef.current.style.height = `${height}px`;
-    }
+		// Calculate project slides - same as original logic
+		const projectSlidesInCarousel = projectsCount;
+		const projectImageInScrollPercentages = 100 / (projectSlidesInCarousel - 1);
+		const carouselLengthInSlides = projectSlidesInCarousel - 1;
 
-    const itemHeight = projectsListRef.current.offsetHeight;
-    projectsListRef.current.querySelectorAll("li").forEach((el) => {
-      (el as HTMLElement).style.height = `${itemHeight}px`;
-    });
+		// Get projects section padding top
+		const projectsSectionPaddingTop = parseInt(window.getComputedStyle(projectsDemoRef.current).getPropertyValue("padding-top"), 10);
 
-    const listEl = projectsListRef.current.querySelector(".projects-list");
-    if (!listEl) return;
+		// Mobile-specific height calculation
+		if (isMobile) {
+			const projectsImagesWrpHeight = window.innerHeight - projectsSectionPaddingTop * 4 - projectNavRef.current.offsetHeight;
+			if (projectsListRef.current) {
+				(projectsListRef.current as HTMLElement).style.height = `${projectsImagesWrpHeight}px`;
+			}
+		}
 
-    const projectsListTween = gsap.to(listEl, {
-      y: -itemHeight * carouselLength,
-      ease: "none",
-      duration: 1,
-    });
+		// Set item height - using projectsListRef which is the wrapper (projectsListWrp)
+		const itemHeight = projectsListRef.current ? (projectsListRef.current as HTMLElement).offsetHeight : 0;
 
-    const offset = !isMobile
-      ? -(window.innerHeight - projectNavRef.current.offsetHeight) / 2 + projectsSectionPaddingTop
-      : -((document.querySelector("header") as HTMLElement)?.offsetHeight || 0) +
-        projectsSectionPaddingTop / 2;
+		// Set height for each figure element
+		const figures = projectsDemoRef.current.querySelectorAll("figure");
+		figures.forEach((figure) => {
+			(figure as HTMLElement).style.height = `${itemHeight}px`;
+		});
 
-    const mainScene = new ScrollMagic.Scene({
-      triggerElement: projectsDemoRef.current,
-      duration: itemHeight * carouselLength,
-      triggerHook: 0,
-      offset,
-    })
-      .on("progress", (event: ScrollMagic.Event) => {
-        const progress = Math.floor(event.progress! * 100);
-        const activeItem = Math.floor(progress / scrollPercentPerSlide);
+		// Get the projects list container (the element that will be animated)
+		// This is the first child div of projectsListWrp (the projectsList element)
+		const projectsListContainer = projectsListRef.current?.firstElementChild as HTMLElement;
 
-        const navItems = projectNavRef.current!.querySelectorAll("li");
-        navItems.forEach((li, i) => {
-          li.classList.toggle("active", i === activeItem);
-        });
-      })
-      .on("enter leave", (event: ScrollMagic.Event) => {
-        const el = document.querySelector(".scroll-to-services");
-        if (!el) return;
-        if (event.type === "enter") {
-          el.classList.add("fadeInUp");
-          el.classList.remove("fadeOutUp");
-        } else {
-          el.classList.remove("fadeInUp");
-          el.classList.add("fadeOutUp");
-        }
-      })
-      .setTween(projectsListTween);
+		if (!projectsListContainer) {
+			console.warn("Projects list container not found");
+			return;
+		}
 
-    const pinTarget = projectsDemoRef.current.querySelector(".projects-wrp");
-    if (pinTarget) {
-      mainScene.setPin(pinTarget);
-    }
+		// Create tween using modern GSAP API (gsap.timeline instead of TimelineMax)
+		const projectsListTween = gsap.timeline().add(
+			gsap.to(projectsListContainer, {
+				y: -itemHeight * carouselLengthInSlides,
+				ease: "none",
+				duration: 1,
+			})
+		);
 
-    mainScene.addTo(controller);
+		// Scene setup - matching original logic
+		const projectsSlidesSceneSetup = !isMobile
+			? {
+					triggerElement: projectsDemoRef.current,
+					duration: itemHeight * carouselLengthInSlides,
+					triggerHook: 0,
+					offset:
+						-((window.innerHeight - (projectsDemoRef.current.querySelector(`[class*="projectsWrp"]`) as HTMLElement)?.offsetHeight || 0) / 2) +
+						projectsSectionPaddingTop,
+			  }
+			: {
+					triggerElement: projectsDemoRef.current,
+					duration: projectsListRef.current?.offsetWidth ? projectsListRef.current.offsetWidth * carouselLengthInSlides : 0,
+					triggerHook: 0,
+					offset: -((document.querySelector("header") as HTMLElement)?.offsetHeight || 0) + projectsSectionPaddingTop / 2,
+			  };
 
-    const heroText = document.getElementById("hero-into-text");
-    if (heroText) {
-      const introTween = gsap.to(heroText, {
-        y: heroRef.current.offsetHeight * 0.45,
-        autoAlpha: 0,
-        ease: "none",
-        duration: 1,
-      });
+		// Handle active portfolio item
+		const handleActivePortfolioItem = (event: any) => {
+			const progress = Math.floor(event.progress * 100);
+			const activeItemActivationPoinDeviation = 1;
+			const activeItem = Math.floor(progress / (projectImageInScrollPercentages * activeItemActivationPoinDeviation));
 
-      new ScrollMagic.Scene({
-        triggerHook: 0,
-        duration:
-          heroRef.current.offsetHeight -
-          (window.innerHeight - projectNavRef.current.offsetHeight) / 2 -
-          projectsSectionPaddingTop,
-      })
-        .setTween(introTween)
-        .addTo(controller);
-    }
+			if (activeItem < projectSlidesInCarousel) {
+				const slideControls = projectNavRef.current?.querySelectorAll(".slide-controls li");
+				slideControls?.forEach((li) => li.classList.remove("active"));
+				const activeLi = slideControls?.[activeItem] as HTMLElement;
+				if (activeLi) {
+					activeLi.classList.add("active");
+				}
+			}
+		};
 
-    const handleProjectAnchorClick = (e: Event) => {
-      const target = e.target as HTMLElement;
-      if (target.classList.contains("real-link")) return;
+		// Create main scene
+		const projectsSlidesScene = new ScrollMagic.Scene(projectsSlidesSceneSetup)
+			.on("progress", (event: any) => {
+				handleActivePortfolioItem(event);
+			})
+			.on("enter leave", function (event: any) {
+				const scrollToServicesEl = document.querySelector(".scroll-to-services");
+				if (!scrollToServicesEl) return;
 
-      e.preventDefault();
-      const projectNum = parseInt(target.dataset.projectNumber || "0", 10);
-      const projectEl = document.getElementById(`project-${projectNum}`);
-      if (!projectEl) return;
+				if (event.type === "enter") {
+					scrollToServicesEl.classList.add("fadeInUp");
+					scrollToServicesEl.classList.remove("fadeOutUp");
+				} else {
+					scrollToServicesEl.classList.remove("fadeInUp");
+					scrollToServicesEl.classList.add("fadeOutUp");
+				}
+			})
+			.setTween(projectsListTween)
+			.setPin(projectsDemoRef.current.querySelector(`[class*="projectsWrp"]`) as HTMLElement)
+			.addTo(controller);
 
-      const scrollTo =
-        projectsDemoRef.current!.offsetTop +
-        projectEl.offsetHeight * (projectNum - 1) +
-        projectsSectionPaddingTop -
-        (window.innerHeight - projectNavRef.current!.offsetHeight) / 2;
+		// Hero intro text animation
+		const heroIntoText = document.getElementById("heroIntoText");
+		if (heroIntoText && heroRef.current) {
+			const introTextTween = gsap.timeline().add(
+				gsap.to(heroIntoText, {
+					y: heroRef.current.offsetHeight * 0.45,
+					autoAlpha: 0,
+					ease: "none",
+					duration: 1,
+				})
+			);
 
-      window.scrollTo({ top: scrollTo, behavior: "smooth" });
-    };
+			const projectsWrp = projectsDemoRef.current.querySelector(`[class*="projectsWrp"]`) as HTMLElement;
+			const projectsWrpHeight = projectsWrp?.offsetHeight || 0;
 
-    const projectAnchors = document.querySelectorAll(".project-anchor");
-    projectAnchors.forEach((el) => el.addEventListener("click", handleProjectAnchorClick));
+			const introTextScene = new ScrollMagic.Scene({
+				triggerHook: 0,
+				duration: heroRef.current.offsetHeight - (window.innerHeight - projectsWrpHeight) / 2 - projectsSectionPaddingTop,
+			})
+				.setTween(introTextTween)
+				.addTo(controller);
+		}
 
-    const scrollToServicesBtn = document.querySelector(".scroll-to-services");
-    const scrollToServices = () => {
-      const servicesEl = document.getElementById("our-services");
-      if (servicesEl) {
-        window.scrollTo({ top: servicesEl.offsetTop, behavior: "smooth" });
-      }
-    };
-    scrollToServicesBtn?.addEventListener("click", scrollToServices);
+		// Project anchor click handler
+		const handleProjectAnchorClick = (e: Event) => {
+			const target = e.target as HTMLElement;
+			if (target.classList.contains("real-link")) {
+				return;
+			}
 
-    return () => {
-      controller.destroy();
-      projectAnchors.forEach((el) =>
-        el.removeEventListener("click", handleProjectAnchorClick)
-      );
-      scrollToServicesBtn?.removeEventListener("click", scrollToServices);
-    };
-  }, [isMobile, projectsCount, projectsListRef, projectNavRef, projectsDemoRef, heroRef]);
+			e.preventDefault();
+
+			const scrollToItem = (itemNumber: number) => {
+				const projectEl = document.getElementById(`project-${itemNumber}`);
+				if (!projectEl || !projectsDemoRef.current) return;
+
+				const projectsWrp = projectsDemoRef.current.querySelector(`[class*="projectsWrp"]`) as HTMLElement;
+				const projectsWrpHeight = projectsWrp?.offsetHeight || 0;
+
+				const toScrollWithoutTweenTopMovement =
+					projectsDemoRef.current.offsetTop -
+					(window.innerHeight - projectsWrpHeight) / 2 +
+					projectsSectionPaddingTop +
+					projectEl.offsetHeight * (itemNumber - 1);
+
+				const toScroll = toScrollWithoutTweenTopMovement;
+
+				// Use ScrollMagic's scrollTo method if available, otherwise use window.scrollTo
+				if (controller.scrollTo) {
+					controller.scrollTo(toScroll);
+				} else {
+					window.scrollTo({ top: toScroll, behavior: "smooth" });
+				}
+			};
+
+			const targetNumber = parseInt(target.dataset.projectNumber || "0", 10);
+			if (targetNumber > 0) {
+				scrollToItem(targetNumber);
+			}
+
+			return false;
+		};
+
+		// Attach click handlers
+		const projectAnchors = document.querySelectorAll(".project-anchor");
+		projectAnchors.forEach((el) => {
+			el.addEventListener("click", handleProjectAnchorClick);
+		});
+
+		// Scroll to services handler
+		const scrollToServicesBtn = document.querySelector(".scroll-to-services");
+		const scrollToServices = () => {
+			// const servicesEl = document.getElementById("our-services");
+			const servicesEl = ourServicesRef.current;
+			if (servicesEl) {
+				window.scrollTo({ top: servicesEl.offsetTop, behavior: "smooth" });
+			}
+		};
+		scrollToServicesBtn?.addEventListener("click", scrollToServices);
+
+
+
+
+
+
+
+
+    // const startX = -window.innerWidth / 2; // pushes start far left
+
+    // const points = [
+    //   { x: startX + 0,   y: 200 },
+    //   { x: startX + 200, y: 100 },
+    //   { x: startX + 400, y: 300 },
+    //   { x: startX + 600, y: 150 },
+    // ];
+  
+    // gsap.to(".circle", {
+    //   duration: 6,
+    //   repeat: -1,
+    //   yoyo: true,
+    //   ease: "bounce.in",
+    //   markers: true,
+    //   motionPath: {
+    //     path: points,
+    //     curviness: 1.5,
+    //     autoRotate: true,
+    //   },
+    // });
+
+    // gsap.fromTo(".circle", {
+    //   scale: 100
+    // }, {
+    //   scale: 0,
+    //   // duration: 3,
+    //   scrollTrigger: {
+    //     trigger: "body",
+    //     scrub: true
+    //   }
+    // })
+
+
+
+
+
+
+		// Cleanup
+		return () => {
+			controller.destroy();
+			projectAnchors.forEach((el) => {
+				el.removeEventListener("click", handleProjectAnchorClick);
+			});
+			scrollToServicesBtn?.removeEventListener("click", scrollToServices);
+		};
+	}, [isMobile, projectsCount, projectsListRef, projectNavRef, projectsDemoRef, heroRef, ourServicesRef]);
 }
+
+// export const useCircleEffect = () => {
+// 	const points = [
+// 		{ x: 0, y: 200 },
+// 		{ x: 200, y: 100 },
+// 		{ x: 400, y: 300 },
+// 		{ x: 600, y: 150 },
+// 	];
+
+// 	gsap.to(".circle", {
+// 		duration: 6,
+// 		repeat: -1,
+// 		yoyo: true,
+// 		ease: "none",
+// 		motionPath: {
+// 			path: points,
+// 			curviness: 1.5,
+// 			autoRotate: true,
+// 		},
+// 	});
+
+//   // return () => {
+    
+//   // }
+// };
