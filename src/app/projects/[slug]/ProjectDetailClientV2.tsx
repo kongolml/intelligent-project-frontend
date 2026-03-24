@@ -32,7 +32,7 @@ export default function ProjectDetailClientV2({ project }: ProjectDetailClientV2
 
     const clientName = project.client ?? "Client";
 
-    const ourTaskHTML = project.our_taskHTML || null;
+    const ourTaskHTML = project.descriptionHTML || null;
     const clientGoalHTML = project.client_goalHTML || null;
 
     const [titleLine1, titleLine2] = splitTitle(project.title);
@@ -50,7 +50,7 @@ export default function ProjectDetailClientV2({ project }: ProjectDetailClientV2
                     className={`${styles.heroBg} ${project.main_image ? styles.heroBgWithImage : ""}`}
                     style={project.main_image ? { viewTransitionName: `thumb-${project.id}` } : undefined}
                 >
-                    {project.main_image && (
+                    {project.main_image ? (
                         <Image
                             src={project.main_image}
                             alt={project.title}
@@ -58,40 +58,38 @@ export default function ProjectDetailClientV2({ project }: ProjectDetailClientV2
                             className={styles.heroBgImage}
                             priority
                         />
+                    ) : (
+                        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%", opacity: 0.4 }}>project.main_image</div>
                     )}
                     <div className={styles.heroGrid} />
                 </div>
 
                 <div className={styles.heroContent}>
                     <div className="reveal-line">
-                        <span className={styles.heroLabel}>{heroLabel}</span>
+                        <span className={styles.heroLabel}>project.categories: {heroLabel}</span>
                     </div>
                     <h1 className={styles.heroH1}>
                         <span className="reveal-line">
-                            <span>{titleLine1}</span>
+                            <span>project.title: {titleLine1}</span>
                         </span>
                         {titleLine2 && (
                             <>
                                 <br />
                                 <span className="reveal-line">
-                                    <span>{titleLine2}</span>
+                                    <span>project.title: {titleLine2}</span>
                                 </span>
                             </>
                         )}
                     </h1>
                     <dl className={styles.heroMeta}>
-                        {project.client && (
-                            <div className="reveal" style={{ transitionDelay: "0.3s" }}>
-                                <dt>Client</dt>
-                                <dd>{project.client}</dd>
-                            </div>
-                        )}
-                        {project.year && (
-                            <div className="reveal" style={{ transitionDelay: "0.4s" }}>
-                                <dt>Year</dt>
-                                <dd>{project.year}</dd>
-                            </div>
-                        )}
+                        <div className="reveal" style={{ transitionDelay: "0.3s" }}>
+                            <dt>Client</dt>
+                            <dd>project.client: {project.client ?? "—"}</dd>
+                        </div>
+                        <div className="reveal" style={{ transitionDelay: "0.4s" }}>
+                            <dt>Year</dt>
+                            <dd>project.year: {project.year ?? "—"}</dd>
+                        </div>
                         <div className="reveal" style={{ transitionDelay: "0.5s" }}>
                             <dt>Scope</dt>
                             <dd>Identity, Naming, Packaging</dd>
@@ -104,7 +102,7 @@ export default function ProjectDetailClientV2({ project }: ProjectDetailClientV2
             <section id="about" className={styles.about}>
                 <div className={`${styles.aboutLeft} reveal`}>
                     <div className={styles.aboutLabel}>Client</div>
-                    <h2 className={styles.aboutHeading}>{clientName}</h2>
+                    <h2 className={styles.aboutHeading}>project.client: {clientName}</h2>
                 </div>
 
                 <div className={styles.aboutRight}>
@@ -113,18 +111,14 @@ export default function ProjectDetailClientV2({ project }: ProjectDetailClientV2
                         style={{ transitionDelay: "0.1s" }}
                     >
                         <h4>Our Task</h4>
-                        {ourTaskHTML ? (
-                            <div dangerouslySetInnerHTML={{ __html: ourTaskHTML }} />
-                        ) : null}
+                        <>project.our_taskHTML: {ourTaskHTML ? <div dangerouslySetInnerHTML={{ __html: ourTaskHTML }} /> : "—"}</>
                     </div>
                     <div
                         className={`${styles.aboutDetail} reveal`}
                         style={{ transitionDelay: "0.2s" }}
                     >
                         <h4>Client Goal</h4>
-                        {clientGoalHTML ? (
-                            <div dangerouslySetInnerHTML={{ __html: clientGoalHTML }} />
-                        ) : null}
+                        <>project.client_goalHTML: {clientGoalHTML ? <div dangerouslySetInnerHTML={{ __html: clientGoalHTML }} /> : "—"}</>
                     </div>
                     <div
                         className={`${styles.aboutDetail} reveal`}
@@ -132,20 +126,14 @@ export default function ProjectDetailClientV2({ project }: ProjectDetailClientV2
                     >
                         <h4>Disciplines</h4>
                         <div className={styles.tagList}>
-                            {project.categories.map((cat) => (
-                                <span key={cat.slug} className={styles.tag}>
-                                    {cat.name}
-                                </span>
-                            ))}
-                            {project.categories.length === 0 && (
-                                <>
-                                    <span className={styles.tag}>Brand Strategy</span>
-                                    <span className={styles.tag}>Naming</span>
-                                    <span className={styles.tag}>Visual Identity</span>
-                                    <span className={styles.tag}>Packaging</span>
-                                    <span className={styles.tag}>Art Direction</span>
-                                </>
-                            )}
+                            {project.categories.length > 0
+                                ? project.categories.map((cat) => (
+                                    <span key={cat.slug} className={styles.tag}>
+                                        project.categories: {cat.name}
+                                    </span>
+                                ))
+                                : <span className={styles.tag}>project.categories: —</span>
+                            }
                         </div>
                     </div>
                 </div>
@@ -184,6 +172,7 @@ export default function ProjectDetailClientV2({ project }: ProjectDetailClientV2
                         {(project.visual_inspiration ?? []).length > 0
                             ? (project.visual_inspiration ?? []).map((url, i) => (
                                 <div key={i} className={styles.moodImg}>
+                                    project.visual_inspiration:
                                     <Image
                                         src={url}
                                         alt={`${project.title} — visual exploration ${i + 1}`}
@@ -193,12 +182,9 @@ export default function ProjectDetailClientV2({ project }: ProjectDetailClientV2
                                 </div>
                             ))
                             : (
-                                <>
-                                    <div className={`${styles.moodImg} ${styles.moodBlue}`} />
-                                    <div className={`${styles.moodImg} ${styles.moodCream}`} />
-                                    <div className={`${styles.moodImg} ${styles.moodTeal}`} />
-                                    <div className={`${styles.moodImg} ${styles.moodWarm}`} />
-                                </>
+                                <div className={styles.moodImg} style={{ display: "flex", alignItems: "center", justifyContent: "center", opacity: 0.4 }}>
+                                    project.visual_inspiration
+                                </div>
                             )
                         }
                     </div>
@@ -228,6 +214,7 @@ export default function ProjectDetailClientV2({ project }: ProjectDetailClientV2
                                     return (
                                         <div key={colIdx} className={`${styles.iterationCard} ${isLast ? styles.iterationCardFinal : ""}`}>
                                             <div className={`${styles.imgWrapper} ${styles.imgWrapperRatio43}`}>
+                                                project.visual_exploration:
                                                 <Image
                                                     src={url}
                                                     alt={`${project.title} — logo exploration ${rowIdx * 3 + colIdx + 1}`}
@@ -243,46 +230,13 @@ export default function ProjectDetailClientV2({ project }: ProjectDetailClientV2
                         ));
                     })()
                 ) : (
-                    <>
-                        {/* Row 1 */}
-                        <div className={`${styles.iterationRow} reveal`}>
-                            <div className={styles.iterationCard}>
-                                <div className={`${styles.imgWrapper} ${styles.imgWrapperRatio43}`}>
-                                    <div className={styles.mockLight} />
-                                </div>
-                            </div>
-                            <div className={styles.iterationCard}>
-                                <div className={`${styles.imgWrapper} ${styles.imgWrapperRatio43}`}>
-                                    <div className={styles.mockBlue} />
-                                </div>
-                            </div>
-                            <div className={styles.iterationCard}>
-                                <div className={`${styles.imgWrapper} ${styles.imgWrapperRatio43}`}>
-                                    <div className={styles.mockCream} />
-                                </div>
+                    <div className={`${styles.iterationRow} reveal`}>
+                        <div className={styles.iterationCard}>
+                            <div className={`${styles.imgWrapper} ${styles.imgWrapperRatio43}`} style={{ display: "flex", alignItems: "center", justifyContent: "center", opacity: 0.4 }}>
+                                project.visual_exploration
                             </div>
                         </div>
-
-                        {/* Row 2 */}
-                        <div className={`${styles.iterationRow} reveal`} style={{ transitionDelay: "0.1s" }}>
-                            <div className={styles.iterationCard}>
-                                <div className={`${styles.imgWrapper} ${styles.imgWrapperRatio43}`}>
-                                    <div className={styles.mockStone} />
-                                </div>
-                            </div>
-                            <div className={styles.iterationCard}>
-                                <div className={`${styles.imgWrapper} ${styles.imgWrapperRatio43}`}>
-                                    <div className={styles.mockTeal} />
-                                </div>
-                            </div>
-                            <div className={`${styles.iterationCard} ${styles.iterationCardFinal}`}>
-                                <div className={`${styles.imgWrapper} ${styles.imgWrapperRatio43}`}>
-                                    <div className={styles.mockSand} />
-                                </div>
-                                <div className={styles.iterationLabel}>Selected</div>
-                            </div>
-                        </div>
-                    </>
+                    </div>
                 )}
             </section>
 
@@ -345,6 +299,7 @@ export default function ProjectDetailClientV2({ project }: ProjectDetailClientV2
                                 >
                                     {pair.map((url, colIdx) => (
                                         <div key={colIdx} className={`${styles.imgWrapper} ${styles.imgWrapperRatio1}`}>
+                                            project.final_result_gallery:
                                             <Image
                                                 src={url}
                                                 alt={`${project.title} — packaging ${pairIdx * 2 + colIdx + 1}`}
@@ -358,25 +313,11 @@ export default function ProjectDetailClientV2({ project }: ProjectDetailClientV2
                         ));
                     })()
                 ) : (
-                    <>
-                        <div className={`${styles.imagePair} reveal`}>
-                            <div className={`${styles.imgWrapper} ${styles.imgWrapperRatio1}`}>
-                                <div className={styles.mockCream} />
-                            </div>
-                            <div className={`${styles.imgWrapper} ${styles.imgWrapperRatio1}`}>
-                                <div className={styles.mockBlue} />
-                            </div>
+                    <div className={`${styles.imagePair} reveal`}>
+                        <div className={`${styles.imgWrapper} ${styles.imgWrapperRatio1}`} style={{ display: "flex", alignItems: "center", justifyContent: "center", opacity: 0.4 }}>
+                            project.final_result_gallery
                         </div>
-                        <div style={{ height: "24px" }} />
-                        <div className={`${styles.imagePair} reveal`} style={{ transitionDelay: "0.1s" }}>
-                            <div className={`${styles.imgWrapper} ${styles.imgWrapperRatio1}`}>
-                                <div className={styles.mockWarm} />
-                            </div>
-                            <div className={`${styles.imgWrapper} ${styles.imgWrapperRatio1}`}>
-                                <div className={styles.mockTeal} />
-                            </div>
-                        </div>
-                    </>
+                    </div>
                 )}
             </section>
 
