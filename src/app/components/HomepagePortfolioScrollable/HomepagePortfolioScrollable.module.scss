@@ -1,0 +1,198 @@
+@use "sass:color";
+@use "../../global.variables.scss" as variables;
+
+$hero-height-percents-viewport: 90;
+
+// main.homepage-portfolio {
+//     padding-left: 0;
+// }
+
+#heroIntoText {
+    margin-top: #{100 - $hero-height-percents-viewport}vh;
+
+    .weAre {
+        margin-bottom: 0;
+    }
+}
+
+.whatWeDo {
+    $title-padding-bottom: 80px;
+    $title-padding-bottom-narrow-screen: 40px;
+
+    padding-top: 5vh;
+
+    h2 {
+        margin-bottom: $title-padding-bottom;
+    }
+
+    .projectsNav {
+        padding: 60px 15px;
+        // padding: 120px 15px;
+        margin: 0;
+
+        h2 {
+            padding-left: variables.$list-padding;
+        }
+
+        ul {
+            margin: 0;
+
+            li {
+                &.linkToAll {
+                    margin-top: $title-padding-bottom;
+
+                    a {
+                        color: variables.$color-font;
+                    }
+                }
+            }
+        }
+
+
+        .projectLink {
+            // cursor: pointer;
+            position: relative;
+            margin-bottom: 25px;
+            font-size: 0.95rem;
+
+            &:global(.active) {
+                a {
+                    color: variables.$color-font;
+                }
+            }
+
+            a {
+                transition: color variables.$transition * 0.3;
+                color: variables.$link-color-faded;
+
+                &:hover {
+                    color: variables.$color-font;
+                }
+            }
+
+            // @each $icon_name, $icon_color in $color-icons-map {
+            //     &.category-#{$icon_name} {
+            //         &.active, &:hover {
+            //             a {
+            //                 color: $icon_color
+            //             }
+            //         }
+            //     }
+            // }
+        }
+    }
+
+    figure {
+        height: 400px;
+        width: 100%;
+        background-position: center bottom;
+        background-repeat: no-repeat;
+        background-size: contain;
+        position: relative;
+        // transition: $transition * 0.5 ease-in-out;
+        position: relative;
+        margin-bottom: 0;
+
+        @each $icon_name, $icon_color in variables.$color-icons-map {
+            &:global(.category-#{$icon_name}) {
+                background-color: color.adjust($icon_color, $alpha: -(variables.$brand-color-fading));
+            }
+        }
+
+        &:hover {
+            figcaption {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        figcaption {
+            // @include flex;
+
+            opacity: 0;
+            transform: translateY(1rem);
+
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+            transition: variables.$transition * 0.4 ease-in-out;
+            padding: 2rem;
+
+            .descriptionWrp {
+                display: inline;
+                background: white;
+                color: variables.$color-font;
+                -webkit-box-decoration-break: clone;
+                -ms-box-decoration-break: clone;
+                -o-box-decoration-break: clone;
+                box-decoration-break: clone;
+                padding: 0.5rem;
+            }
+        }
+    }
+
+    .projectsWrp {
+        box-shadow: 0 0 50px rgba(0, 0, 0, .25);
+        border-radius: 6px;
+        background-color: variables.$color-background;
+    }
+
+    .scrollToServices {
+        position: absolute;
+        left: 50%;
+        bottom: -60px;
+        margin-left: -1rem;
+        font-size: 2rem;
+        cursor: pointer;
+    }
+
+    .projectsListWrp {
+        position: relative;
+        height: 100%;
+        width: 100%;
+        border-radius: 0 6px 6px 0;
+        overflow: hidden;
+
+        .projectsList {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+
+            .projectsListItem {}
+
+            .projectsListItemContent {}
+        }
+    }
+
+    @media screen and (max-height: 800px) {
+        .projectsNav {
+            padding-top: 30px;
+            padding-bottom: 30px;
+
+            h2 {
+                margin-bottom: $title-padding-bottom-narrow-screen;
+            }
+
+            .linkToAll {
+                margin-top: $title-padding-bottom-narrow-screen;
+            }
+        }
+
+        .scrollToServices {
+            bottom: -45px;
+        }
+    }
+}
+
+.circle {
+    width: 100px;
+    height: 100px;
+    background-color: red;
+    border-radius: 50%;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    margin-top: -50px;
+}

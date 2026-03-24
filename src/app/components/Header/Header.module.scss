@@ -1,67 +1,373 @@
 @use "../../global.variables.scss" as variables;
 
-:global(header) {
+// ─── Design Tokens (matched to portfolio design system) ───
+$accent: #c44a2f;
+$black: #0a0a0a;
+$cream: #f5f2ed;
+$grey-mid: #7a7a76;
+$grey-light: #b8b5ae;
+$grey-dark: #3a3a38;
+$font-mono: "JetBrains Mono", monospace;
+$font-sans: "Instrument Sans", sans-serif;
+$font-serif: "DM Serif Display", serif;
+
+$header-height: 52px;
+$page-margin: clamp(24px, 5vw, 80px);
+$ease: cubic-bezier(0.23, 1, 0.32, 1);
+
+// ─── Header Container — morphing blob ───
+// Width, border-radius, background, backdrop-filter, box-shadow, border-color,
+// and transform are driven by spring physics in JS (inline styles).
+// CSS handles layout, entrance animation, and child styles.
+.header {
 	position: fixed;
-    left: 0;
-    top: 0;
-    height: 100vh;
-    width: variables.$header-width;
+	top: 16px;
+	// left and transform are driven by spring physics in JS
+	height: $header-height;
+	z-index: 200;
+	display: flex;
+	align-items: center;
+	border: 1px solid rgba(255, 255, 255, 0.06);
+	// Will-change for spring-animated properties
+	will-change: left, width, border-radius, background, backdrop-filter, transform, box-shadow;
 
-    .logo-link {
-        margin-top: variables.$distance-from-top;
-        margin-left: variables.$list-padding;
-        display: inline-block;
-        color: variables.$color-logo-orange !important;
-        font-size: variables.$header-logo-font-size;
-    }
+	// Before entrance — blob hidden
+	&:not(.headerEntered) {
+		opacity: 0;
+		transform: translateY(-20px) scale(0.95) !important;
 
-    nav {
-        position: absolute;
-        left: 0;
-        top: 50%;
-        transform: translateY(-50%);
+		.logoLink {
+			opacity: 0;
+			transform: translateY(8px);
+		}
 
-        ul {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            margin-bottom: 0;
+		.navItem {
+			.navLink {
+				clip-path: inset(0 0 100% 0);
+			}
+		}
+	}
+}
 
-            li {
-                &.current-menu-item {
-                    a {
-                        color: variables.$color-font;
-                    }
-                }
-            }
-        }
+// ─── Entered State — blob appears, then children reveal ───
+.headerEntered {
+	opacity: 1;
+	transition: opacity 0.7s $ease;
 
-    }
+	.logoLink {
+		opacity: 1;
+		transform: translateY(0);
+		transition: opacity 0.6s $ease 0.2s, transform 0.6s $ease 0.2s;
+	}
 
-    a {
-        color: variables.$link-color-faded;
+	.navItem {
+		.navLink {
+			clip-path: inset(0 0 0% 0);
+			transition: clip-path 0.6s $ease var(--stagger);
+		}
 
-        &:hover {
-            color: variables.$color-font;
-        }
-    }
+		.navIndex {
+			animation: indexFlash 0.8s $ease var(--stagger) forwards;
+		}
+	}
+}
 
-    .menu-trigger {
-        display: none;
-    }
+// Index flash: visible during entrance, then fades out
+@keyframes indexFlash {
+	0% {
+		opacity: 0.8;
+		transform: translateX(0);
+	}
+	60% {
+		opacity: 0.8;
+		transform: translateX(0);
+	}
+	100% {
+		opacity: 0;
+		transform: translateX(-4px);
+	}
+}
 
-    .language-switcher {
-        position: absolute;
-        left: 0;
-        bottom: 1rem;
-        width: 100%;
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        padding-left: variables.$list-padding;
+// ─── Settled State — entrance done, enable hover transitions ───
+.headerSettled {
+	.navItem .navIndex {
+		animation: none;
+		opacity: 0;
+		transform: translateX(-4px);
+		transition: opacity 0.25s ease, transform 0.3s $ease, color 0.5s $ease;
+	}
 
-        .language {
-            text-transform: uppercase;
-        }
-    }
+	.navLink:hover .navIndex,
+	.navLinkActive .navIndex {
+		opacity: 0.5;
+		transform: translateX(0);
+	}
+
+	.navLinkActive .navIndex {
+		opacity: 0.4;
+	}
+}
+
+// ─── Scrolled State — text transitions from light to dark ───
+.headerScrolled {
+	.navLink {
+		color: $black !important;
+
+		&:hover {
+			color: $black !important;
+		}
+	}
+
+	.navIndex {
+		color: $grey-light;
+	}
+
+	.navLinkActive {
+		color: $black !important;
+
+		.navIndex {
+			color: $accent;
+		}
+	}
+
+	.logoLink {
+		color: variables.$color-logo-orange !important;
+	}
+}
+
+// ─── Inner Layout ───
+.headerInner {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0 28px;
+	width: 100%;
+}
+
+// ─── Logo ───
+.logoLink {
+	display: flex;
+	align-items: center;
+	color: rgba(255, 255, 255, 0.92) !important;
+	transition:
+		transform 0.4s $ease,
+		color 0.5s $ease,
+		opacity 0.6s $ease;
+	flex-shrink: 0;
+
+	&:hover {
+		transform: scale(1.06);
+	}
+}
+
+// ─── Navigation ───
+.navList {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	align-items: center;
+	gap: 0;
+}
+
+.navItem {
+	position: relative;
+}
+
+// ─── Nav Link ───
+.navLink {
+	position: relative;
+	display: flex;
+	align-items: center;
+	padding: 8px 16px;
+	font-family: $font-sans;
+	font-size: 0.8125rem;
+	font-weight: 500;
+	letter-spacing: 0.02em;
+	color: rgba(255, 255, 255, 0.9) !important;
+	transition: color 0.5s $ease;
+	overflow: visible;
+	white-space: nowrap;
+
+	// Accent underline
+	&::after {
+		content: "";
+		position: absolute;
+		bottom: 2px;
+		left: 16px;
+		right: 16px;
+		height: 1px;
+		background: $accent;
+		transform: scaleX(0);
+		transform-origin: left center;
+		transition: transform 0.4s $ease;
+	}
+
+	&:hover {
+		color: rgba(255, 255, 255, 1) !important;
+
+		&::after {
+			transform: scaleX(1);
+			transition-delay: 0.05s;
+		}
+	}
+}
+
+// ─── Nav Index Number ───
+.navIndex {
+	font-family: $font-mono;
+	font-size: 0.5625rem;
+	letter-spacing: 0.06em;
+	color: rgba(255, 255, 255, 0.4);
+	margin-right: 6px;
+	pointer-events: none;
+	flex-shrink: 0;
+	transition: color 0.5s $ease;
+}
+
+// ─── Nav Text ───
+.navText {
+	position: relative;
+}
+
+// ─── Active Link ───
+.navLinkActive {
+	color: rgba(255, 255, 255, 1) !important;
+	font-weight: 600;
+
+	&::after {
+		transform: scaleX(1);
+	}
+
+	.navIndex {
+		color: rgba(255, 255, 255, 0.5);
+		transition: color 0.5s $ease;
+	}
+}
+
+// ─── Category Pills (docked filter bar) ───
+.categorySection {
+	display: flex;
+	align-items: center;
+	margin-left: auto;
+	gap: 0;
+	opacity: 0;
+	pointer-events: none;
+	transition: opacity 0.2s ease;
+	overflow: hidden;
+}
+
+.categorySectionVisible {
+	opacity: 1;
+	pointer-events: auto;
+}
+
+.categoryDivider {
+	display: block;
+	width: 1px;
+	height: 16px;
+	background: $grey-light;
+	margin: 0 12px;
+	flex-shrink: 0;
+	opacity: 0.5;
+}
+
+.categoryPill {
+	font-family: $font-mono;
+	font-size: 0.5625rem;
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
+	color: $grey-mid;
+	background: none;
+	border: none;
+	padding: 6px 12px;
+	cursor: pointer;
+	white-space: nowrap;
+	position: relative;
+	opacity: 0;
+	transform: translateY(6px);
+	transition:
+		color 0.3s ease,
+		opacity 0.2s ease,
+		transform 0.2s ease;
+
+	&:hover {
+		color: $grey-dark;
+	}
+
+	&::after {
+		content: "";
+		position: absolute;
+		bottom: 0;
+		left: 12px;
+		right: 12px;
+		height: 1px;
+		background: $accent;
+		transform: scaleX(0);
+		transform-origin: left;
+		transition: transform 0.35s $ease;
+	}
+}
+
+.categoryPillEnter {
+	animation: pillEnter 0.4s $ease var(--cat-stagger) both;
+}
+
+@keyframes pillEnter {
+	from {
+		opacity: 0;
+		transform: translateY(6px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.categoryPillActive {
+	color: $black;
+
+	&::after {
+		transform: scaleX(1);
+	}
+}
+
+.categoryPillCount {
+	font-size: 0.5rem;
+	color: $grey-light;
+	margin-left: 4px;
+	vertical-align: super;
+}
+
+
+// ─── Responsive ───
+@media (max-width: variables.$bp-mobile) {
+	.header {
+		height: 48px;
+		top: 10px;
+	}
+
+	.headerInner {
+		padding: 0 18px;
+	}
+
+	.logoLink {
+		svg {
+			width: 26px;
+			height: 26px;
+		}
+	}
+
+	.navLink {
+		padding: 8px 10px;
+		font-size: 0.7rem;
+	}
+
+	.navIndex {
+		display: none;
+	}
+
+	.categorySection {
+		display: none;
+	}
 }

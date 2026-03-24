@@ -1,0 +1,25 @@
+@use "../../global.variables.scss" as variables;
+@use "sass:color";
+
+.loadingPage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100dvh;
+    width: 100%;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 2px solid color.adjust(variables.$color-font, $alpha: -0.8);
+    border-top-color: variables.$color-font;
+    border-radius: 50%;
+    animation: spin 700ms linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

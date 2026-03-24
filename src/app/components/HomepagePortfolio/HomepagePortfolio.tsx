@@ -1,3 +1,6 @@
+// lib
+import { getApiUrl } from "../../lib/api";
+
 // types
 import { PortfolioCategory, PortfolioItem, PortfolioItem as PortfolioItemType } from "../../../types/portfolio.types";
 // import PortfolioItem from "."; // Adjust the import path as necessary
@@ -41,12 +44,16 @@ export default async function HomepagePortfolio() {
 	//     return result[0] || null;
 	// });
 
-	const showcasePortfolioItemsRequest = await fetch("http://localhost:3000/public-api/portfolio/showcases", {
-		// Recommended for SSR caching control:
-		// cache: "no-store", // or `next: { revalidate: 60 }` for ISR,
-	});
+	let showcasePortfolioItems: PortfolioItemType[] = [];
 
-	const showcasePortfolioItems: PortfolioItemType[] = await showcasePortfolioItemsRequest.json();
+	try {
+		const showcasePortfolioItemsRequest = await fetch(`${getApiUrl()}/public-api/portfolio/showcases`);
+		if (showcasePortfolioItemsRequest.ok) {
+			showcasePortfolioItems = await showcasePortfolioItemsRequest.json();
+		}
+	} catch {
+		// API unavailable — render with empty showcase
+	}
 
 	// console.log(showcasePortfolioItems);
 
@@ -57,7 +64,7 @@ export default async function HomepagePortfolio() {
 		<section>
 			<div className="container">
 				<div className="row">
-					<div className="col-12">
+					<div className="col-10 mx-auto">
 						<HomepagePortfolioBlocks portfolioItems={showcasePortfolioItems} />
 					</div>
 				</div>

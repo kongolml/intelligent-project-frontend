@@ -21,7 +21,7 @@ const servicesIconsMap = {
 
 export default async function ServicesList({ portfolioCategories }: ServicesListProps) {
 	return (
-		<section className="what-we-do" id="our-services">
+		<section className="what-we-do d-flex align-items-center" id="our-services" style={{ height: 'calc(100vh - 100px - 24px)' }}>
 			<div className="container">
 				<div className="row">
 					<div className="col-12 col-sm-10 offset-sm-1">

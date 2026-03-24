@@ -1,0 +1,248 @@
+/* ============================================
+   CaseStudyNav — Archival Index Rail
+   ============================================ */
+
+$accent:    #c44a2f;
+$black:     #0a0a0a;
+$white:     #f5f2ed;
+$grey-mid:  #7a7a76;
+$font-mono: 'JetBrains Mono', monospace;
+
+$rail-width:      56px;
+$dot-size:        5px;
+$indicator-size:  8px;
+$transition-nav:  cubic-bezier(0.23, 1, 0.32, 1);
+
+
+/* ─── Rail container ─── */
+.rail {
+  position: fixed;
+  left: 16px;
+  top: 0;
+  bottom: 0;
+  width: $rail-width;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+
+  // Color modes
+  &.railDark {
+    --nav-text:   rgba(245, 242, 237, 0.35);
+    --nav-active: #f5f2ed;
+    --nav-dot:    rgba(245, 242, 237, 0.25);
+    --nav-spine:  rgba(245, 242, 237, 0.07);
+  }
+
+  &.railLight {
+    --nav-text:   rgba(10, 10, 10, 0.3);
+    --nav-active: #0a0a0a;
+    --nav-dot:    rgba(10, 10, 10, 0.18);
+    --nav-spine:  rgba(10, 10, 10, 0.06);
+  }
+
+  @media (max-width: 1100px) {
+    display: none;
+  }
+}
+
+.railInner {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+/* ─── Vertical spine ─── */
+.spine {
+  position: absolute;
+  left: 50%;
+  top: -50vh;
+  bottom: -50vh;
+  width: 1px;
+  background: var(--nav-spine);
+  transform: translateX(-50%);
+  pointer-events: none;
+  transition: background 0.5s ease;
+}
+
+
+/* ─── Travelling indicator ─── */
+.indicator {
+  position: absolute;
+  left: 24px;
+  top: 0;
+  transform: translateX(-50%) translateY(0);
+  transition: transform 0.65s $transition-nav;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  z-index: 2;
+}
+
+.indicatorLine {
+  width: 20px;
+  height: 1px;
+  background: $accent;
+  position: absolute;
+  right: calc(100% + 2px);
+  top: 50%;
+  transform: translateY(-50%);
+  transform-origin: right center;
+  animation: lineExtend 0.4s $transition-nav forwards;
+}
+
+@keyframes lineExtend {
+  from { width: 0; opacity: 0; }
+  to   { width: 20px; opacity: 1; }
+}
+
+.indicatorDot {
+  width: $indicator-size;
+  height: $indicator-size;
+  background: $accent;
+  border-radius: 50%;
+  position: relative;
+  z-index: 1;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border: 1px solid rgba(196, 74, 47, 0.3);
+    border-radius: 50%;
+    animation: pulse 2.5s ease infinite;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 0.6; }
+  50%       { transform: scale(1.5); opacity: 0; }
+}
+
+
+/* ─── Section list ─── */
+.sectionList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  position: relative;
+  z-index: 1;
+}
+
+.sectionItem {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+/* ─── Section button ─── */
+.sectionBtn {
+  position: relative;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+  width: 100%;
+
+  // Index number — rotated, always present but hidden by default
+  .sectionIndex {
+    position: absolute;
+    right: calc(100% + 6px);
+    top: 50%;
+    transform: translateY(-50%) translateX(6px);
+    font-family: $font-mono;
+    font-size: 0.5rem;
+    letter-spacing: 0.08em;
+    color: var(--nav-text);
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    opacity: 0;
+    transition:
+      opacity 0.3s ease,
+      transform 0.3s ease,
+      color 0.4s ease;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+
+  // Dot
+  .sectionDot {
+    width: $dot-size;
+    height: $dot-size;
+    background: var(--nav-dot);
+    border-radius: 50%;
+    display: block;
+    flex-shrink: 0;
+    transition:
+      background 0.3s ease,
+      transform 0.3s $transition-nav;
+  }
+
+  // Section label — slides in from right on hover
+  .sectionLabel {
+    position: absolute;
+    left: calc(100% + 14px);
+    top: 50%;
+    transform: translateY(-50%) translateX(-8px);
+    font-family: $font-mono;
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--nav-text);
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition:
+      opacity 0.25s ease,
+      transform 0.3s $transition-nav,
+      color 0.4s ease;
+  }
+
+  // Hover state
+  &:hover {
+    .sectionIndex {
+      opacity: 0.6;
+      transform: translateY(-50%) translateX(0);
+    }
+
+    .sectionDot {
+      background: var(--nav-active);
+      transform: scale(1.4);
+    }
+
+    .sectionLabel {
+      opacity: 1;
+      transform: translateY(-50%) translateX(0);
+    }
+  }
+
+  // Active state
+  &.sectionBtnActive {
+    .sectionDot {
+      background: transparent;
+      transform: scale(0.6);
+    }
+
+    .sectionIndex {
+      opacity: 0;
+    }
+
+    .sectionLabel {
+      opacity: 1;
+      transform: translateY(-50%) translateX(0);
+      color: var(--nav-active);
+      font-weight: 600;
+    }
+  }
+}

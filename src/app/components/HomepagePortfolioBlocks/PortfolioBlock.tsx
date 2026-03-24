@@ -30,7 +30,7 @@ const servicesIconsMap = {
 }
 
 export default function PortfolioBlock({ portfolioItem, index, size }: PortfolioBlockProps) {
-	const imageUrl = portfolioItem.thumbnail;
+	const imageUrl = portfolioItem.main_image;
 
 	return (
 		<div className={`${styles.portfolioBlock} ${styles[`index${index + 1}`]}`} style={{
@@ -42,7 +42,7 @@ export default function PortfolioBlock({ portfolioItem, index, size }: Portfolio
 			{/* <p>{portfolioItem.description}</p> */}
 
 			{/* <div className={styles.imageWrp}>
-				<Image src={portfolioItem.thumbnail || 'https://mir-s3-cdn-cf.behance.net/project_modules/2800_webp/cb49d9229631565.6867efff8a713.png'} alt={portfolioItem.title} fill style={{ objectFit: "contain" }} className={styles.portfolioBlockImage} />
+				<Image src={portfolioItem.main_image || 'https://mir-s3-cdn-cf.behance.net/project_modules/2800_webp/cb49d9229631565.6867efff8a713.png'} alt={portfolioItem.title} fill style={{ objectFit: "contain" }} className={styles.portfolioBlockImage} />
 			</div> */}
 
 			<div className={styles.categoriesList}>
