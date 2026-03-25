@@ -36,34 +36,36 @@ $ease-case: cubic-bezier(0.23, 1, 0.32, 1);
 
 
 /* ─── Reveal Animations (global — applied as plain class strings in JSX) ─── */
-:global(.reveal) {
-  opacity: 0;
-  transform: translateY(32px);
-  transition: opacity 0.7s cubic-bezier(0.23, 1, 0.32, 1),
-              transform 0.7s cubic-bezier(0.23, 1, 0.32, 1);
-}
-:global(.reveal.visible) {
-  opacity: 1;
-  transform: translateY(0);
-}
-:global(.reveal-line) {
-  overflow: hidden;
-}
-:global(.reveal-line span) {
-  display: inline-block;
-  transform: translateY(110%);
-  transition: transform 0.8s cubic-bezier(0.23, 1, 0.32, 1);
-}
-:global(.reveal-line.visible span) {
-  transform: translateY(0);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  :global(.reveal),
+.casePage {
+  :global(.reveal) {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 0.7s cubic-bezier(0.23, 1, 0.32, 1),
+                transform 0.7s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  :global(.reveal.visible) {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  :global(.reveal-line) {
+    overflow: hidden;
+  }
   :global(.reveal-line span) {
-    opacity: 1 !important;
-    transform: none !important;
-    transition: none !important;
+    display: inline-block;
+    transform: translateY(110%);
+    transition: transform 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  :global(.reveal-line.visible span) {
+    transform: translateY(0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :global(.reveal),
+    :global(.reveal-line span) {
+      opacity: 1 !important;
+      transform: none !important;
+      transition: none !important;
+    }
   }
 }
 

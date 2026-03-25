@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 
 import { useState, useEffect, useRef } from "react";
@@ -34,7 +35,7 @@ export const useScrollEffects = ({
             useEffect(() => {
                 // Ensure GSAP and ScrollMagic are loaded (they are included in the HTML)
                 // @ts-ignore
-                if (typeof window.gsap === 'undefined' || typeof window.ScrollMagic === 'undefined') {
+                if (typeof (window as any).gsap === 'undefined' || typeof (window as any).ScrollMagic === 'undefined') {
                     console.error("GSAP or ScrollMagic is not loaded!");
                     return;
                 }
@@ -50,7 +51,7 @@ export const useScrollEffects = ({
                 }
                 
                 // Initialize the main controller for all animations
-                const controller = new window.ScrollMagic.Controller();
+                const controller = new (window as any).ScrollMagic.Controller();
                 controllerRef.current = controller;
 
                 const projectsSectionPaddingTop = parseInt(window.getComputedStyle(projectsDemoRef.current).getPropertyValue('padding-top'), 10);
@@ -58,7 +59,7 @@ export const useScrollEffects = ({
                 const carouselLengthInSlides = projectsCount - 1;
 
                 // --- 1. Pinned Project Carousel Scene ---
-                const projectsListTween = window.gsap.to(projectsListRef.current, {
+                const projectsListTween = (window as any).gsap.to(projectsListRef.current, {
                     y: -itemHeight * carouselLengthInSlides,
                     ease: "none"
                 });
@@ -66,7 +67,7 @@ export const useScrollEffects = ({
                 const projectsWrpOuterHeight = projectsWrapperRef.current.offsetHeight;
                 const sceneOffset = -((window.innerHeight - projectsWrpOuterHeight) / 2) + projectsSectionPaddingTop;
 
-                const projectsSlidesScene = new window.ScrollMagic.Scene({
+                const projectsSlidesScene = new (window as any).ScrollMagic.Scene({
                     triggerElement: projectsDemoRef.current,
                     duration: itemHeight * carouselLengthInSlides,
                     triggerHook: 0,
@@ -100,7 +101,7 @@ export const useScrollEffects = ({
 
 
                 // --- 2. Hero Intro Text Fade-out Scene ---
-                const introTextTween = window.gsap.to(heroTextRef.current, {
+                const introTextTween = (window as any).gsap.to(heroTextRef.current, {
                     y: heroRef.current.offsetHeight * 0.45,
                     autoAlpha: 0,
                     ease: "none"
@@ -108,7 +109,7 @@ export const useScrollEffects = ({
 
                 const introTextSceneDuration = heroRef.current.offsetHeight - ((window.innerHeight - projectsWrpOuterHeight) / 2) - projectsSectionPaddingTop;
                 
-                new window.ScrollMagic.Scene({
+                new (window as any).ScrollMagic.Scene({
                     triggerElement: heroRef.current,
                     triggerHook: 0,
                     duration: introTextSceneDuration

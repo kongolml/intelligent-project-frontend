@@ -1,5 +1,6 @@
 // lib
 import { getPortfolioItems, getPortfolioCategories } from "../lib/api";
+import { Suspense } from "react";
 
 // components
 import PortfolioList from "@/app/components/PortfolioList/PortfolioList";
@@ -12,7 +13,9 @@ export default async function ProjectsPage() {
 
 	return (
 		<main>
-			<PortfolioList portfolioItems={portfolioItems} portfolioCategories={portfolioCategories} />
+			<Suspense>
+				<PortfolioList portfolioItems={portfolioItems} portfolioCategories={portfolioCategories} />
+			</Suspense>
 		</main>
 	);
 }

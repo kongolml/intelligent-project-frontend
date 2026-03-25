@@ -9,7 +9,7 @@ import { PortfolioCategory, PortfolioItem, PortfolioItem as PortfolioItemType } 
 import styles from "./HomepagePortfolio.module.scss";
 
 // hooks
-import useScrollEffects from "@/app/hooks/useScrollEffects";
+import { useScrollEffects } from "@/app/hooks/useScrollEffects";
 import HomepagePortfolioClient from "./HomepagePortfolioClient";
 import HomepagePortfolioBlocks from "../HomepagePortfolioBlocks/HomepagePortfolioBlocks";
 

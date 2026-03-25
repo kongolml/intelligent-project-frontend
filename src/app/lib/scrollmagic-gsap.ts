@@ -1,3 +1,4 @@
+// @ts-nocheck
 /*!
  * ScrollMagic v2.0.8 (2020-08-14)
  * The javascript library for magical scroll interactions.
