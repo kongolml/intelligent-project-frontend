@@ -9,16 +9,16 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [new URL('https://intelligent-project.fra1.digitaloceanspaces.com/**'), new URL('https://intelligent-project.fra1.cdn.digitaloceanspaces.com/**'), new URL('https://mir-s3-cdn-cf.behance.net/project_modules/**')]
   },
-  // webpack(config) {
-  //   // For Webpack Bundler
-  //   config.module.rules.push({
-  //     test: /\.svg$/i,
-  //     issuer: /\.[jt]sx?$/,
-  //     resourceQuery: { not: /url/ },
-  //     use: ['@svgr/webpack'],
-  //   });
-  //   return config;
-  // },
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  webpack(config: any) {
+    console.log('webpack function called, rules count:', config.module.rules.length);
+    // Handle SVG imports as React components via SVGR
+    config.module.rules.push({
+      test: /\.svg$/,
+      use: ['@svgr/webpack'],
+    });
+    return config;
+  },
   turbopack: {
     // For Turbopack Bundler
     rules: {

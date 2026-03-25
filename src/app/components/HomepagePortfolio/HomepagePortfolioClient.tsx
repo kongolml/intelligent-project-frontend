@@ -18,7 +18,7 @@ interface Props {
 export default function HomepagePortfolioClient({ randomPortfolioItems }: Props) {
   // const heroRef = useRef<HTMLElement>(null);
   // const projectsListRef = useRef<HTMLElement>(null);
-  const projectNavRef = useRef<HTMLElement>(null);
+  const projectNavRef = useRef<HTMLUListElement>(null);
   // const projectsDemoRef = useRef<HTMLElement>(null);
 
   const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
@@ -124,7 +124,7 @@ export default function HomepagePortfolioClient({ randomPortfolioItems }: Props)
                                                     key={portfolioItem.id}
                                                 >
                                                     <figcaption>
-                                                        <div className={styles["description-wrp"]} dangerouslySetInnerHTML={{ __html: sanitizeHtml(portfolioItem.description || "") }}>
+                                                        <div className={styles["description-wrp"]} dangerouslySetInnerHTML={{ __html: sanitizeHtml(portfolioItem.descriptionHTML || "") }}>
                                                         </div>
                                                     </figcaption>
                                                 </figure>
