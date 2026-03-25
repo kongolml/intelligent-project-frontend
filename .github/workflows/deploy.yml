@@ -42,4 +42,4 @@ jobs:
       - name: Restart PM2
         run: |
           ssh ${{ secrets.DROPLET_USER }}@${{ secrets.DROPLET_HOST }} \
-            "pm2 restart intelligent-project-frontend || pm2 start /var/www/intelligent-project-frontend/server.js --name intelligent-project-frontend"
+            "pm2 restart intelligent-project-frontend || PORT=3001 pm2 start /var/www/intelligent-project-frontend/server.js --name intelligent-project-frontend"
