@@ -50,7 +50,7 @@ export default function ProjectDetailClientV2({ project }: ProjectDetailClientV2
                     className={`${styles.heroBg} ${project.main_image ? styles.heroBgWithImage : ""}`}
                     style={project.main_image ? { viewTransitionName: `thumb-${project.id}` } : undefined}
                 >
-                    {project.main_image ? (
+                    {project.main_image && (
                         <Image
                             src={project.main_image}
                             alt={project.title}
@@ -58,38 +58,40 @@ export default function ProjectDetailClientV2({ project }: ProjectDetailClientV2
                             className={styles.heroBgImage}
                             priority
                         />
-                    ) : (
-                        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%", opacity: 0.4 }}>project.main_image</div>
                     )}
                     <div className={styles.heroGrid} />
                 </div>
 
                 <div className={styles.heroContent}>
                     <div className="reveal-line">
-                        <span className={styles.heroLabel}>project.categories: {heroLabel}</span>
+                        <span className={styles.heroLabel}>{heroLabel}</span>
                     </div>
                     <h1 className={styles.heroH1}>
                         <span className="reveal-line">
-                            <span>project.title: {titleLine1}</span>
+                            <span>{titleLine1}</span>
                         </span>
                         {titleLine2 && (
                             <>
                                 <br />
                                 <span className="reveal-line">
-                                    <span>project.title: {titleLine2}</span>
+                                    <span>{titleLine2}</span>
                                 </span>
                             </>
                         )}
                     </h1>
                     <dl className={styles.heroMeta}>
-                        <div className="reveal" style={{ transitionDelay: "0.3s" }}>
-                            <dt>Client</dt>
-                            <dd>project.client: {project.client ?? "—"}</dd>
-                        </div>
-                        <div className="reveal" style={{ transitionDelay: "0.4s" }}>
-                            <dt>Year</dt>
-                            <dd>project.year: {project.year ?? "—"}</dd>
-                        </div>
+                        {project.client && (
+                            <div className="reveal" style={{ transitionDelay: "0.3s" }}>
+                                <dt>Client</dt>
+                                <dd>{project.client}</dd>
+                            </div>
+                        )}
+                        {project.year && (
+                            <div className="reveal" style={{ transitionDelay: "0.4s" }}>
+                                <dt>Year</dt>
+                                <dd>{project.year}</dd>
+                            </div>
+                        )}
                         <div className="reveal" style={{ transitionDelay: "0.5s" }}>
                             <dt>Scope</dt>
                             <dd>Identity, Naming, Packaging</dd>
@@ -102,40 +104,43 @@ export default function ProjectDetailClientV2({ project }: ProjectDetailClientV2
             <section id="about" className={styles.about}>
                 <div className={`${styles.aboutLeft} reveal`}>
                     <div className={styles.aboutLabel}>Client</div>
-                    <h2 className={styles.aboutHeading}>project.client: {clientName}</h2>
+                    <h2 className={styles.aboutHeading}>{clientName}</h2>
                 </div>
 
                 <div className={styles.aboutRight}>
-                    <div
-                        className={`${styles.aboutDetail} reveal`}
-                        style={{ transitionDelay: "0.1s" }}
-                    >
-                        <h4>Our Task</h4>
-                        <>project.our_taskHTML: {ourTaskHTML ? <div dangerouslySetInnerHTML={{ __html: ourTaskHTML }} /> : "—"}</>
-                    </div>
-                    <div
-                        className={`${styles.aboutDetail} reveal`}
-                        style={{ transitionDelay: "0.2s" }}
-                    >
-                        <h4>Client Goal</h4>
-                        <>project.client_goalHTML: {clientGoalHTML ? <div dangerouslySetInnerHTML={{ __html: clientGoalHTML }} /> : "—"}</>
-                    </div>
-                    <div
-                        className={`${styles.aboutDetail} reveal`}
-                        style={{ transitionDelay: "0.3s" }}
-                    >
-                        <h4>Disciplines</h4>
-                        <div className={styles.tagList}>
-                            {project.categories.length > 0
-                                ? project.categories.map((cat) => (
-                                    <span key={cat.slug} className={styles.tag}>
-                                        project.categories: {cat.name}
-                                    </span>
-                                ))
-                                : <span className={styles.tag}>project.categories: —</span>
-                            }
+                    {ourTaskHTML && (
+                        <div
+                            className={`${styles.aboutDetail} reveal`}
+                            style={{ transitionDelay: "0.1s" }}
+                        >
+                            <h4>Our Task</h4>
+                            <div dangerouslySetInnerHTML={{ __html: ourTaskHTML }} />
                         </div>
-                    </div>
+                    )}
+                    {clientGoalHTML && (
+                        <div
+                            className={`${styles.aboutDetail} reveal`}
+                            style={{ transitionDelay: "0.2s" }}
+                        >
+                            <h4>Client Goal</h4>
+                            <div dangerouslySetInnerHTML={{ __html: clientGoalHTML }} />
+                        </div>
+                    )}
+                    {project.categories.length > 0 && (
+                        <div
+                            className={`${styles.aboutDetail} reveal`}
+                            style={{ transitionDelay: "0.3s" }}
+                        >
+                            <h4>Disciplines</h4>
+                            <div className={styles.tagList}>
+                                {project.categories.map((cat) => (
+                                    <span key={cat.slug} className={styles.tag}>
+                                        {cat.name}
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
+                    )}
                 </div>
             </section>
 
@@ -166,13 +171,12 @@ export default function ProjectDetailClientV2({ project }: ProjectDetailClientV2
                     </div>
                 </div>
 
-                <div className="reveal" style={{ transitionDelay: "0.15s" }}>
-                    <div className={styles.moodboardLabel}>Visual Inspiration</div>
-                    <div className={styles.moodboardGrid}>
-                        {(project.visual_inspiration ?? []).length > 0
-                            ? (project.visual_inspiration ?? []).map((url, i) => (
+                {(project.visual_inspiration ?? []).length > 0 && (
+                    <div className="reveal" style={{ transitionDelay: "0.15s" }}>
+                        <div className={styles.moodboardLabel}>Visual Inspiration</div>
+                        <div className={styles.moodboardGrid}>
+                            {(project.visual_inspiration ?? []).map((url, i) => (
                                 <div key={i} className={styles.moodImg}>
-                                    project.visual_inspiration:
                                     <Image
                                         src={url}
                                         alt={`${project.title} — visual exploration ${i + 1}`}
@@ -180,26 +184,21 @@ export default function ProjectDetailClientV2({ project }: ProjectDetailClientV2
                                         className={styles.coverImage}
                                     />
                                 </div>
-                            ))
-                            : (
-                                <div className={styles.moodImg} style={{ display: "flex", alignItems: "center", justifyContent: "center", opacity: 0.4 }}>
-                                    project.visual_inspiration
-                                </div>
-                            )
-                        }
+                            ))}
+                        </div>
                     </div>
-                </div>
+                )}
             </section>
 
             {/* ─── LOGO EXPLORATION ─── */}
-            <section id="process" className={styles.processSection}>
-                <div className={`${styles.processHeader} reveal`}>
-                    <h2>Logo &amp; Visual Exploration</h2>
-                    <span className={styles.stepCount}>ref...</span>
-                </div>
+            {(project.visual_exploration ?? []).length > 0 && (
+                <section id="process" className={styles.processSection}>
+                    <div className={`${styles.processHeader} reveal`}>
+                        <h2>Logo &amp; Visual Exploration</h2>
+                        <span className={styles.stepCount}>ref...</span>
+                    </div>
 
-                {(project.visual_exploration ?? []).length > 0 ? (
-                    (() => {
+                    {(() => {
                         const imgs = project.visual_exploration!;
                         const rows: string[][] = [];
                         for (let i = 0; i < imgs.length; i += 3) rows.push(imgs.slice(i, i + 3));
@@ -214,7 +213,6 @@ export default function ProjectDetailClientV2({ project }: ProjectDetailClientV2
                                     return (
                                         <div key={colIdx} className={`${styles.iterationCard} ${isLast ? styles.iterationCardFinal : ""}`}>
                                             <div className={`${styles.imgWrapper} ${styles.imgWrapperRatio43}`}>
-                                                project.visual_exploration:
                                                 <Image
                                                     src={url}
                                                     alt={`${project.title} — logo exploration ${rowIdx * 3 + colIdx + 1}`}
@@ -228,17 +226,9 @@ export default function ProjectDetailClientV2({ project }: ProjectDetailClientV2
                                 })}
                             </div>
                         ));
-                    })()
-                ) : (
-                    <div className={`${styles.iterationRow} reveal`}>
-                        <div className={styles.iterationCard}>
-                            <div className={`${styles.imgWrapper} ${styles.imgWrapperRatio43}`} style={{ display: "flex", alignItems: "center", justifyContent: "center", opacity: 0.4 }}>
-                                project.visual_exploration
-                            </div>
-                        </div>
-                    </div>
-                )}
-            </section>
+                    })()}
+                </section>
+            )}
 
             {/* ─── NAME STEP ─── */}
             <section className={styles.processSection} style={{ paddingTop: "60px" }}>
@@ -281,13 +271,13 @@ export default function ProjectDetailClientV2({ project }: ProjectDetailClientV2
             </section>
 
             {/* ─── PACKAGING ─── */}
-            <section id="packaging" className={styles.processSection} style={{ paddingTop: "40px" }}>
-                <div className={`${styles.processHeader} reveal`}>
-                    <h2>Packaging</h2>
-                </div>
+            {finalResultGalleryImages.length > 0 && (
+                <section id="packaging" className={styles.processSection} style={{ paddingTop: "40px" }}>
+                    <div className={`${styles.processHeader} reveal`}>
+                        <h2>Packaging</h2>
+                    </div>
 
-                {finalResultGalleryImages.length > 0 ? (
-                    (() => {
+                    {(() => {
                         const pairs: string[][] = [];
                         for (let i = 0; i < finalResultGalleryImages.length; i += 2) pairs.push(finalResultGalleryImages.slice(i, i + 2));
                         return pairs.map((pair, pairIdx) => (
@@ -299,7 +289,6 @@ export default function ProjectDetailClientV2({ project }: ProjectDetailClientV2
                                 >
                                     {pair.map((url, colIdx) => (
                                         <div key={colIdx} className={`${styles.imgWrapper} ${styles.imgWrapperRatio1}`}>
-                                            project.final_result_gallery:
                                             <Image
                                                 src={url}
                                                 alt={`${project.title} — packaging ${pairIdx * 2 + colIdx + 1}`}
@@ -311,15 +300,9 @@ export default function ProjectDetailClientV2({ project }: ProjectDetailClientV2
                                 </div>
                             </div>
                         ));
-                    })()
-                ) : (
-                    <div className={`${styles.imagePair} reveal`}>
-                        <div className={`${styles.imgWrapper} ${styles.imgWrapperRatio1}`} style={{ display: "flex", alignItems: "center", justifyContent: "center", opacity: 0.4 }}>
-                            project.final_result_gallery
-                        </div>
-                    </div>
-                )}
-            </section>
+                    })()}
+                </section>
+            )}
 
             {/* ─── TYPOGRAPHY SECTION ─── */}
             <section id="type" className={`${styles.typeSection} reveal`}>
