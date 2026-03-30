@@ -1,0 +1,561 @@
+/* ============================================
+   Homepage Curator — Design System
+   Based on designer reference + PortfolioCaseStudyV2 tokens
+   ============================================ */
+
+@use '../../global.variables' as *;
+
+/* ─── Variables (matching PortfolioCaseStudyV2) ─── */
+$black: #0a0a0a;
+$white: #f5f2ed;
+$cream: #ece8e1;
+$grey-dark: #3a3a38;
+$grey-mid: #7a7a76;
+$grey-light: #b8b5ae;
+$accent: #c44a2f;
+$page-bg: #dedad2;
+$panel-bg: #f5f2ed;
+
+$font-display: 'DM Serif Display', serif;
+$font-body: 'Instrument Sans', sans-serif;
+$font-mono: 'JetBrains Mono', monospace;
+
+$ease-case: cubic-bezier(0.23, 1, 0.32, 1);
+$page-margin: clamp(24px, 5vw, 80px);
+
+
+/* ─── Page Wrapper ─── */
+.curatorPage {
+  background: $page-bg;
+  color: $black;
+  font-family: $font-body;
+  font-weight: 400;
+  line-height: 1.55;
+  overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
+
+  /* ─── Reveal Animations (global classes) ─── */
+  :global(.reveal) {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 0.7s $ease-case,
+                transform 0.7s $ease-case;
+  }
+  :global(.reveal.visible) {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  :global(.reveal-line) {
+    overflow: hidden;
+  }
+  :global(.reveal-line span) {
+    display: inline-block;
+    transform: translateY(110%);
+    transition: transform 0.8s $ease-case;
+  }
+  :global(.reveal-line.visible span) {
+    transform: translateY(0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :global(.reveal),
+    :global(.reveal-line span) {
+      opacity: 1 !important;
+      transform: none !important;
+      transition: none !important;
+    }
+  }
+}
+
+
+/* ═══════════════════════════════════════════════
+   HERO SECTION
+   ═══════════════════════════════════════════════ */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 $page-margin;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+}
+
+.heroGradient {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 50%, $white 0%, $cream 100%);
+  z-index: 0;
+}
+
+/* Subtle decorative blobs */
+.heroGradient::before {
+  content: '';
+  position: absolute;
+  top: -10%;
+  left: -10%;
+  width: 60%;
+  height: 60%;
+  background: rgba($grey-light, 0.15);
+  filter: blur(120px);
+  border-radius: 50%;
+}
+
+.heroGradient::after {
+  content: '';
+  position: absolute;
+  bottom: -10%;
+  right: -10%;
+  width: 50%;
+  height: 50%;
+  background: rgba($cream, 0.4);
+  filter: blur(100px);
+  border-radius: 50%;
+}
+
+.heroContent {
+  position: relative;
+  z-index: 1;
+  max-width: 900px;
+}
+
+.heroLabel {
+  font-family: $font-mono;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  color: rgba($black, 0.4);
+  margin-bottom: 24px;
+  display: block;
+}
+
+.heroH1 {
+  font-family: $font-display;
+  font-size: clamp(3.5rem, 9vw, 9rem);
+  font-weight: 400;
+  line-height: 0.92;
+  letter-spacing: -0.03em;
+  color: $black;
+  margin: 0;
+}
+
+.heroItalic {
+  font-style: italic;
+  color: rgba($black, 0.7);
+}
+
+.heroTagline {
+  margin-top: 48px;
+  font-size: 1.125rem;
+  color: rgba($black, 0.55);
+  max-width: 520px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.65;
+}
+
+.heroScrollLink {
+  margin-top: 64px;
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  font-family: $font-mono;
+  font-size: 0.8125rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: $black;
+  text-decoration: none;
+  transition: opacity 0.3s ease;
+
+  &:hover {
+    opacity: 0.6;
+  }
+}
+
+.heroScrollLine {
+  width: 48px;
+  height: 1px;
+  background: rgba($black, 0.3);
+  transition: width 0.5s $ease-case;
+
+  .heroScrollLink:hover & {
+    width: 64px;
+  }
+}
+
+
+/* ═══════════════════════════════════════════════
+   PORTFOLIO SLIDER SECTION
+   ═══════════════════════════════════════════════ */
+.portfolioSection {
+  padding: 128px $page-margin 80px;
+  background: $white;
+}
+
+.portfolioHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 80px;
+}
+
+.portfolioHeaderLeft {
+  max-width: 640px;
+}
+
+.portfolioLabel {
+  font-family: $font-mono;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  color: rgba($black, 0.35);
+  margin-bottom: 16px;
+  display: block;
+}
+
+.portfolioTitle {
+  font-family: $font-display;
+  font-size: clamp(2.5rem, 4vw, 3.5rem);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: $black;
+  margin: 0;
+}
+
+.portfolioNav {
+  display: flex;
+  gap: 24px;
+}
+
+.navButton {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 1px solid rgba($black, 0.1);
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $black;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: $black;
+    color: $white;
+  }
+
+  @media (max-width: 768px) {
+    display: none;
+  }
+}
+
+.navButtonIcon {
+  font-size: 20px;
+  line-height: 1;
+}
+
+/* Horizontal scroll container */
+.sliderContainer {
+  display: flex;
+  gap: 48px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 24px;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Individual card */
+.projectCard {
+  min-width: min(700px, 85vw);
+  scroll-snap-align: center;
+  flex-shrink: 0;
+}
+
+.projectCardImage {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border-radius: 48px;
+  background: $cream;
+  box-shadow: 0 20px 60px -15px rgba($black, 0.08);
+  transition: border-radius 0.5s $ease-case;
+
+  .projectCard:hover & {
+    border-radius: 12px;
+  }
+}
+
+.projectCardImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(100%);
+  transform: scale(1.05);
+  transition: filter 0.7s $ease-case, transform 0.7s $ease-case;
+
+  .projectCard:hover & {
+    filter: grayscale(0%);
+    transform: scale(1);
+  }
+}
+
+.projectCardInfo {
+  margin-top: 32px;
+  padding: 0 24px;
+}
+
+.projectCardTitle {
+  font-family: $font-display;
+  font-size: 1.75rem;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  color: $black;
+  margin: 0;
+}
+
+.projectCardCategory {
+  font-family: $font-mono;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: rgba($black, 0.35);
+  margin-top: 8px;
+}
+
+
+/* ═══════════════════════════════════════════════
+   CAPABILITIES SECTION
+   ═══════════════════════════════════════════════ */
+.capabilitiesSection {
+  padding: 128px $page-margin;
+  background: $cream;
+}
+
+.capabilitiesInner {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 48px;
+  align-items: start;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.capabilitiesSidebar {
+  position: sticky;
+  top: 160px;
+
+  @media (max-width: 768px) {
+    position: static;
+  }
+}
+
+.capabilitiesLabel {
+  font-family: $font-mono;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  color: rgba($black, 0.35);
+  margin-bottom: 24px;
+  display: block;
+}
+
+.capabilitiesTitle {
+  font-family: $font-display;
+  font-size: clamp(2.5rem, 4vw, 3.75rem);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: $black;
+  margin: 0;
+}
+
+.capabilitiesList {
+  display: flex;
+  flex-direction: column;
+}
+
+.capabilityItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 48px 0;
+  cursor: default;
+  transition: all 0.5s $ease-case;
+  border-bottom: 1px solid rgba($black, 0.06);
+
+  &:first-child {
+    border-top: 1px solid rgba($black, 0.06);
+  }
+}
+
+.capabilityLeft {
+  display: flex;
+  align-items: baseline;
+  gap: 48px;
+}
+
+.capabilityNumber {
+  font-family: $font-mono;
+  font-size: 0.8125rem;
+  color: rgba($black, 0.25);
+  letter-spacing: 0.1em;
+  flex-shrink: 0;
+  min-width: 32px;
+}
+
+.capabilityName {
+  font-family: $font-display;
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  font-weight: 400;
+  letter-spacing: -0.03em;
+  color: $black;
+  transition: font-style 0.5s $ease-case, transform 0.5s $ease-case;
+  margin: 0;
+}
+
+.capabilityArrow {
+  font-size: 2rem;
+  color: rgba($black, 0.15);
+  transition: color 0.5s $ease-case, transform 0.5s $ease-case;
+  flex-shrink: 0;
+}
+
+/* Hover effects */
+.capabilityItem:hover {
+  .capabilityName {
+    font-style: italic;
+    transform: translateX(16px);
+  }
+
+  .capabilityArrow {
+    color: $black;
+    transform: translate(8px, -8px);
+  }
+}
+
+
+/* ═══════════════════════════════════════════════
+   MANIFESTO SECTION
+   ═══════════════════════════════════════════════ */
+.manifestoSection {
+  padding: 120px $page-margin;
+  background: $page-bg;
+}
+
+.manifestoText {
+  max-width: 900px;
+  font-family: $font-display;
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: $black;
+  margin: 0;
+}
+
+
+/* ═══════════════════════════════════════════════
+   CTA SECTION
+   ═══════════════════════════════════════════════ */
+.ctaSection {
+  padding: 192px $page-margin;
+  background: $white;
+  text-align: center;
+}
+
+.ctaHeadline {
+  font-family: $font-display;
+  font-size: clamp(3rem, 6vw, 5rem);
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  color: $black;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.ctaHeadlineItalic {
+  font-style: italic;
+}
+
+.ctaButtonWrapper {
+  margin-top: 80px;
+}
+
+.ctaButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  border: 1px solid rgba($black, 0.1);
+  background: transparent;
+  color: $black;
+  font-family: $font-mono;
+  font-size: 0.8125rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.7s $ease-case;
+  position: relative;
+  z-index: 1;
+
+  &:hover {
+    background: $black;
+    color: $white;
+    transform: scale(1.05);
+    border-color: $black;
+  }
+}
+
+
+/* ═══════════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  .heroH1 {
+    font-size: clamp(2.5rem, 12vw, 4rem);
+  }
+
+  .projectCard {
+    min-width: 85vw;
+  }
+
+  .capabilityItem {
+    padding: 32px 0;
+  }
+
+  .capabilityLeft {
+    gap: 24px;
+  }
+
+  .capabilityName {
+    font-size: clamp(2rem, 8vw, 3rem);
+  }
+
+  .portfolioHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 32px;
+  }
+
+  .ctaButton {
+    width: 160px;
+    height: 160px;
+    font-size: 0.75rem;
+  }
+}

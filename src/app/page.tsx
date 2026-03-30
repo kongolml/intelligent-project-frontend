@@ -1,6 +1,5 @@
-import HomepageMagnetic from "./components/HomepageMagnetic/HomepageMagnetic";
-import HomepageSplit from "./components/HomepageSplit/HomepageSplit";
+import HomepageCurator from "./components/HomepageCurator/HomepageCurator";
 
 export default function Home() {
-  return <HomepageSplit />;
+  return <HomepageCurator />;
 }
