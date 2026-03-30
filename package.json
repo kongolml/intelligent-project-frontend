@@ -24,10 +24,13 @@
     "typewriter-effect": "^2.22.0"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3.3.5",
     "@svgr/webpack": "^8.1.0",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "eslint": "^9.39.4",
+    "eslint-config-next": "^16.2.1",
     "typescript": "^5"
   }
 }
