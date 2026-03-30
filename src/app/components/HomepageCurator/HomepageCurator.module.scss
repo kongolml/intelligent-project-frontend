@@ -266,7 +266,7 @@ $page-margin: clamp(24px, 5vw, 80px);
 /* Horizontal scroll container */
 .sliderContainer {
   display: flex;
-  gap: 48px;
+  gap: 32px;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
@@ -280,7 +280,7 @@ $page-margin: clamp(24px, 5vw, 80px);
 
 /* Individual card */
 .projectCard {
-  min-width: min(700px, 85vw);
+  min-width: min(380px, 28vw);
   scroll-snap-align: center;
   flex-shrink: 0;
   display: block;
@@ -297,13 +297,13 @@ $page-margin: clamp(24px, 5vw, 80px);
   position: relative;
   aspect-ratio: 4 / 5;
   overflow: hidden;
-  border-radius: 48px;
+  border-radius: 32px;
   background: $cream;
   box-shadow: 0 20px 60px -15px rgba($black, 0.08);
   transition: border-radius 0.5s $ease-case;
 
   .projectCard:hover & {
-    border-radius: 12px;
+    border-radius: 8px;
   }
 }
 
@@ -322,13 +322,13 @@ $page-margin: clamp(24px, 5vw, 80px);
 }
 
 .projectCardInfo {
-  margin-top: 32px;
-  padding: 0 24px;
+  margin-top: 24px;
+  padding: 0 16px;
 }
 
 .projectCardTitle {
   font-family: $font-display;
-  font-size: 1.75rem;
+  font-size: 1.375rem;
   font-weight: 400;
   letter-spacing: -0.01em;
   color: $black;

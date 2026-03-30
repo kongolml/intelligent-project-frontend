@@ -103,7 +103,7 @@ export default function HomepageCuratorClient({ showcases }: HomepageCuratorClie
                     alt={item.title}
                     fill
                     className={styles.projectCardImg}
-                    sizes="(max-width: 768px) 85vw, 700px"
+                    sizes="(max-width: 768px) 85vw, 380px"
                   />
                 )}
               </div>
