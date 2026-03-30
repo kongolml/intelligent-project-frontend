@@ -248,6 +248,11 @@ $page-margin: clamp(24px, 5vw, 80px);
     color: $white;
   }
 
+  &:focus-visible {
+    outline: 2px solid $black;
+    outline-offset: 2px;
+  }
+
   @media (max-width: 768px) {
     display: none;
   }
@@ -278,6 +283,14 @@ $page-margin: clamp(24px, 5vw, 80px);
   min-width: min(700px, 85vw);
   scroll-snap-align: center;
   flex-shrink: 0;
+  display: block;
+  text-decoration: none;
+  color: inherit;
+
+  &:focus-visible {
+    outline: 2px solid $black;
+    outline-offset: 4px;
+  }
 }
 
 .projectCardImage {
@@ -519,6 +532,11 @@ $page-margin: clamp(24px, 5vw, 80px);
     color: $white;
     transform: scale(1.05);
     border-color: $black;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $black;
+    outline-offset: 4px;
   }
 }
 

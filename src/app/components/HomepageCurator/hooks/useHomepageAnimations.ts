@@ -40,9 +40,11 @@ export function useHeroAnimations() {
     const heroElements = document.querySelectorAll(
       ".hero-section .reveal-line, .hero-section .reveal"
     );
+    const timeoutIds: NodeJS.Timeout[] = [];
     heroElements.forEach((el, i) => {
-      setTimeout(() => el.classList.add("visible"), 200 + i * 150);
+      timeoutIds.push(setTimeout(() => el.classList.add("visible"), 200 + i * 150));
     });
+    return () => timeoutIds.forEach(clearTimeout);
   }, []);
 }
 
@@ -65,5 +67,8 @@ export function useHorizontalScroll() {
     });
   }, []);
 
-  return { scrollRef, scrollPrev: () => scroll("prev"), scrollNext: () => scroll("next") };
+  const scrollPrev = useCallback(() => scroll("prev"), [scroll]);
+  const scrollNext = useCallback(() => scroll("next"), [scroll]);
+
+  return { scrollRef, scrollPrev, scrollNext };
 }
