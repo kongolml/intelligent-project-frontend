@@ -7,6 +7,7 @@ const nextConfig: NextConfig = {
     viewTransition: true,
   },
   images: {
+    unoptimized: true,
     remotePatterns: [new URL('https://intelligent-project.fra1.digitaloceanspaces.com/**'), new URL('https://intelligent-project.fra1.cdn.digitaloceanspaces.com/**'), new URL('https://mir-s3-cdn-cf.behance.net/project_modules/**')]
   },
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -18,7 +18,10 @@ export function getApiUrl(): string {
 // --- Internal helpers ---
 
 async function fetchFromPayload<T>(path: string, options?: RequestInit): Promise<T[]> {
-  const res = await fetch(`${getApiUrl()}/api/${path}`, options);
+  const res = await fetch(`${getApiUrl()}/api/${path}`, {
+    next: { revalidate: 3600 },
+    ...options,
+  });
   if (!res.ok) throw new Error(`PayloadCMS fetch failed: ${res.status} ${res.statusText}`);
   const data: PayloadPaginatedResponse<T> = await res.json();
   return data.docs;
