@@ -47,4 +47,4 @@ jobs:
       - name: Restart PM2
         run: |
           ssh -p 2269 ${{ secrets.DROPLET_USER }}@${{ secrets.DROPLET_HOST }} \
-            "bash -lc 'PORT=3001 API_URL=http://localhost:3000 pm2 restart intelligent-project-frontend --update-env || PORT=3001 API_URL=http://localhost:3000 pm2 start /var/www/intelligent-project-frontend/server.js --name intelligent-project-frontend'"
+            "bash -lc 'PORT=3001 API_URL=http://localhost:3000 PAYLOAD_WEBHOOK_SECRET=${{ secrets.PAYLOAD_WEBHOOK_SECRET }} pm2 restart intelligent-project-frontend --update-env || PORT=3001 API_URL=http://localhost:3000 PAYLOAD_WEBHOOK_SECRET=${{ secrets.PAYLOAD_WEBHOOK_SECRET }} pm2 start /var/www/intelligent-project-frontend/server.js --name intelligent-project-frontend'"
