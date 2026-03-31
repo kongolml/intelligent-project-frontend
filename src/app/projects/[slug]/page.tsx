@@ -1,8 +1,12 @@
 import { notFound } from "next/navigation";
-import { getPortfolioItemBySlug } from "../../lib/api";
+import { getPortfolioItemBySlug, getPortfolioItems } from "../../lib/api";
 import ProjectDetailClientV2 from "./ProjectDetailClientV2";
 
-export const revalidate = 3600;
+export async function generateStaticParams() {
+    const items = await getPortfolioItems();
+    return items.map(item => ({ slug: item.slug }));
+}
+
 
 export default async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {
     const slug = (await params).slug;

@@ -17,34 +17,44 @@ jobs:
 
       - run: npm ci
 
+      - name: Connect Tailscale
+        uses: tailscale/github-action@v2
+        with:
+          oauth-client-id: ${{ secrets.TAILSCALE_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TAILSCALE_OAUTH_SECRET }}
+          tags: tag:ci
+
       - name: Build
         run: npm run build
         env:
-          API_URL: ${{ secrets.API_URL }}
+          API_URL: http://${{ secrets.TAILSCALE_IP }}:3000
+          PAYLOAD_WEBHOOK_SECRET: ${{ secrets.PAYLOAD_WEBHOOK_SECRET }}
 
       - name: Setup SSH
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.DROPLET_SSH_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          echo "StrictHostKeyChecking no" >> ~/.ssh/config
+          echo "${{ secrets.DROPLET_HOST_KEY }}" >> ~/.ssh/known_hosts
 
       - name: Sync build to Droplet
         run: |
-          rsync -az --delete --exclude='.env' \
-            -e "ssh -p 2269" \
+          rsync -az --delete \
+            -e "ssh -p ${{ secrets.DROPLET_SSH_PORT }}" \
             .next/standalone/ \
             ${{ secrets.DROPLET_USER }}@${{ secrets.DROPLET_HOST }}:/var/www/intelligent-project-frontend/
           rsync -az --delete \
-            -e "ssh -p 2269" \
+            -e "ssh -p ${{ secrets.DROPLET_SSH_PORT }}" \
             .next/static/ \
             ${{ secrets.DROPLET_USER }}@${{ secrets.DROPLET_HOST }}:/var/www/intelligent-project-frontend/.next/static/
           rsync -az --delete \
-            -e "ssh -p 2269" \
+            -e "ssh -p ${{ secrets.DROPLET_SSH_PORT }}" \
             public/ \
             ${{ secrets.DROPLET_USER }}@${{ secrets.DROPLET_HOST }}:/var/www/intelligent-project-frontend/public/
 
       - name: Restart PM2
         run: |
-          ssh -p 2269 ${{ secrets.DROPLET_USER }}@${{ secrets.DROPLET_HOST }} \
-            "bash -lc 'PORT=3001 API_URL=http://localhost:3000 PAYLOAD_WEBHOOK_SECRET=${{ secrets.PAYLOAD_WEBHOOK_SECRET }} pm2 restart intelligent-project-frontend --update-env || PORT=3001 API_URL=http://localhost:3000 PAYLOAD_WEBHOOK_SECRET=${{ secrets.PAYLOAD_WEBHOOK_SECRET }} pm2 start /var/www/intelligent-project-frontend/server.js --name intelligent-project-frontend'"
+          ssh -p ${{ secrets.DROPLET_SSH_PORT }} ${{ secrets.DROPLET_USER }}@${{ secrets.DROPLET_HOST }} \
+            "PORT=3001 pm2 restart intelligent-project-frontend || \
+             PORT=3001 pm2 start /var/www/intelligent-project-frontend/server.js \
+             --name intelligent-project-frontend"

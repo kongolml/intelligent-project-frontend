@@ -11,7 +11,6 @@ import { Teammate } from "../../types/teammate.types";
 
 import styles from "./Teammate.module.scss";
 
-export const revalidate = 3600;
 
 export default async function AboutUsPage() {
 	let teammatesData: Teammate[] = [];

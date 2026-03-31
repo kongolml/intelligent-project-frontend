@@ -17,9 +17,19 @@ export function getApiUrl(): string {
 
 // --- Internal helpers ---
 
-async function fetchFromPayload<T>(path: string, options?: RequestInit): Promise<T[]> {
+// Cache tags for each collection — used for on-demand revalidation via webhook
+export const CACHE_TAGS = {
+  portfolioItems: 'portfolio-items',
+  portfolioCategories: 'portfolio-categories',
+  teammates: 'teammates',
+} as const;
+
+// Fallback revalidation interval (seconds) — self-heals if webhook delivery fails
+const REVALIDATE_SECONDS = 3600;
+
+async function fetchFromPayload<T>(path: string, tags: string[], options?: RequestInit): Promise<T[]> {
   const res = await fetch(`${getApiUrl()}/api/${path}`, {
-    next: { revalidate: 3600 },
+    next: { tags, revalidate: REVALIDATE_SECONDS },
     ...options,
   });
   if (!res.ok) throw new Error(`PayloadCMS fetch failed: ${res.status} ${res.statusText}`);
@@ -70,7 +80,7 @@ function mapTeammate(raw: PayloadTeammate): Teammate {
 export async function getPortfolioItems(): Promise<PortfolioItem[]> {
   const docs = await fetchFromPayload<PayloadPortfolioItem>(
     "portfolio-items?depth=1&limit=0",
-    // { cache: "no-store" },
+    [CACHE_TAGS.portfolioItems],
   ).catch((err) => {
     console.error("Failed to fetch portfolio items:", err);
     return [];
@@ -81,6 +91,7 @@ export async function getPortfolioItems(): Promise<PortfolioItem[]> {
 export async function getPortfolioShowcases(): Promise<PortfolioItem[]> {
   const docs = await fetchFromPayload<PayloadPortfolioItem>(
     "portfolio-items?where[isShowcase][equals]=true&depth=1&limit=0",
+    [CACHE_TAGS.portfolioItems],
   ).catch((err) => {
     console.error("Failed to fetch portfolio showcases:", err);
     return [];
@@ -91,6 +102,7 @@ export async function getPortfolioShowcases(): Promise<PortfolioItem[]> {
 export async function getPortfolioItemBySlug(slug: string): Promise<PortfolioItem | null> {
   const docs = await fetchFromPayload<PayloadPortfolioItem>(
     `portfolio-items?where[slug][equals]=${encodeURIComponent(slug)}&depth=1`,
+    [CACHE_TAGS.portfolioItems],
   ).catch((err) => {
     console.error(`Failed to fetch portfolio item by slug "${slug}":`, err);
     return null;
@@ -100,14 +112,20 @@ export async function getPortfolioItemBySlug(slug: string): Promise<PortfolioIte
 }
 
 export async function getPortfolioCategories(): Promise<PortfolioCategory[]> {
-  return fetchFromPayload<PortfolioCategory>("portfolio-categories?limit=0").catch((err) => {
+  return fetchFromPayload<PortfolioCategory>(
+    "portfolio-categories?limit=0",
+    [CACHE_TAGS.portfolioCategories],
+  ).catch((err) => {
     console.error("Failed to fetch portfolio categories:", err);
     return [];
   });
 }
 
 export async function getTeammates(): Promise<Teammate[]> {
-  const docs = await fetchFromPayload<PayloadTeammate>("teammates?depth=1&limit=0").catch((err) => {
+  const docs = await fetchFromPayload<PayloadTeammate>(
+    "teammates?depth=1&limit=0",
+    [CACHE_TAGS.teammates],
+  ).catch((err) => {
     console.error("Failed to fetch teammates:", err);
     return [];
   });

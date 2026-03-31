@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { revalidatePath } from 'next/cache';
+import { revalidateTag } from 'next/cache';
+import { CACHE_TAGS } from '../../lib/api';
 
 export async function POST(request: NextRequest) {
   const startTime = Date.now();
@@ -25,47 +26,30 @@ export async function POST(request: NextRequest) {
       timestamp: new Date().toISOString()
     });
 
-    const revalidatedPaths: string[] = [];
+    const revalidatedTags: string[] = [];
 
-    // Revalidate pages based on content type
     if (model === 'portfolio-items') {
-      // Revalidate the homepage
-      revalidatePath('/', 'layout');
-      revalidatedPaths.push('/');
-      
-      // Revalidate portfolio list page
-      revalidatePath('/projects', 'layout');
-      revalidatedPaths.push('/projects');
-      
-      // Revalidate individual project page if slug exists
-      const slug = payload?.doc?.slug;
-      if (slug) {
-        revalidatePath(`/projects/${slug}`);
-        revalidatedPaths.push(`/projects/${slug}`);
-      }
+      revalidateTag(CACHE_TAGS.portfolioItems);
+      revalidatedTags.push(CACHE_TAGS.portfolioItems);
     } else if (model === 'portfolio-categories') {
-      // Revalidate portfolio and homepage if categories change
-      revalidatePath('/projects', 'layout');
-      revalidatedPaths.push('/projects');
-      revalidatePath('/', 'layout');
-      revalidatedPaths.push('/');
+      revalidateTag(CACHE_TAGS.portfolioCategories);
+      revalidatedTags.push(CACHE_TAGS.portfolioCategories);
     } else if (model === 'teammates') {
-      // Revalidate about-us page
-      revalidatePath('/about-us', 'layout');
-      revalidatedPaths.push('/about-us');
+      revalidateTag(CACHE_TAGS.teammates);
+      revalidatedTags.push(CACHE_TAGS.teammates);
     }
 
     const duration = Date.now() - startTime;
-    
+
     console.log(`✅ Revalidation complete (${duration}ms)`, {
-      paths: revalidatedPaths,
+      tags: revalidatedTags,
       duration,
       timestamp: new Date().toISOString()
     });
 
-    return NextResponse.json({ 
+    return NextResponse.json({
       success: true,
-      revalidated: revalidatedPaths,
+      revalidated: revalidatedTags,
       duration,
       timestamp: new Date().toISOString()
     });
