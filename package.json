@@ -9,7 +9,9 @@
     "lint": "next lint",
     "prepare": "husky",
     "test": "vitest",
-    "test:run": "vitest run"
+    "test:run": "vitest run",
+    "analyze": "ANALYZE=true next build",
+    "analyze:dev": "ANALYZE=true next dev --turbopack"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
@@ -27,6 +29,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.5",
+    "@next/bundle-analyzer": "^15.5.14",
     "@svgr/webpack": "^8.1.0",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
