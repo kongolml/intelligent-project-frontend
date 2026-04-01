@@ -10,8 +10,10 @@ Guidance for AI coding agents working in this repository.
 | `npm run build` | Production build |
 | `npm run start` | Start production server |
 | `npm run lint` | ESLint via `next lint` |
+| `npm run test` | Run tests in watch mode (Vitest) |
+| `npm run test:run` | Run tests once (CI) |
 
-**No test framework is configured.** There are no test commands.
+**Testing:** Vitest with React Testing Library configured. Tests located in `src/**/*.test.{ts,tsx}`.
 
 ## Environment
 

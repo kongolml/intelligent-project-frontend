@@ -1,8 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { revalidateTag } from 'next/cache';
 import { CACHE_TAGS } from '../../lib/api';
+import { rateLimit } from '../../lib/rate-limit';
 
 export async function POST(request: NextRequest) {
+  const rateLimitResponse = rateLimit(request);
+  if (rateLimitResponse) return rateLimitResponse;
+
   const startTime = Date.now();
   
   try {
