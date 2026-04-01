@@ -13,11 +13,11 @@ Address critical security vulnerabilities, update outdated dependencies, and imp
 
 ## Phase 1: Critical Security Fixes [PENDING]
 - [ ] **1.0 Create git branch `security-fixes` and commit current state** ← CURRENT
-- [ ] **1.1 Update Next.js to 15.4.x (NOT 15.5.14 — that version does not exist)**
+- [x] **1.1 Update Next.js to 15.4.x (NOT 15.5.14 — that version does not exist)**
   - Check available versions: `npm view next versions --json | tail -20`
   - Install: `npm install next@15.4.x`
   - Verification: `npm list next` shows 15.4.x
-- [ ] 1.2 Run `npm audit fix --audit-level=critical` for critical vulnerabilities only
+- [x] 1.2 Run `npm audit fix --audit-level=critical` for critical vulnerabilities only
   - Verification: `npm audit` shows no critical vulnerabilities
 - [ ] 1.3 Add specific security headers to next.config.ts: X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy
   - Verification: Test homepage loads without CSP errors in browser console
