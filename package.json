@@ -6,10 +6,6 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "prepare": "husky",
-    "test": "vitest",
-    "test:run": "vitest run",
     "analyze": "ANALYZE=true next build",
     "analyze:dev": "ANALYZE=true next dev --turbopack"
   },
@@ -28,24 +24,11 @@
     "typewriter-effect": "^2.22.0"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3.3.5",
     "@next/bundle-analyzer": "^15.5.14",
     "@svgr/webpack": "^8.1.0",
-    "@testing-library/jest-dom": "^6.9.1",
-    "@testing-library/react": "^16.3.2",
     "@types/node": "^20.19.37",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@vitejs/plugin-react": "^6.0.1",
-    "eslint": "^9.39.4",
-    "eslint-config-next": "^16.2.1",
-    "husky": "^9.1.7",
-    "jsdom": "^29.0.1",
-    "lint-staged": "^16.4.0",
-    "typescript": "^5.9.3",
-    "vitest": "^4.1.2"
-  },
-  "lint-staged": {
-    "*.{ts,tsx}": "tsc --noEmit"
+    "typescript": "^5.9.3"
   }
 }
