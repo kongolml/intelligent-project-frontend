@@ -65,10 +65,7 @@ export async function POST(request: NextRequest) {
     });
     
     return NextResponse.json(
-      { 
-        error: 'Failed to revalidate pages',
-        details: error instanceof Error ? error.message : String(error)
-      }, 
+      { error: 'Failed to revalidate pages' }, 
       { status: 500 }
     );
   }
