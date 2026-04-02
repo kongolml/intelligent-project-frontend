@@ -211,7 +211,7 @@
 						params = duration;
 					}
 					// Add a duration is there isn't one
-					if (!params.hasOwnProperty('duration')) {
+					if (!Object.prototype.hasOwnProperty.call(params, 'duration')) {
 						params.duration = durationIsSet ? duration : 1;
 					}
 				} else {

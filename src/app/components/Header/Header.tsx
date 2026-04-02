@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, CSSProperties } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Logo from "@assets/intelligent-project-logo.svg";
@@ -265,7 +265,7 @@ export default function Header() {
 								<li
 									key={item.href}
 									className={styles.navItem}
-									style={{ "--stagger": `${i * 80 + 300}ms` } as React.CSSProperties}
+									style={{ "--stagger": `${i * 80 + 300}ms` } as CSSProperties}
 								>
 									<Link
 										href={item.href}
@@ -294,7 +294,7 @@ export default function Header() {
 							className={`${styles.categoryPill} ${
 								showPills ? styles.categoryPillEnter : ""
 							} ${activeCategory === "all" ? styles.categoryPillActive : ""}`}
-							style={{ "--cat-stagger": "0ms" } as React.CSSProperties}
+							style={{ "--cat-stagger": "0ms" } as CSSProperties}
 							onClick={() => onCategoryChange("all")}
 						>
 							All
@@ -305,7 +305,7 @@ export default function Header() {
 								className={`${styles.categoryPill} ${
 									showPills ? styles.categoryPillEnter : ""
 								} ${activeCategory === cat.slug ? styles.categoryPillActive : ""}`}
-								style={{ "--cat-stagger": `${(i + 1) * 50}ms` } as React.CSSProperties}
+								style={{ "--cat-stagger": `${(i + 1) * 50}ms` } as CSSProperties}
 								onClick={() => onCategoryChange(cat.slug)}
 							>
 								{cat.name}

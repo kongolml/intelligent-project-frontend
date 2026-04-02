@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useEffect, useState } from "react";
+import Link from "next/link";
 import { PortfolioItem } from "../../../types/portfolio.types";
 import styles from "./HomepagePortfolioScrollable.module.scss";
 import {useScrollEffects} from "@/app/hooks/useScrollEffects";
@@ -96,7 +97,7 @@ export default function HomepagePortfolioScrollableClient({ showcasePortfolioIte
 													</li>
 												))}
 												<li className={styles.linkToAll}>
-													<a href="/projects" className={styles.realLink}>Дивитись всі</a>
+													<Link href="/projects" className={styles.realLink}>Дивитись всі</Link>
 												</li>
 											</ul>
 										</div>

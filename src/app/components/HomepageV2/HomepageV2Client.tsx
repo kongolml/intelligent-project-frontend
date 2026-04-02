@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useEffect } from "react";
+import Link from "next/link";
 import { PortfolioItem } from "../../../types/portfolio.types";
 import styles from "./HomepageV2.module.scss";
 import HeroSection from "./sections/HeroSection";
@@ -98,8 +99,8 @@ export default function HomepageV2Client({ portfolioItems }: HomepageV2ClientPro
         <div className={styles.footerInner}>
           <div className={styles.footerLinks}>
             <a href="mailto:hello@intelligentproject.com">hello@intelligentproject.com</a>
-            <a href="/about-us">Про нас</a>
-            <a href="/projects">Проєкти</a>
+            <Link href="/about-us">Про нас</Link>
+            <Link href="/projects">Проєкти</Link>
           </div>
           <div className={styles.footerCopyright}>
             © {new Date().getFullYear()} Intelligent Project

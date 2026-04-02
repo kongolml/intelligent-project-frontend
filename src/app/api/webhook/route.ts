@@ -33,13 +33,13 @@ export async function POST(request: NextRequest) {
     const revalidatedTags: string[] = [];
 
     if (model === 'portfolio-items') {
-      revalidateTag(CACHE_TAGS.portfolioItems);
+      revalidateTag(CACHE_TAGS.portfolioItems, 'max');
       revalidatedTags.push(CACHE_TAGS.portfolioItems);
     } else if (model === 'portfolio-categories') {
-      revalidateTag(CACHE_TAGS.portfolioCategories);
+      revalidateTag(CACHE_TAGS.portfolioCategories, 'max');
       revalidatedTags.push(CACHE_TAGS.portfolioCategories);
     } else if (model === 'teammates') {
-      revalidateTag(CACHE_TAGS.teammates);
+      revalidateTag(CACHE_TAGS.teammates, 'max');
       revalidatedTags.push(CACHE_TAGS.teammates);
     }
 
