@@ -10,8 +10,10 @@ Guidance for AI coding agents working in this repository.
 | `npm run build` | Production build |
 | `npm run start` | Start production server |
 | `npm run lint` | ESLint via `next lint` |
+| `npm run test` | Run tests in watch mode (Vitest) |
+| `npm run test:run` | Run tests once (CI) |
 
-**No test framework is configured.** There are no test commands.
+**Testing:** Vitest with React Testing Library configured. Tests located in `src/**/*.test.{ts,tsx}`.
 
 ## Environment
 
@@ -129,6 +131,61 @@ Use `@/` path alias for cross-directory imports. Relative paths (`../../../`) ar
 - `dangerouslySetInnerHTML` is used for CMS HTML — always sanitize via `src/app/lib/sanitize.ts` (`sanitizeHtml()`).
 - SVGs imported as React components: `import Logo from "@assets/logo.svg";` (via `@svgr/webpack`).
 - CSS custom properties for stagger animations: `style={{ "--stagger": `${i * 80}ms` } as React.CSSProperties}`.
+
+## Security & Performance
+
+### Security Headers
+
+next.config.ts (lines 26-48) configures security headers applied to all routes:
+
+| Header | Value | Purpose |
+|--------|-------|---------|
+| X-Frame-Options | DENY | Prevents clickjacking by disallowing iframe embedding |
+| X-Content-Type-Options | nosniff | Prevents MIME type sniffing |
+| Referrer-Policy | strict-origin-when-cross-origin | Controls referrer information sent with requests |
+| Permissions-Policy | camera=(), microphone=(), geolocation=() | Restricts access to browser features |
+
+### Rate Limiting
+
+Webhook endpoints are protected by rate limiting in `src/app/lib/rate-limit.ts`:
+
+- **Limit:** 30 requests per minute per IP address
+- **Implementation:** In-memory Map with sliding window reset
+- **Response:** HTTP 429 with `{ "error": "Rate limit exceeded. Try again later." }` when exceeded
+- **Detection:** Uses `x-forwarded-for` or `x-real-ip` headers to identify clients
+
+### Bundle Analysis
+
+Analyze bundle size during development or production builds:
+
+| Command | Purpose |
+|---------|---------|
+| `npm run analyze` | Production build with interactive bundle analyzer |
+| `npm run analyze:dev` | Dev server with bundle analyzer |
+
+Uses `@next/bundle-analyzer` configured in next.config.ts. Set `ANALYZE=true` environment variable to enable.
+
+### Lighthouse CI
+
+Automated performance testing runs on every pull request to `main` via `.github/workflows/lighthouse.yml`. Configuration in `lighthouserc.json`:
+
+**Thresholds (warn/error):**
+- Performance: 0.8 (minScore)
+- Accessibility: 0.9 (minScore, error)
+- Best Practices: 0.85 (minScore)
+- SEO: 0.9 (minScore)
+
+**Core Web Vitals (warn):**
+- First Contentful Paint: max 2000ms
+- Largest Contentful Paint: max 4000ms
+- Cumulative Layout Shift: max 0.1
+- Total Blocking Time: max 500ms
+
+**Pages tested:** `/`, `/projects`, `/about-us` (3 runs each)
+
+### sanitizeHtml Guard
+
+The `sanitizeHtml()` function in `src/app/lib/sanitize.ts` is client-only. It throws `Error('sanitizeHtml is client-only')` if called in a server context. Always use this function only in client components after any server-side rendering is complete.
 
 ## Deployment
 

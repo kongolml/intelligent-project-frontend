@@ -6,31 +6,29 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "analyze": "ANALYZE=true next build",
+    "analyze:dev": "ANALYZE=true next dev --turbopack"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
     "@types/dompurify": "^3.0.5",
     "bootstrap": "^5.3.8",
     "dompurify": "^3.3.3",
-    "gsap": "^3.13.0",
-    "next": "15.3.4",
-    "react": "^19.0.0",
+    "gsap": "^3.14.2",
+    "next": "^15.5.14",
+    "react": "^19.1.1",
     "react-bootstrap": "^2.10.10",
-    "react-dom": "^19.0.0",
+    "react-dom": "^19.1.1",
     "sass": "^1.89.2",
-    "scrollmagic": "^2.0.8",
-    "scrollmagic-plugin-gsap": "^1.0.4",
+    "scrollmagic": "^2.0.9",
     "typewriter-effect": "^2.22.0"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3.3.5",
+    "@next/bundle-analyzer": "^15.5.14",
     "@svgr/webpack": "^8.1.0",
-    "@types/node": "^20",
+    "@types/node": "^20.19.37",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "eslint": "^9.39.4",
-    "eslint-config-next": "^16.2.1",
-    "typescript": "^5"
+    "typescript": "^5.9.3"
   }
 }

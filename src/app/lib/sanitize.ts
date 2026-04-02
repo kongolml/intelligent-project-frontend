@@ -1,6 +1,8 @@
 import DOMPurify from "dompurify";
 
 export function sanitizeHtml(dirty: string): string {
-  // doesnt work on server side
+  if (typeof window === 'undefined') {
+    throw new Error('sanitizeHtml is client-only');
+  }
   return DOMPurify.sanitize(dirty);
 }
