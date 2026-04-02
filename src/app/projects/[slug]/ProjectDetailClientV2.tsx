@@ -6,6 +6,8 @@ import Link from "next/link";
 import { PortfolioItem } from "../../../types/portfolio.types";
 import styles from "./PortfolioCaseStudyV2.module.scss";
 import CaseStudyNav, { NavSection } from "./CaseStudyNav";
+import { useRevealOnScroll } from "@/app/hooks/useRevealOnScroll";
+import { useHeroEntry } from "@/app/hooks/useHeroEntry";
 
 const NAV_SECTIONS: NavSection[] = [
     { id: "hero",      label: "Intro",      index: "01" },
@@ -21,8 +23,8 @@ interface ProjectDetailClientV2Props {
 }
 
 export default function ProjectDetailClientV2({ project }: ProjectDetailClientV2Props) {
-    useRevealAnimations();
-    useHeroAnimations();
+    useRevealOnScroll({ selector: "[data-reveal], .reveal, .reveal-line" });
+    useHeroEntry({ selector: ".hero .reveal-line, .hero .reveal" });
     useScrollRounding();
 
     const heroLabel =
@@ -392,56 +394,6 @@ function ExpandableSection({ title, children }: ExpandableSectionProps) {
             </div>
         </div>
     );
-}
-
-
-// ── Reveal Animation Hook ──
-
-function useRevealAnimations() {
-    useEffect(() => {
-        const revealed = new Set<Element>();
-        const observer = new IntersectionObserver(
-            (entries) => {
-                entries.forEach((entry) => {
-                    if (!entry.isIntersecting || revealed.has(entry.target)) return;
-                    revealed.add(entry.target);
-                    if (entry.target.hasAttribute("data-reveal")) {
-                        entry.target.classList.add("revealed");
-                    }
-                    if (
-                        entry.target.classList.contains("reveal") ||
-                        entry.target.classList.contains("reveal-line")
-                    ) {
-                        entry.target.classList.add("visible");
-                    }
-                });
-            },
-            {
-                rootMargin: "0px 0px -80px 0px",
-                threshold: 0.05,
-            }
-        );
-
-        document
-            .querySelectorAll("[data-reveal], .reveal, .reveal-line")
-            .forEach((el) => observer.observe(el));
-
-        return () => observer.disconnect();
-    }, []);
-}
-
-
-// ── Hero Entry Animation Hook ──
-
-function useHeroAnimations() {
-    useEffect(() => {
-        const heroElements = document.querySelectorAll(
-            ".hero .reveal-line, .hero .reveal"
-        );
-        heroElements.forEach((el, i) => {
-            setTimeout(() => el.classList.add("visible"), 200 + i * 150);
-        });
-    }, []);
 }
 
 

@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
   }
 
   const tags = Object.values(CACHE_TAGS);
-  tags.forEach(tag => revalidateTag(tag));
+  tags.forEach(tag => revalidateTag(tag, 'max'));
 
   console.log(`[revalidate] Manual revalidation triggered for tags: ${tags.join(', ')}`);
 

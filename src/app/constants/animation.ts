@@ -1,0 +1,11 @@
+export const ANIMATION = {
+  REVEAL_ROOT_MARGIN: "0px 0px -80px 0px",
+  REVEAL_THRESHOLD: 0.05,
+  HERO_STAGGER_DELAY: 200,
+  HERO_STAGGER_INTERVAL: 150,
+} as const;
+
+export const SCROLL = {
+  HORIZONTAL_GAP: 48,
+  CARD_WIDTH_FALLBACK: 700,
+} as const;
