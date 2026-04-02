@@ -4,7 +4,7 @@ import ProjectDetailClientV2 from "./ProjectDetailClientV2";
 
 export async function generateStaticParams() {
     const items = await getPortfolioItems();
-    return items.map(item => ({ slug: item.slug }));
+    return items.filter(item => item.slug).map(item => ({ slug: item.slug! }));
 }
 
 

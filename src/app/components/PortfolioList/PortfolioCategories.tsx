@@ -7,7 +7,6 @@ import { PortfolioCategory, PortfolioCategorySlugs, PortfolioItem } from "@/type
 
 // styles
 import styles from "./PortfolioList.module.scss";
-// import variables from "../../styles/variables.scss";
 
 import IconIdentity from "@assets/icon-identity.svg";
 import IconWeb from "@assets/icon-web.svg";
@@ -47,15 +46,3 @@ export default function PortfolioCategories({ portfolioCategories, categoriesCou
 
     )
 }
-
-// type Props = {
-//     category: PortfolioCategorySlugs;
-// };
-
-// export function CategoryIcon({ category }: Props) {
-// const Icon = categoriesIconsMap[category];
-
-// if (!Icon) return null; // fallback for unknown categories
-
-// return <Icon aria-hidden="true" />;
-// }
